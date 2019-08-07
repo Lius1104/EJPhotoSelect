@@ -1,0 +1,6 @@
+framework module LSToolsKit {
+  umbrella header "LSToolsKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

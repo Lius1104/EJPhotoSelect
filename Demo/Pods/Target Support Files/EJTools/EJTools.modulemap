@@ -1,0 +1,6 @@
+framework module EJTools {
+  umbrella header "EJTools-umbrella.h"
+
+  export *
+  module * { export * }
+}

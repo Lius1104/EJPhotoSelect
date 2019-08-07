@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="EJSelectedCell" id="gTV-IL-0wX" customClass="EJSelectedCell">
+            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="O6P-Xa-ysW">
+                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DOq-UO-NcI">
+                        <rect key="frame" x="26" y="0.0" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="GaH-cA-ZKW"/>
+                            <constraint firstAttribute="width" constant="24" id="ups-D7-v22"/>
+                        </constraints>
+                        <state key="normal" image="删除"/>
+                        <connections>
+                            <action selector="handleClickDeleteButton:" destination="gTV-IL-0wX" eventType="touchUpInside" id="AyX-6E-RGs"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="O6P-Xa-ysW" secondAttribute="trailing" id="KtS-Rk-wcq"/>
+                <constraint firstItem="O6P-Xa-ysW" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="MJr-1b-oE8"/>
+                <constraint firstItem="O6P-Xa-ysW" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="atZ-zy-q3F"/>
+                <constraint firstItem="DOq-UO-NcI" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bES-ZS-zU4"/>
+                <constraint firstAttribute="trailing" secondItem="DOq-UO-NcI" secondAttribute="trailing" id="gK0-Zu-DKo"/>
+                <constraint firstAttribute="bottom" secondItem="O6P-Xa-ysW" secondAttribute="bottom" id="nPl-pp-UBu"/>
+            </constraints>
+            <connections>
+                <outlet property="coverImage" destination="O6P-Xa-ysW" id="eQc-kj-jiC"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="删除" width="24" height="24"/>
+    </resources>
+</document>

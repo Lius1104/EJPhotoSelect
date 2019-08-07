@@ -1,0 +1,33 @@
+//
+//  EJPrefixHeader.pch
+//  EJPhotoBrowser
+//
+//  Created by LiuShuang on 2019/6/18.
+//  Copyright © 2019 LiuShuang. All rights reserved.
+//
+
+#ifndef EJPrefixHeader_pch
+#define EJPrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#import <Masonry.h>
+#import <YYKit.h>
+#import <SDWebImage.h>
+
+#import <LSToolsKit/LSToolsKit.h>
+
+#import <EJTools.h>
+#import <EJWarningCardKit/EJWarningCardKit.h>
+#import <JoyssomTool/JoyssomTool.h>
+
+#import "EJUserDefine.h"
+
+
+#import <AVFoundation/AVFoundation.h>
+
+#import "LSSourceCrop.h"
+
+#define  kTintColor UIColorHex(333333)
+
+#endif /* EJPrefixHeader_pch */

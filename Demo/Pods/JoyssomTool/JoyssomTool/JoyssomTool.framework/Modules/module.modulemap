@@ -1,0 +1,6 @@
+framework module JoyssomTool {
+  umbrella header "JoyssomTool.h"
+
+  export *
+  module * { export * }
+}

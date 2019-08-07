@@ -1,0 +1,33 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '8.0'
+
+inhibit_all_warnings!
+
+target 'EJPhotoBrowser' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for EJPhotoBrowser
+pod 'SDWebImage'
+pod 'DACircularProgress'
+pod 'MBProgressHUD'
+pod 'YYKit'
+pod 'JPImageresizerView'
+pod 'FDFullscreenPopGesture'
+pod 'Masonry'
+pod 'LSToolsKit'
+pod 'JoyssomTool'
+pod 'EJWarningCardKit'
+pod 'EJTools'
+
+  target 'EJPhotoBrowserTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'EJPhotoBrowserUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

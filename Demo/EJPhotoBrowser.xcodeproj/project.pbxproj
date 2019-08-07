@@ -1,0 +1,1170 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		096E7BA33486B00047BD3064 /* Pods_EJPhotoBrowserUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95292D840DE70ADEB9A2B1FA /* Pods_EJPhotoBrowserUITests.framework */; };
+		5312DF8A22C220E700A59718 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5312DF8922C220E700A59718 /* MediaPlayer.framework */; };
+		53CB9EF822F7D95900A85A77 /* EJSelectedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */; };
+		53CB9EF922F7D95900A85A77 /* EJSelectedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */; };
+		53CB9EFD22F7D97100A85A77 /* EJAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9EFB22F7D97100A85A77 /* EJAddCell.m */; };
+		53CB9EFE22F7D97100A85A77 /* EJAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CB9EFC22F7D97100A85A77 /* EJAddCell.xib */; };
+		53CB9F0322F7DF0E00A85A77 /* EJConfigVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9F0222F7DF0E00A85A77 /* EJConfigVC.m */; };
+		53CB9F0722F804E400A85A77 /* EJConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9F0622F804E400A85A77 /* EJConfigModel.m */; };
+		53E0334E22FA767600AB3B04 /* EJVideoPlayerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E032FA22FA767600AB3B04 /* EJVideoPlayerVC.m */; };
+		53E0334F22FA767600AB3B04 /* EJPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */; };
+		53E0335022FA767600AB3B04 /* EJAlbumPickerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0330422FA767600AB3B04 /* EJAlbumPickerVC.m */; };
+		53E0335122FA767600AB3B04 /* EJImagePickerNVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0330522FA767600AB3B04 /* EJImagePickerNVC.m */; };
+		53E0335222FA767600AB3B04 /* EJImagePickerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0330622FA767600AB3B04 /* EJImagePickerVC.m */; };
+		53E0335322FA767600AB3B04 /* EJ_AlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0330A22FA767600AB3B04 /* EJ_AlbumModel.m */; };
+		53E0335422FA767600AB3B04 /* LSAlbumListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0330E22FA767600AB3B04 /* LSAlbumListCell.m */; };
+		53E0335522FA767600AB3B04 /* LSAssetCollectionToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331022FA767600AB3B04 /* LSAssetCollectionToolBar.m */; };
+		53E0335622FA767600AB3B04 /* EJImagePickerShotCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E0331122FA767600AB3B04 /* EJImagePickerShotCell.xib */; };
+		53E0335722FA767600AB3B04 /* LSAssetItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331322FA767600AB3B04 /* LSAssetItemCell.m */; };
+		53E0335822FA767600AB3B04 /* EJImagePickerShotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331422FA767600AB3B04 /* EJImagePickerShotCell.m */; };
+		53E0335922FA767600AB3B04 /* UIViewController+LSAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331822FA767600AB3B04 /* UIViewController+LSAuthorization.m */; };
+		53E0335A22FA767600AB3B04 /* NSObject+LSAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331922FA767600AB3B04 /* NSObject+LSAuthorization.m */; };
+		53E0335B22FA767600AB3B04 /* EJImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331B22FA767600AB3B04 /* EJImageManager.m */; };
+		53E0335E22FA767600AB3B04 /* LSInterceptVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332322FA767600AB3B04 /* LSInterceptVideo.m */; };
+		53E0335F22FA767600AB3B04 /* LSVideoFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E0332722FA767600AB3B04 /* LSVideoFrameCell.xib */; };
+		53E0336022FA767600AB3B04 /* LSEditFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332822FA767600AB3B04 /* LSEditFrameView.m */; };
+		53E0336122FA767600AB3B04 /* LSVideoFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332922FA767600AB3B04 /* LSVideoFrameCell.m */; };
+		53E0336222FA767600AB3B04 /* LSInterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332A22FA767600AB3B04 /* LSInterceptView.m */; };
+		53E0336322FA767600AB3B04 /* EJViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333122FA767600AB3B04 /* EJViewController.m */; };
+		53E0336422FA767600AB3B04 /* EJImageCropperVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333222FA767600AB3B04 /* EJImageCropperVC.m */; };
+		53E0336522FA767600AB3B04 /* EJTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333622FA767600AB3B04 /* EJTapDetectingImageView.m */; };
+		53E0336622FA767600AB3B04 /* EJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333922FA767600AB3B04 /* EJPhoto.m */; };
+		53E0336722FA767600AB3B04 /* EJZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333C22FA767600AB3B04 /* EJZoomingScrollView.m */; };
+		53E0336822FA767600AB3B04 /* UIImage+EJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333E22FA767600AB3B04 /* UIImage+EJPhotoBrowser.m */; };
+		53E0336922FA767600AB3B04 /* EJTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0334022FA767600AB3B04 /* EJTapDetectingView.m */; };
+		53E0336A22FA767600AB3B04 /* EJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0334222FA767600AB3B04 /* EJPhotoBrowser.m */; };
+		53E0336B22FA767600AB3B04 /* EJCameraShotVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0334622FA767600AB3B04 /* EJCameraShotVC.m */; };
+		53E0336C22FA767600AB3B04 /* NSString+EJShot.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0334922FA767600AB3B04 /* NSString+EJShot.m */; };
+		53E0336D22FA767600AB3B04 /* EJCameraShotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0334D22FA767600AB3B04 /* EJCameraShotView.m */; };
+		53E2787922B87B0700B65C7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E2787822B87B0700B65C7E /* AppDelegate.m */; };
+		53E2787C22B87B0700B65C7E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E2787B22B87B0700B65C7E /* ViewController.m */; };
+		53E2787F22B87B0700B65C7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53E2787D22B87B0700B65C7E /* Main.storyboard */; };
+		53E2788122B87B0800B65C7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E2788022B87B0800B65C7E /* Assets.xcassets */; };
+		53E2788422B87B0800B65C7E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53E2788222B87B0800B65C7E /* LaunchScreen.storyboard */; };
+		53E2788722B87B0800B65C7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E2788622B87B0800B65C7E /* main.m */; };
+		53E2789122B87B0900B65C7E /* EJPhotoBrowserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E2789022B87B0900B65C7E /* EJPhotoBrowserTests.m */; };
+		53E2789C22B87B0900B65C7E /* EJPhotoBrowserUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E2789B22B87B0900B65C7E /* EJPhotoBrowserUITests.m */; };
+		53E2790422B88F9F00B65C7E /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E2790322B88F9F00B65C7E /* Photos.framework */; };
+		53E2791E22B8948800B65C7E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E2791D22B8948800B65C7E /* AVFoundation.framework */; };
+		57F2F632EF3F87D8A5824BFC /* Pods_EJPhotoBrowserTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 917FF35EF63493CD103DC96E /* Pods_EJPhotoBrowserTests.framework */; };
+		9A098EE982A1FCD0F1F36187 /* Pods_EJPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 780319760F14163697AC7A8B /* Pods_EJPhotoBrowser.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		53E2788D22B87B0900B65C7E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E2786C22B87B0700B65C7E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 53E2787322B87B0700B65C7E;
+			remoteInfo = EJPhotoBrowser;
+		};
+		53E2789822B87B0900B65C7E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E2786C22B87B0700B65C7E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 53E2787322B87B0700B65C7E;
+			remoteInfo = EJPhotoBrowser;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0F865038130F1F453864CA1D /* Pods-EJPhotoBrowserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowserTests.debug.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowserTests/Pods-EJPhotoBrowserTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5312DF8922C220E700A59718 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		53CB9EF522F7D95900A85A77 /* EJSelectedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJSelectedCell.h; sourceTree = "<group>"; };
+		53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJSelectedCell.m; sourceTree = "<group>"; };
+		53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EJSelectedCell.xib; sourceTree = "<group>"; };
+		53CB9EFA22F7D97100A85A77 /* EJAddCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJAddCell.h; sourceTree = "<group>"; };
+		53CB9EFB22F7D97100A85A77 /* EJAddCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJAddCell.m; sourceTree = "<group>"; };
+		53CB9EFC22F7D97100A85A77 /* EJAddCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EJAddCell.xib; sourceTree = "<group>"; };
+		53CB9F0122F7DF0E00A85A77 /* EJConfigVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJConfigVC.h; sourceTree = "<group>"; };
+		53CB9F0222F7DF0E00A85A77 /* EJConfigVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJConfigVC.m; sourceTree = "<group>"; };
+		53CB9F0522F804E400A85A77 /* EJConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJConfigModel.h; sourceTree = "<group>"; };
+		53CB9F0622F804E400A85A77 /* EJConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJConfigModel.m; sourceTree = "<group>"; };
+		53E032FA22FA767600AB3B04 /* EJVideoPlayerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJVideoPlayerVC.m; sourceTree = "<group>"; };
+		53E032FB22FA767600AB3B04 /* EJVideoPlayerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJVideoPlayerVC.h; sourceTree = "<group>"; };
+		53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJPlayerControlView.m; sourceTree = "<group>"; };
+		53E032FE22FA767600AB3B04 /* EJPlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPlayerControlView.h; sourceTree = "<group>"; };
+		53E0330022FA767600AB3B04 /* EJImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageManager.h; sourceTree = "<group>"; };
+		53E0330222FA767600AB3B04 /* EJImagePickerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImagePickerVC.h; sourceTree = "<group>"; };
+		53E0330322FA767600AB3B04 /* EJImagePickerNVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImagePickerNVC.h; sourceTree = "<group>"; };
+		53E0330422FA767600AB3B04 /* EJAlbumPickerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJAlbumPickerVC.m; sourceTree = "<group>"; };
+		53E0330522FA767600AB3B04 /* EJImagePickerNVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImagePickerNVC.m; sourceTree = "<group>"; };
+		53E0330622FA767600AB3B04 /* EJImagePickerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImagePickerVC.m; sourceTree = "<group>"; };
+		53E0330722FA767600AB3B04 /* EJAlbumPickerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJAlbumPickerVC.h; sourceTree = "<group>"; };
+		53E0330822FA767600AB3B04 /* ImagePickerEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerEnums.h; sourceTree = "<group>"; };
+		53E0330A22FA767600AB3B04 /* EJ_AlbumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJ_AlbumModel.m; sourceTree = "<group>"; };
+		53E0330B22FA767600AB3B04 /* EJ_AlbumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJ_AlbumModel.h; sourceTree = "<group>"; };
+		53E0330D22FA767600AB3B04 /* LSAssetItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSAssetItemCell.h; sourceTree = "<group>"; };
+		53E0330E22FA767600AB3B04 /* LSAlbumListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSAlbumListCell.m; sourceTree = "<group>"; };
+		53E0330F22FA767600AB3B04 /* EJImagePickerShotCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImagePickerShotCell.h; sourceTree = "<group>"; };
+		53E0331022FA767600AB3B04 /* LSAssetCollectionToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionToolBar.m; sourceTree = "<group>"; };
+		53E0331122FA767600AB3B04 /* EJImagePickerShotCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EJImagePickerShotCell.xib; sourceTree = "<group>"; };
+		53E0331222FA767600AB3B04 /* LSAlbumListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSAlbumListCell.h; sourceTree = "<group>"; };
+		53E0331322FA767600AB3B04 /* LSAssetItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSAssetItemCell.m; sourceTree = "<group>"; };
+		53E0331422FA767600AB3B04 /* EJImagePickerShotCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImagePickerShotCell.m; sourceTree = "<group>"; };
+		53E0331522FA767600AB3B04 /* LSAssetCollectionToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionToolBar.h; sourceTree = "<group>"; };
+		53E0331722FA767600AB3B04 /* NSObject+LSAuthorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LSAuthorization.h"; sourceTree = "<group>"; };
+		53E0331822FA767600AB3B04 /* UIViewController+LSAuthorization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LSAuthorization.m"; sourceTree = "<group>"; };
+		53E0331922FA767600AB3B04 /* NSObject+LSAuthorization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LSAuthorization.m"; sourceTree = "<group>"; };
+		53E0331A22FA767600AB3B04 /* UIViewController+LSAuthorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LSAuthorization.h"; sourceTree = "<group>"; };
+		53E0331B22FA767600AB3B04 /* EJImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageManager.m; sourceTree = "<group>"; };
+		53E0332222FA767600AB3B04 /* LSInterceptVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSInterceptVideo.h; sourceTree = "<group>"; };
+		53E0332322FA767600AB3B04 /* LSInterceptVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSInterceptVideo.m; sourceTree = "<group>"; };
+		53E0332522FA767600AB3B04 /* LSSourceCrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSSourceCrop.h; sourceTree = "<group>"; };
+		53E0332722FA767600AB3B04 /* LSVideoFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LSVideoFrameCell.xib; sourceTree = "<group>"; };
+		53E0332822FA767600AB3B04 /* LSEditFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSEditFrameView.m; sourceTree = "<group>"; };
+		53E0332922FA767600AB3B04 /* LSVideoFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSVideoFrameCell.m; sourceTree = "<group>"; };
+		53E0332A22FA767600AB3B04 /* LSInterceptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSInterceptView.m; sourceTree = "<group>"; };
+		53E0332B22FA767600AB3B04 /* LSInterceptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSInterceptView.h; sourceTree = "<group>"; };
+		53E0332C22FA767600AB3B04 /* LSVideoFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSVideoFrameCell.h; sourceTree = "<group>"; };
+		53E0332D22FA767600AB3B04 /* LSEditFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSEditFrameView.h; sourceTree = "<group>"; };
+		53E0333022FA767600AB3B04 /* EJImageCropperVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageCropperVC.h; sourceTree = "<group>"; };
+		53E0333122FA767600AB3B04 /* EJViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJViewController.m; sourceTree = "<group>"; };
+		53E0333222FA767600AB3B04 /* EJImageCropperVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageCropperVC.m; sourceTree = "<group>"; };
+		53E0333322FA767600AB3B04 /* EJViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJViewController.h; sourceTree = "<group>"; };
+		53E0333522FA767600AB3B04 /* EJZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJZoomingScrollView.h; sourceTree = "<group>"; };
+		53E0333622FA767600AB3B04 /* EJTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJTapDetectingImageView.m; sourceTree = "<group>"; };
+		53E0333722FA767600AB3B04 /* UIImage+EJPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EJPhotoBrowser.h"; sourceTree = "<group>"; };
+		53E0333822FA767600AB3B04 /* EJPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPhotoBrowser.h; sourceTree = "<group>"; };
+		53E0333922FA767600AB3B04 /* EJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJPhoto.m; sourceTree = "<group>"; };
+		53E0333A22FA767600AB3B04 /* EJTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJTapDetectingView.h; sourceTree = "<group>"; };
+		53E0333B22FA767600AB3B04 /* EJPhotoProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPhotoProtocol.h; sourceTree = "<group>"; };
+		53E0333C22FA767600AB3B04 /* EJZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJZoomingScrollView.m; sourceTree = "<group>"; };
+		53E0333D22FA767600AB3B04 /* EJPhotoBrowserPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPhotoBrowserPrivate.h; sourceTree = "<group>"; };
+		53E0333E22FA767600AB3B04 /* UIImage+EJPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+EJPhotoBrowser.m"; sourceTree = "<group>"; };
+		53E0333F22FA767600AB3B04 /* EJTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJTapDetectingImageView.h; sourceTree = "<group>"; };
+		53E0334022FA767600AB3B04 /* EJTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJTapDetectingView.m; sourceTree = "<group>"; };
+		53E0334122FA767600AB3B04 /* EJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPhoto.h; sourceTree = "<group>"; };
+		53E0334222FA767600AB3B04 /* EJPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJPhotoBrowser.m; sourceTree = "<group>"; };
+		53E0334322FA767600AB3B04 /* EJLocalPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJLocalPhotos.h; sourceTree = "<group>"; };
+		53E0334622FA767600AB3B04 /* EJCameraShotVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJCameraShotVC.m; sourceTree = "<group>"; };
+		53E0334722FA767600AB3B04 /* EJCameraShotVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJCameraShotVC.h; sourceTree = "<group>"; };
+		53E0334922FA767600AB3B04 /* NSString+EJShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+EJShot.m"; sourceTree = "<group>"; };
+		53E0334A22FA767600AB3B04 /* NSString+EJShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+EJShot.h"; sourceTree = "<group>"; };
+		53E0334C22FA767600AB3B04 /* EJCameraShotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJCameraShotView.h; sourceTree = "<group>"; };
+		53E0334D22FA767600AB3B04 /* EJCameraShotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJCameraShotView.m; sourceTree = "<group>"; };
+		53E2787422B87B0700B65C7E /* EJPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EJPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		53E2787722B87B0700B65C7E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		53E2787822B87B0700B65C7E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		53E2787A22B87B0700B65C7E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		53E2787B22B87B0700B65C7E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		53E2787E22B87B0700B65C7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		53E2788022B87B0800B65C7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		53E2788322B87B0800B65C7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		53E2788522B87B0800B65C7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53E2788622B87B0800B65C7E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		53E2788C22B87B0900B65C7E /* EJPhotoBrowserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EJPhotoBrowserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		53E2789022B87B0900B65C7E /* EJPhotoBrowserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJPhotoBrowserTests.m; sourceTree = "<group>"; };
+		53E2789222B87B0900B65C7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53E2789722B87B0900B65C7E /* EJPhotoBrowserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EJPhotoBrowserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		53E2789B22B87B0900B65C7E /* EJPhotoBrowserUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJPhotoBrowserUITests.m; sourceTree = "<group>"; };
+		53E2789D22B87B0900B65C7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53E2790322B88F9F00B65C7E /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		53E2791B22B8926B00B65C7E /* EJPrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJPrefixHeader.pch; sourceTree = "<group>"; };
+		53E2791C22B8938500B65C7E /* EJUserDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJUserDefine.h; sourceTree = "<group>"; };
+		53E2791D22B8948800B65C7E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		658B5D164F9798D73DD0DE7F /* Pods-EJPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowser.debug.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowser/Pods-EJPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
+		780319760F14163697AC7A8B /* Pods_EJPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EJPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85D163F072208726D8715C06 /* Pods-EJPhotoBrowserUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowserUITests.release.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowserUITests/Pods-EJPhotoBrowserUITests.release.xcconfig"; sourceTree = "<group>"; };
+		8D11873BE7DC5C69BF7E3EB6 /* Pods-EJPhotoBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowser.release.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowser/Pods-EJPhotoBrowser.release.xcconfig"; sourceTree = "<group>"; };
+		917FF35EF63493CD103DC96E /* Pods_EJPhotoBrowserTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EJPhotoBrowserTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		95292D840DE70ADEB9A2B1FA /* Pods_EJPhotoBrowserUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EJPhotoBrowserUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB6EFA6BDDDB164BC0B2ABC9 /* Pods-EJPhotoBrowserUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowserUITests.debug.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowserUITests/Pods-EJPhotoBrowserUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		AFA0A6C54884AA4EDE1F32DA /* Pods-EJPhotoBrowserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowserTests.release.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowserTests/Pods-EJPhotoBrowserTests.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		53E2787122B87B0700B65C7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5312DF8A22C220E700A59718 /* MediaPlayer.framework in Frameworks */,
+				53E2791E22B8948800B65C7E /* AVFoundation.framework in Frameworks */,
+				53E2790422B88F9F00B65C7E /* Photos.framework in Frameworks */,
+				9A098EE982A1FCD0F1F36187 /* Pods_EJPhotoBrowser.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53E2788922B87B0900B65C7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57F2F632EF3F87D8A5824BFC /* Pods_EJPhotoBrowserTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53E2789422B87B0900B65C7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				096E7BA33486B00047BD3064 /* Pods_EJPhotoBrowserUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		53CB9EFF22F7DEDB00A85A77 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				53CB9EF522F7D95900A85A77 /* EJSelectedCell.h */,
+				53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */,
+				53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */,
+				53CB9EFA22F7D97100A85A77 /* EJAddCell.h */,
+				53CB9EFB22F7D97100A85A77 /* EJAddCell.m */,
+				53CB9EFC22F7D97100A85A77 /* EJAddCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53CB9F0022F7DEF100A85A77 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				53E2787A22B87B0700B65C7E /* ViewController.h */,
+				53E2787B22B87B0700B65C7E /* ViewController.m */,
+				53CB9F0122F7DF0E00A85A77 /* EJConfigVC.h */,
+				53CB9F0222F7DF0E00A85A77 /* EJConfigVC.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		53CB9F0422F804CA00A85A77 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				53CB9F0522F804E400A85A77 /* EJConfigModel.h */,
+				53CB9F0622F804E400A85A77 /* EJConfigModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		53E032F722FA767600AB3B04 /* EJPhotoSelect */ = {
+			isa = PBXGroup;
+			children = (
+				53E032F822FA767600AB3B04 /* VideoPlay */,
+				53E032FF22FA767600AB3B04 /* ImagePicker */,
+				53E0331C22FA767600AB3B04 /* Framework */,
+				53E0331F22FA767600AB3B04 /* Edit */,
+				53E0333422FA767600AB3B04 /* PhotoBrowser */,
+				53E0334322FA767600AB3B04 /* EJLocalPhotos.h */,
+				53E0334422FA767600AB3B04 /* Shot */,
+			);
+			name = EJPhotoSelect;
+			path = ../../EJPhotoSelect;
+			sourceTree = "<group>";
+		};
+		53E032F822FA767600AB3B04 /* VideoPlay */ = {
+			isa = PBXGroup;
+			children = (
+				53E032F922FA767600AB3B04 /* Controller */,
+				53E032FC22FA767600AB3B04 /* View */,
+			);
+			path = VideoPlay;
+			sourceTree = "<group>";
+		};
+		53E032F922FA767600AB3B04 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53E032FA22FA767600AB3B04 /* EJVideoPlayerVC.m */,
+				53E032FB22FA767600AB3B04 /* EJVideoPlayerVC.h */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53E032FC22FA767600AB3B04 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */,
+				53E032FE22FA767600AB3B04 /* EJPlayerControlView.h */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53E032FF22FA767600AB3B04 /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				53E0330022FA767600AB3B04 /* EJImageManager.h */,
+				53E0330122FA767600AB3B04 /* Controller */,
+				53E0330822FA767600AB3B04 /* ImagePickerEnums.h */,
+				53E0330922FA767600AB3B04 /* Model */,
+				53E0330C22FA767600AB3B04 /* View */,
+				53E0331622FA767600AB3B04 /* Authorization */,
+				53E0331B22FA767600AB3B04 /* EJImageManager.m */,
+			);
+			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		53E0330122FA767600AB3B04 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53E0330222FA767600AB3B04 /* EJImagePickerVC.h */,
+				53E0330322FA767600AB3B04 /* EJImagePickerNVC.h */,
+				53E0330422FA767600AB3B04 /* EJAlbumPickerVC.m */,
+				53E0330522FA767600AB3B04 /* EJImagePickerNVC.m */,
+				53E0330622FA767600AB3B04 /* EJImagePickerVC.m */,
+				53E0330722FA767600AB3B04 /* EJAlbumPickerVC.h */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53E0330922FA767600AB3B04 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				53E0330A22FA767600AB3B04 /* EJ_AlbumModel.m */,
+				53E0330B22FA767600AB3B04 /* EJ_AlbumModel.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		53E0330C22FA767600AB3B04 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				53E0330D22FA767600AB3B04 /* LSAssetItemCell.h */,
+				53E0330E22FA767600AB3B04 /* LSAlbumListCell.m */,
+				53E0330F22FA767600AB3B04 /* EJImagePickerShotCell.h */,
+				53E0331022FA767600AB3B04 /* LSAssetCollectionToolBar.m */,
+				53E0331122FA767600AB3B04 /* EJImagePickerShotCell.xib */,
+				53E0331222FA767600AB3B04 /* LSAlbumListCell.h */,
+				53E0331322FA767600AB3B04 /* LSAssetItemCell.m */,
+				53E0331422FA767600AB3B04 /* EJImagePickerShotCell.m */,
+				53E0331522FA767600AB3B04 /* LSAssetCollectionToolBar.h */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53E0331622FA767600AB3B04 /* Authorization */ = {
+			isa = PBXGroup;
+			children = (
+				53E0331722FA767600AB3B04 /* NSObject+LSAuthorization.h */,
+				53E0331822FA767600AB3B04 /* UIViewController+LSAuthorization.m */,
+				53E0331922FA767600AB3B04 /* NSObject+LSAuthorization.m */,
+				53E0331A22FA767600AB3B04 /* UIViewController+LSAuthorization.h */,
+			);
+			path = Authorization;
+			sourceTree = "<group>";
+		};
+		53E0331C22FA767600AB3B04 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Framework;
+			sourceTree = "<group>";
+		};
+		53E0331F22FA767600AB3B04 /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				53E0332022FA767600AB3B04 /* Video */,
+				53E0332E22FA767600AB3B04 /* Photo */,
+			);
+			path = Edit;
+			sourceTree = "<group>";
+		};
+		53E0332022FA767600AB3B04 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				53E0332122FA767600AB3B04 /* Controller */,
+				53E0332422FA767600AB3B04 /* Model */,
+				53E0332522FA767600AB3B04 /* LSSourceCrop.h */,
+				53E0332622FA767600AB3B04 /* View */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		53E0332122FA767600AB3B04 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53E0332222FA767600AB3B04 /* LSInterceptVideo.h */,
+				53E0332322FA767600AB3B04 /* LSInterceptVideo.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53E0332422FA767600AB3B04 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		53E0332622FA767600AB3B04 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				53E0332722FA767600AB3B04 /* LSVideoFrameCell.xib */,
+				53E0332822FA767600AB3B04 /* LSEditFrameView.m */,
+				53E0332922FA767600AB3B04 /* LSVideoFrameCell.m */,
+				53E0332A22FA767600AB3B04 /* LSInterceptView.m */,
+				53E0332B22FA767600AB3B04 /* LSInterceptView.h */,
+				53E0332C22FA767600AB3B04 /* LSVideoFrameCell.h */,
+				53E0332D22FA767600AB3B04 /* LSEditFrameView.h */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53E0332E22FA767600AB3B04 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				53E0332F22FA767600AB3B04 /* Controller */,
+			);
+			path = Photo;
+			sourceTree = "<group>";
+		};
+		53E0332F22FA767600AB3B04 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53E0333022FA767600AB3B04 /* EJImageCropperVC.h */,
+				53E0333122FA767600AB3B04 /* EJViewController.m */,
+				53E0333222FA767600AB3B04 /* EJImageCropperVC.m */,
+				53E0333322FA767600AB3B04 /* EJViewController.h */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53E0333422FA767600AB3B04 /* PhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				53E0333522FA767600AB3B04 /* EJZoomingScrollView.h */,
+				53E0333622FA767600AB3B04 /* EJTapDetectingImageView.m */,
+				53E0333722FA767600AB3B04 /* UIImage+EJPhotoBrowser.h */,
+				53E0333822FA767600AB3B04 /* EJPhotoBrowser.h */,
+				53E0333922FA767600AB3B04 /* EJPhoto.m */,
+				53E0333A22FA767600AB3B04 /* EJTapDetectingView.h */,
+				53E0333B22FA767600AB3B04 /* EJPhotoProtocol.h */,
+				53E0333C22FA767600AB3B04 /* EJZoomingScrollView.m */,
+				53E0333D22FA767600AB3B04 /* EJPhotoBrowserPrivate.h */,
+				53E0333E22FA767600AB3B04 /* UIImage+EJPhotoBrowser.m */,
+				53E0333F22FA767600AB3B04 /* EJTapDetectingImageView.h */,
+				53E0334022FA767600AB3B04 /* EJTapDetectingView.m */,
+				53E0334122FA767600AB3B04 /* EJPhoto.h */,
+				53E0334222FA767600AB3B04 /* EJPhotoBrowser.m */,
+			);
+			path = PhotoBrowser;
+			sourceTree = "<group>";
+		};
+		53E0334422FA767600AB3B04 /* Shot */ = {
+			isa = PBXGroup;
+			children = (
+				53E0334522FA767600AB3B04 /* Controller */,
+				53E0334822FA767600AB3B04 /* Model */,
+				53E0334B22FA767600AB3B04 /* View */,
+			);
+			path = Shot;
+			sourceTree = "<group>";
+		};
+		53E0334522FA767600AB3B04 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53E0334622FA767600AB3B04 /* EJCameraShotVC.m */,
+				53E0334722FA767600AB3B04 /* EJCameraShotVC.h */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53E0334822FA767600AB3B04 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				53E0334922FA767600AB3B04 /* NSString+EJShot.m */,
+				53E0334A22FA767600AB3B04 /* NSString+EJShot.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		53E0334B22FA767600AB3B04 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				53E0334C22FA767600AB3B04 /* EJCameraShotView.h */,
+				53E0334D22FA767600AB3B04 /* EJCameraShotView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53E2786B22B87B0700B65C7E = {
+			isa = PBXGroup;
+			children = (
+				53E2787622B87B0700B65C7E /* EJPhotoBrowser */,
+				53E2788F22B87B0900B65C7E /* EJPhotoBrowserTests */,
+				53E2789A22B87B0900B65C7E /* EJPhotoBrowserUITests */,
+				53E2787522B87B0700B65C7E /* Products */,
+				B6916384E5EF1115C9EC084B /* Pods */,
+				AEA838FC2BE5B0113EAF18FC /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		53E2787522B87B0700B65C7E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				53E2787422B87B0700B65C7E /* EJPhotoBrowser.app */,
+				53E2788C22B87B0900B65C7E /* EJPhotoBrowserTests.xctest */,
+				53E2789722B87B0900B65C7E /* EJPhotoBrowserUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		53E2787622B87B0700B65C7E /* EJPhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				53E032F722FA767600AB3B04 /* EJPhotoSelect */,
+				53CB9F0422F804CA00A85A77 /* Model */,
+				53CB9F0022F7DEF100A85A77 /* ViewController */,
+				53CB9EFF22F7DEDB00A85A77 /* View */,
+				53E2787722B87B0700B65C7E /* AppDelegate.h */,
+				53E2787822B87B0700B65C7E /* AppDelegate.m */,
+				53E2788022B87B0800B65C7E /* Assets.xcassets */,
+				53E2791B22B8926B00B65C7E /* EJPrefixHeader.pch */,
+				53E2791C22B8938500B65C7E /* EJUserDefine.h */,
+				53E2788522B87B0800B65C7E /* Info.plist */,
+				53E2788222B87B0800B65C7E /* LaunchScreen.storyboard */,
+				53E2788622B87B0800B65C7E /* main.m */,
+				53E2787D22B87B0700B65C7E /* Main.storyboard */,
+			);
+			path = EJPhotoBrowser;
+			sourceTree = "<group>";
+		};
+		53E2788F22B87B0900B65C7E /* EJPhotoBrowserTests */ = {
+			isa = PBXGroup;
+			children = (
+				53E2789022B87B0900B65C7E /* EJPhotoBrowserTests.m */,
+				53E2789222B87B0900B65C7E /* Info.plist */,
+			);
+			path = EJPhotoBrowserTests;
+			sourceTree = "<group>";
+		};
+		53E2789A22B87B0900B65C7E /* EJPhotoBrowserUITests */ = {
+			isa = PBXGroup;
+			children = (
+				53E2789B22B87B0900B65C7E /* EJPhotoBrowserUITests.m */,
+				53E2789D22B87B0900B65C7E /* Info.plist */,
+			);
+			path = EJPhotoBrowserUITests;
+			sourceTree = "<group>";
+		};
+		AEA838FC2BE5B0113EAF18FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5312DF8922C220E700A59718 /* MediaPlayer.framework */,
+				53E2791D22B8948800B65C7E /* AVFoundation.framework */,
+				53E2790322B88F9F00B65C7E /* Photos.framework */,
+				780319760F14163697AC7A8B /* Pods_EJPhotoBrowser.framework */,
+				917FF35EF63493CD103DC96E /* Pods_EJPhotoBrowserTests.framework */,
+				95292D840DE70ADEB9A2B1FA /* Pods_EJPhotoBrowserUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B6916384E5EF1115C9EC084B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				658B5D164F9798D73DD0DE7F /* Pods-EJPhotoBrowser.debug.xcconfig */,
+				8D11873BE7DC5C69BF7E3EB6 /* Pods-EJPhotoBrowser.release.xcconfig */,
+				0F865038130F1F453864CA1D /* Pods-EJPhotoBrowserTests.debug.xcconfig */,
+				AFA0A6C54884AA4EDE1F32DA /* Pods-EJPhotoBrowserTests.release.xcconfig */,
+				AB6EFA6BDDDB164BC0B2ABC9 /* Pods-EJPhotoBrowserUITests.debug.xcconfig */,
+				85D163F072208726D8715C06 /* Pods-EJPhotoBrowserUITests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		53E2787322B87B0700B65C7E /* EJPhotoBrowser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53E278A022B87B0900B65C7E /* Build configuration list for PBXNativeTarget "EJPhotoBrowser" */;
+			buildPhases = (
+				46770653BDFD78DF3F53F4F9 /* [CP] Check Pods Manifest.lock */,
+				53E2787022B87B0700B65C7E /* Sources */,
+				53E2787122B87B0700B65C7E /* Frameworks */,
+				53E2787222B87B0700B65C7E /* Resources */,
+				9711B8732FBD186C792C632E /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EJPhotoBrowser;
+			productName = EJPhotoBrowser;
+			productReference = 53E2787422B87B0700B65C7E /* EJPhotoBrowser.app */;
+			productType = "com.apple.product-type.application";
+		};
+		53E2788B22B87B0900B65C7E /* EJPhotoBrowserTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53E278A322B87B0900B65C7E /* Build configuration list for PBXNativeTarget "EJPhotoBrowserTests" */;
+			buildPhases = (
+				305A495AC9CFCEE3E9FA7157 /* [CP] Check Pods Manifest.lock */,
+				53E2788822B87B0900B65C7E /* Sources */,
+				53E2788922B87B0900B65C7E /* Frameworks */,
+				53E2788A22B87B0900B65C7E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				53E2788E22B87B0900B65C7E /* PBXTargetDependency */,
+			);
+			name = EJPhotoBrowserTests;
+			productName = EJPhotoBrowserTests;
+			productReference = 53E2788C22B87B0900B65C7E /* EJPhotoBrowserTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		53E2789622B87B0900B65C7E /* EJPhotoBrowserUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53E278A622B87B0900B65C7E /* Build configuration list for PBXNativeTarget "EJPhotoBrowserUITests" */;
+			buildPhases = (
+				1EFC69E339EF6F3F40CE1371 /* [CP] Check Pods Manifest.lock */,
+				53E2789322B87B0900B65C7E /* Sources */,
+				53E2789422B87B0900B65C7E /* Frameworks */,
+				53E2789522B87B0900B65C7E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				53E2789922B87B0900B65C7E /* PBXTargetDependency */,
+			);
+			name = EJPhotoBrowserUITests;
+			productName = EJPhotoBrowserUITests;
+			productReference = 53E2789722B87B0900B65C7E /* EJPhotoBrowserUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		53E2786C22B87B0700B65C7E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = EJ;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = LiuShuang;
+				TargetAttributes = {
+					53E2787322B87B0700B65C7E = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					53E2788B22B87B0900B65C7E = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 53E2787322B87B0700B65C7E;
+					};
+					53E2789622B87B0900B65C7E = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 53E2787322B87B0700B65C7E;
+					};
+				};
+			};
+			buildConfigurationList = 53E2786F22B87B0700B65C7E /* Build configuration list for PBXProject "EJPhotoBrowser" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 53E2786B22B87B0700B65C7E;
+			productRefGroup = 53E2787522B87B0700B65C7E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				53E2787322B87B0700B65C7E /* EJPhotoBrowser */,
+				53E2788B22B87B0900B65C7E /* EJPhotoBrowserTests */,
+				53E2789622B87B0900B65C7E /* EJPhotoBrowserUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		53E2787222B87B0700B65C7E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53E0335F22FA767600AB3B04 /* LSVideoFrameCell.xib in Resources */,
+				53E2788422B87B0800B65C7E /* LaunchScreen.storyboard in Resources */,
+				53CB9EFE22F7D97100A85A77 /* EJAddCell.xib in Resources */,
+				53E2788122B87B0800B65C7E /* Assets.xcassets in Resources */,
+				53CB9EF922F7D95900A85A77 /* EJSelectedCell.xib in Resources */,
+				53E0335622FA767600AB3B04 /* EJImagePickerShotCell.xib in Resources */,
+				53E2787F22B87B0700B65C7E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53E2788A22B87B0900B65C7E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53E2789522B87B0900B65C7E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1EFC69E339EF6F3F40CE1371 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EJPhotoBrowserUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		305A495AC9CFCEE3E9FA7157 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EJPhotoBrowserTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		46770653BDFD78DF3F53F4F9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EJPhotoBrowser-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9711B8732FBD186C792C632E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EJPhotoBrowser/Pods-EJPhotoBrowser-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EJPhotoBrowser/Pods-EJPhotoBrowser-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EJPhotoBrowser/Pods-EJPhotoBrowser-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		53E2787022B87B0700B65C7E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53E0335A22FA767600AB3B04 /* NSObject+LSAuthorization.m in Sources */,
+				53E0336622FA767600AB3B04 /* EJPhoto.m in Sources */,
+				53E0335422FA767600AB3B04 /* LSAlbumListCell.m in Sources */,
+				53E0335922FA767600AB3B04 /* UIViewController+LSAuthorization.m in Sources */,
+				53E0336822FA767600AB3B04 /* UIImage+EJPhotoBrowser.m in Sources */,
+				53E0336122FA767600AB3B04 /* LSVideoFrameCell.m in Sources */,
+				53E0336022FA767600AB3B04 /* LSEditFrameView.m in Sources */,
+				53E0335322FA767600AB3B04 /* EJ_AlbumModel.m in Sources */,
+				53E0336A22FA767600AB3B04 /* EJPhotoBrowser.m in Sources */,
+				53E0336322FA767600AB3B04 /* EJViewController.m in Sources */,
+				53E0334F22FA767600AB3B04 /* EJPlayerControlView.m in Sources */,
+				53E0336D22FA767600AB3B04 /* EJCameraShotView.m in Sources */,
+				53E0335522FA767600AB3B04 /* LSAssetCollectionToolBar.m in Sources */,
+				53E0334E22FA767600AB3B04 /* EJVideoPlayerVC.m in Sources */,
+				53CB9EFD22F7D97100A85A77 /* EJAddCell.m in Sources */,
+				53E0336422FA767600AB3B04 /* EJImageCropperVC.m in Sources */,
+				53E0335B22FA767600AB3B04 /* EJImageManager.m in Sources */,
+				53CB9F0322F7DF0E00A85A77 /* EJConfigVC.m in Sources */,
+				53CB9EF822F7D95900A85A77 /* EJSelectedCell.m in Sources */,
+				53E0335022FA767600AB3B04 /* EJAlbumPickerVC.m in Sources */,
+				53E2787C22B87B0700B65C7E /* ViewController.m in Sources */,
+				53E0336522FA767600AB3B04 /* EJTapDetectingImageView.m in Sources */,
+				53E0335722FA767600AB3B04 /* LSAssetItemCell.m in Sources */,
+				53CB9F0722F804E400A85A77 /* EJConfigModel.m in Sources */,
+				53E0335122FA767600AB3B04 /* EJImagePickerNVC.m in Sources */,
+				53E0335222FA767600AB3B04 /* EJImagePickerVC.m in Sources */,
+				53E2788722B87B0800B65C7E /* main.m in Sources */,
+				53E0336222FA767600AB3B04 /* LSInterceptView.m in Sources */,
+				53E2787922B87B0700B65C7E /* AppDelegate.m in Sources */,
+				53E0336C22FA767600AB3B04 /* NSString+EJShot.m in Sources */,
+				53E0336722FA767600AB3B04 /* EJZoomingScrollView.m in Sources */,
+				53E0335822FA767600AB3B04 /* EJImagePickerShotCell.m in Sources */,
+				53E0335E22FA767600AB3B04 /* LSInterceptVideo.m in Sources */,
+				53E0336B22FA767600AB3B04 /* EJCameraShotVC.m in Sources */,
+				53E0336922FA767600AB3B04 /* EJTapDetectingView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53E2788822B87B0900B65C7E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53E2789122B87B0900B65C7E /* EJPhotoBrowserTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53E2789322B87B0900B65C7E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53E2789C22B87B0900B65C7E /* EJPhotoBrowserUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		53E2788E22B87B0900B65C7E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 53E2787322B87B0700B65C7E /* EJPhotoBrowser */;
+			targetProxy = 53E2788D22B87B0900B65C7E /* PBXContainerItemProxy */;
+		};
+		53E2789922B87B0900B65C7E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 53E2787322B87B0700B65C7E /* EJPhotoBrowser */;
+			targetProxy = 53E2789822B87B0900B65C7E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		53E2787D22B87B0700B65C7E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				53E2787E22B87B0700B65C7E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		53E2788222B87B0800B65C7E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				53E2788322B87B0800B65C7E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		53E2789E22B87B0900B65C7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		53E2789F22B87B0900B65C7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		53E278A122B87B0900B65C7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 658B5D164F9798D73DD0DE7F /* Pods-EJPhotoBrowser.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EJPhotoBrowser",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/EJPhotoBrowser/EJPrefixHeader.pch";
+				INFOPLIST_FILE = EJPhotoBrowser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lius.EJPhotoBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		53E278A222B87B0900B65C7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D11873BE7DC5C69BF7E3EB6 /* Pods-EJPhotoBrowser.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EJPhotoBrowser",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/EJPhotoBrowser/EJPrefixHeader.pch";
+				INFOPLIST_FILE = EJPhotoBrowser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lius.EJPhotoBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		53E278A422B87B0900B65C7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F865038130F1F453864CA1D /* Pods-EJPhotoBrowserTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				INFOPLIST_FILE = EJPhotoBrowserTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lius.EJPhotoBrowserTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EJPhotoBrowser.app/EJPhotoBrowser";
+			};
+			name = Debug;
+		};
+		53E278A522B87B0900B65C7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFA0A6C54884AA4EDE1F32DA /* Pods-EJPhotoBrowserTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				INFOPLIST_FILE = EJPhotoBrowserTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lius.EJPhotoBrowserTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EJPhotoBrowser.app/EJPhotoBrowser";
+			};
+			name = Release;
+		};
+		53E278A722B87B0900B65C7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB6EFA6BDDDB164BC0B2ABC9 /* Pods-EJPhotoBrowserUITests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				INFOPLIST_FILE = EJPhotoBrowserUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lius.EJPhotoBrowserUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EJPhotoBrowser;
+			};
+			name = Debug;
+		};
+		53E278A822B87B0900B65C7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85D163F072208726D8715C06 /* Pods-EJPhotoBrowserUITests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				INFOPLIST_FILE = EJPhotoBrowserUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lius.EJPhotoBrowserUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EJPhotoBrowser;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		53E2786F22B87B0700B65C7E /* Build configuration list for PBXProject "EJPhotoBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				53E2789E22B87B0900B65C7E /* Debug */,
+				53E2789F22B87B0900B65C7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		53E278A022B87B0900B65C7E /* Build configuration list for PBXNativeTarget "EJPhotoBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				53E278A122B87B0900B65C7E /* Debug */,
+				53E278A222B87B0900B65C7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		53E278A322B87B0900B65C7E /* Build configuration list for PBXNativeTarget "EJPhotoBrowserTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				53E278A422B87B0900B65C7E /* Debug */,
+				53E278A522B87B0900B65C7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		53E278A622B87B0900B65C7E /* Build configuration list for PBXNativeTarget "EJPhotoBrowserUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				53E278A722B87B0900B65C7E /* Debug */,
+				53E278A822B87B0900B65C7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 53E2786C22B87B0700B65C7E /* Project object */;
+}
