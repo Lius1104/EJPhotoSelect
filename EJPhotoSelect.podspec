@@ -174,7 +174,7 @@ Pod::Spec.new do |spec|
     # ss.dependency 'MJRefresh'
   end
   spec.subspec 'Shot' do |ss|
-	ss.iOS.deployment_target = '8.0'
+	ss.ios.deployment_target = '8.0'
 	ss.public_header_files = "EJPhotoSelect/Shot/**/*.h"
     ss.source_files = "EJPhotoSelect/Shot/**/*.{h,m}"
   end
