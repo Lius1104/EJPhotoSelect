@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		096E7BA33486B00047BD3064 /* Pods_EJPhotoBrowserUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95292D840DE70ADEB9A2B1FA /* Pods_EJPhotoBrowserUITests.framework */; };
 		5312DF8A22C220E700A59718 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5312DF8922C220E700A59718 /* MediaPlayer.framework */; };
+		5369123422FAB00F00D8B5F2 /* EJImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5369123322FAB00F00D8B5F2 /* EJImageManager.m */; };
 		53CB9EF822F7D95900A85A77 /* EJSelectedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */; };
 		53CB9EF922F7D95900A85A77 /* EJSelectedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */; };
 		53CB9EFD22F7D97100A85A77 /* EJAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9EFB22F7D97100A85A77 /* EJAddCell.m */; };
@@ -28,7 +29,6 @@
 		53E0335822FA767600AB3B04 /* EJImagePickerShotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331422FA767600AB3B04 /* EJImagePickerShotCell.m */; };
 		53E0335922FA767600AB3B04 /* UIViewController+LSAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331822FA767600AB3B04 /* UIViewController+LSAuthorization.m */; };
 		53E0335A22FA767600AB3B04 /* NSObject+LSAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331922FA767600AB3B04 /* NSObject+LSAuthorization.m */; };
-		53E0335B22FA767600AB3B04 /* EJImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0331B22FA767600AB3B04 /* EJImageManager.m */; };
 		53E0335E22FA767600AB3B04 /* LSInterceptVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332322FA767600AB3B04 /* LSInterceptVideo.m */; };
 		53E0335F22FA767600AB3B04 /* LSVideoFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E0332722FA767600AB3B04 /* LSVideoFrameCell.xib */; };
 		53E0336022FA767600AB3B04 /* LSEditFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332822FA767600AB3B04 /* LSEditFrameView.m */; };
@@ -79,6 +79,9 @@
 /* Begin PBXFileReference section */
 		0F865038130F1F453864CA1D /* Pods-EJPhotoBrowserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowserTests.debug.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowserTests/Pods-EJPhotoBrowserTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5312DF8922C220E700A59718 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		5369123122FAB00F00D8B5F2 /* EJImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageManager.h; sourceTree = "<group>"; };
+		5369123222FAB00F00D8B5F2 /* ImagePickerEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerEnums.h; sourceTree = "<group>"; };
+		5369123322FAB00F00D8B5F2 /* EJImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageManager.m; sourceTree = "<group>"; };
 		53CB9EF522F7D95900A85A77 /* EJSelectedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJSelectedCell.h; sourceTree = "<group>"; };
 		53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJSelectedCell.m; sourceTree = "<group>"; };
 		53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EJSelectedCell.xib; sourceTree = "<group>"; };
@@ -93,14 +96,12 @@
 		53E032FB22FA767600AB3B04 /* EJVideoPlayerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJVideoPlayerVC.h; sourceTree = "<group>"; };
 		53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJPlayerControlView.m; sourceTree = "<group>"; };
 		53E032FE22FA767600AB3B04 /* EJPlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPlayerControlView.h; sourceTree = "<group>"; };
-		53E0330022FA767600AB3B04 /* EJImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageManager.h; sourceTree = "<group>"; };
 		53E0330222FA767600AB3B04 /* EJImagePickerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImagePickerVC.h; sourceTree = "<group>"; };
 		53E0330322FA767600AB3B04 /* EJImagePickerNVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImagePickerNVC.h; sourceTree = "<group>"; };
 		53E0330422FA767600AB3B04 /* EJAlbumPickerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJAlbumPickerVC.m; sourceTree = "<group>"; };
 		53E0330522FA767600AB3B04 /* EJImagePickerNVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImagePickerNVC.m; sourceTree = "<group>"; };
 		53E0330622FA767600AB3B04 /* EJImagePickerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImagePickerVC.m; sourceTree = "<group>"; };
 		53E0330722FA767600AB3B04 /* EJAlbumPickerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJAlbumPickerVC.h; sourceTree = "<group>"; };
-		53E0330822FA767600AB3B04 /* ImagePickerEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerEnums.h; sourceTree = "<group>"; };
 		53E0330A22FA767600AB3B04 /* EJ_AlbumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJ_AlbumModel.m; sourceTree = "<group>"; };
 		53E0330B22FA767600AB3B04 /* EJ_AlbumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJ_AlbumModel.h; sourceTree = "<group>"; };
 		53E0330D22FA767600AB3B04 /* LSAssetItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSAssetItemCell.h; sourceTree = "<group>"; };
@@ -116,7 +117,6 @@
 		53E0331822FA767600AB3B04 /* UIViewController+LSAuthorization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LSAuthorization.m"; sourceTree = "<group>"; };
 		53E0331922FA767600AB3B04 /* NSObject+LSAuthorization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LSAuthorization.m"; sourceTree = "<group>"; };
 		53E0331A22FA767600AB3B04 /* UIViewController+LSAuthorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LSAuthorization.h"; sourceTree = "<group>"; };
-		53E0331B22FA767600AB3B04 /* EJImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageManager.m; sourceTree = "<group>"; };
 		53E0332222FA767600AB3B04 /* LSInterceptVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSInterceptVideo.h; sourceTree = "<group>"; };
 		53E0332322FA767600AB3B04 /* LSInterceptVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSInterceptVideo.m; sourceTree = "<group>"; };
 		53E0332522FA767600AB3B04 /* LSSourceCrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSSourceCrop.h; sourceTree = "<group>"; };
@@ -145,7 +145,6 @@
 		53E0334022FA767600AB3B04 /* EJTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJTapDetectingView.m; sourceTree = "<group>"; };
 		53E0334122FA767600AB3B04 /* EJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPhoto.h; sourceTree = "<group>"; };
 		53E0334222FA767600AB3B04 /* EJPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJPhotoBrowser.m; sourceTree = "<group>"; };
-		53E0334322FA767600AB3B04 /* EJLocalPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJLocalPhotos.h; sourceTree = "<group>"; };
 		53E0334622FA767600AB3B04 /* EJCameraShotVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJCameraShotVC.m; sourceTree = "<group>"; };
 		53E0334722FA767600AB3B04 /* EJCameraShotVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJCameraShotVC.h; sourceTree = "<group>"; };
 		53E0334922FA767600AB3B04 /* NSString+EJShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+EJShot.m"; sourceTree = "<group>"; };
@@ -251,10 +250,8 @@
 			children = (
 				53E032F822FA767600AB3B04 /* VideoPlay */,
 				53E032FF22FA767600AB3B04 /* ImagePicker */,
-				53E0331C22FA767600AB3B04 /* Framework */,
 				53E0331F22FA767600AB3B04 /* Edit */,
 				53E0333422FA767600AB3B04 /* PhotoBrowser */,
-				53E0334322FA767600AB3B04 /* EJLocalPhotos.h */,
 				53E0334422FA767600AB3B04 /* Shot */,
 			);
 			name = EJPhotoSelect;
@@ -291,13 +288,10 @@
 		53E032FF22FA767600AB3B04 /* ImagePicker */ = {
 			isa = PBXGroup;
 			children = (
-				53E0330022FA767600AB3B04 /* EJImageManager.h */,
+				53E0331622FA767600AB3B04 /* Authorization */,
 				53E0330122FA767600AB3B04 /* Controller */,
-				53E0330822FA767600AB3B04 /* ImagePickerEnums.h */,
 				53E0330922FA767600AB3B04 /* Model */,
 				53E0330C22FA767600AB3B04 /* View */,
-				53E0331622FA767600AB3B04 /* Authorization */,
-				53E0331B22FA767600AB3B04 /* EJImageManager.m */,
 			);
 			path = ImagePicker;
 			sourceTree = "<group>";
@@ -318,6 +312,9 @@
 		53E0330922FA767600AB3B04 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5369123122FAB00F00D8B5F2 /* EJImageManager.h */,
+				5369123322FAB00F00D8B5F2 /* EJImageManager.m */,
+				5369123222FAB00F00D8B5F2 /* ImagePickerEnums.h */,
 				53E0330A22FA767600AB3B04 /* EJ_AlbumModel.m */,
 				53E0330B22FA767600AB3B04 /* EJ_AlbumModel.h */,
 			);
@@ -349,13 +346,6 @@
 				53E0331A22FA767600AB3B04 /* UIViewController+LSAuthorization.h */,
 			);
 			path = Authorization;
-			sourceTree = "<group>";
-		};
-		53E0331C22FA767600AB3B04 /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Framework;
 			sourceTree = "<group>";
 		};
 		53E0331F22FA767600AB3B04 /* Edit */ = {
@@ -812,7 +802,6 @@
 				53E0334E22FA767600AB3B04 /* EJVideoPlayerVC.m in Sources */,
 				53CB9EFD22F7D97100A85A77 /* EJAddCell.m in Sources */,
 				53E0336422FA767600AB3B04 /* EJImageCropperVC.m in Sources */,
-				53E0335B22FA767600AB3B04 /* EJImageManager.m in Sources */,
 				53CB9F0322F7DF0E00A85A77 /* EJConfigVC.m in Sources */,
 				53CB9EF822F7D95900A85A77 /* EJSelectedCell.m in Sources */,
 				53E0335022FA767600AB3B04 /* EJAlbumPickerVC.m in Sources */,
@@ -820,6 +809,7 @@
 				53E0336522FA767600AB3B04 /* EJTapDetectingImageView.m in Sources */,
 				53E0335722FA767600AB3B04 /* LSAssetItemCell.m in Sources */,
 				53CB9F0722F804E400A85A77 /* EJConfigModel.m in Sources */,
+				5369123422FAB00F00D8B5F2 /* EJImageManager.m in Sources */,
 				53E0335122FA767600AB3B04 /* EJImagePickerNVC.m in Sources */,
 				53E0335222FA767600AB3B04 /* EJImagePickerVC.m in Sources */,
 				53E2788722B87B0800B65C7E /* main.m in Sources */,

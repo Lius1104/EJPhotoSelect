@@ -16,18 +16,18 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "EJPhotoSelect"
-  spec.version      = "0.0.1"
-  spec.summary      = "A short description of EJPhotoSelect."
+  spec.version      = "1.0.0"
+  spec.summary      = "本地照片选择器"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
   #   * Try to keep it short, snappy and to the point.
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
-  spec.description  = <<-DESC
-                   DESC
+  # spec.description  = <<-DESC
+                   # DESC
 
-  spec.homepage     = "http://EXAMPLE/EJPhotoSelect"
+  spec.homepage     = "https://github.com/Lius1104/EJPhotoSelect"
   # spec.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -38,8 +38,8 @@ Pod::Spec.new do |spec|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  spec.license      = "MIT (example)"
-  # spec.license      = { :type => "MIT", :file => "FILE_LICENSE" }
+  # spec.license      = "MIT (example)"
+  spec.license      = { :type => "MIT", :file => "LICENSE" }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -52,7 +52,7 @@ Pod::Spec.new do |spec|
   #  profile URL.
   #
 
-  spec.author             = { "" => "" }
+  spec.author             = { "Lius" => "849763605@qq.com" }
   # Or just: spec.author    = ""
   # spec.authors            = { "" => "" }
   # spec.social_media_url   = "https://twitter.com/"
@@ -64,10 +64,10 @@ Pod::Spec.new do |spec|
   #
 
   # spec.platform     = :ios
-  # spec.platform     = :ios, "5.0"
+  spec.platform     = :ios, "8.0"
 
   #  When using multiple platforms
-  # spec.ios.deployment_target = "5.0"
+  spec.ios.deployment_target = "8.0"
   # spec.osx.deployment_target = "10.7"
   # spec.watchos.deployment_target = "2.0"
   # spec.tvos.deployment_target = "9.0"
@@ -79,7 +79,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "http://EXAMPLE/EJPhotoSelect.git", :tag => "#{spec.version}" }
+  spec.source       = { :git => "https://github.com/Lius1104/EJPhotoSelect.git", :tag => "#{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -90,10 +90,10 @@ Pod::Spec.new do |spec|
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "Classes", "Classes/**/*.{h,m}"
-  spec.exclude_files = "Classes/Exclude"
+  spec.source_files  = "EJPhotoSelect", "EJPhotoSelect/**/*.{h,m}"
+  # spec.exclude_files = "Classes/Exclude"
 
-  # spec.public_header_files = "Classes/**/*.h"
+  spec.public_header_files = "EJPhotoSelect/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -117,7 +117,7 @@ Pod::Spec.new do |spec|
   #
 
   # spec.framework  = "SomeFramework"
-  # spec.frameworks = "SomeFramework", "AnotherFramework"
+  spec.frameworks = "UIKit", "Foundation"
 
   # spec.library   = "iconv"
   # spec.libraries = "iconv", "xml2"
@@ -129,9 +129,54 @@ Pod::Spec.new do |spec|
   #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
-  # spec.requires_arc = true
+  spec.requires_arc = true
 
   # spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # spec.dependency "JSONKit", "~> 1.4"
+  spec.dependency 'SDWebImage'
+  spec.dependency 'DACircularProgress'
+  spec.dependency 'MBProgressHUD'
+  spec.dependency 'YYKit'
+  spec.dependency 'JPImageresizerView'
+  spec.dependency 'FDFullscreenPopGesture'
+  spec.dependency 'Masonry'
+  spec.dependency 'LSToolsKit'
+  spec.dependency 'JoyssomTool'
+  spec.dependency 'EJWarningCardKit'
+  spec.dependency 'EJTools'
+
+  spec.subspec 'VideoPlay' do |ss|
+    ss.ios.deployment_target = '8.0'
+    ss.public_header_files = "EJPhotoSelect/VideoPlay/**/*.h"
+    ss.source_files = "EJPhotoSelect/VideoPlay/**/*.{h,m}"
+    # ss.dependency 'SDWebImage'
+    # ss.dependency 'YYKit'
+  end
+
+  spec.subspec 'ImagePicker' do |ss|
+    ss.ios.deployment_target = '8.0'
+    ss.public_header_files = "EJPhotoSelect/ImagePicker/**/*.h"
+    ss.source_files = "EJPhotoSelect/ImagePicker/**/*.{h,m}"
+    # ss.dependency 'DZNEmptyDataSet'
+    # ss.dependency 'LSToolsKit'
+  end
+
+  spec.subspec 'Edit' do |ss|
+    ss.ios.deployment_target = '8.0'
+    ss.public_header_files = "EJPhotoSelect/Edit/**/*.h"
+    ss.source_files = "EJPhotoSelect/Edit/**/*.{h,m}"
+    # ss.dependency 'MBProgressHUD'
+  end
+  spec.subspec 'PhotoBrowser' do |ss|
+    ss.ios.deployment_target = '8.0'
+    ss.public_header_files = "EJPhotoSelect/PhotoBrowser/*.h"
+    ss.source_files = "EJPhotoSelect/PhotoBrowser/*.{h,m}"
+    # ss.dependency 'MJRefresh'
+  end
+  spec.subspec 'Shot' do |ss|
+	ss.iOS.deployment_target = '8.0'
+	ss.public_header_files = "EJPhotoSelect/Shot/**/*.h"
+    ss.source_files = "EJPhotoSelect/Shot/**/*.{h,m}"
+  end
 
 end
