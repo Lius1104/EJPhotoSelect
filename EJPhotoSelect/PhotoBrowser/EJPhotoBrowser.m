@@ -9,7 +9,7 @@
 
 #import "EJPhotoBrowser.h"
 #import "EJPhotoBrowserPrivate.h"
-
+#import "EJPhotoSelectDefine.h"
 
 #import "EJImageCropperVC.h"
 #import <UINavigationController+FDFullscreenPopGesture.h>
@@ -146,7 +146,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     
     self.fd_prefersNavigationBarHidden = YES;
 	// View
-    self.view.backgroundColor = UIColorHex(ffffff);
+    self.view.backgroundColor = [UIColor blackColor];
     self.view.clipsToBounds = YES;
     
 	
@@ -173,53 +173,63 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     _pagingScrollView.delegate = self;
     _pagingScrollView.showsHorizontalScrollIndicator = NO;
     _pagingScrollView.showsVerticalScrollIndicator = NO;
-    _pagingScrollView.backgroundColor = UIColorHex(ffffff);
+    _pagingScrollView.backgroundColor = [UIColor blackColor];
     _pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
     [self.view addSubview:_pagingScrollView];
     
     [_pagingScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            make.left.equalTo(self.view.mas_safeAreaLayoutGuideLeft);
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+            make.right.equalTo(self.view.mas_safeAreaLayoutGuideRight);
+        } else {
+            make.top.equalTo(self.view.mas_top);
+            make.left.equalTo(self.view.mas_left);
+            make.bottom.equalTo(self.view.mas_bottom);
+            make.right.equalTo(self.view.mas_right);
+        }
     }];
     
     _navigationBar = [[UIView alloc] init];
-    _navigationBar.backgroundColor = kBarTintColor;
+    _navigationBar.backgroundColor = [UIColorHex(010101) colorWithAlphaComponent:0.94];
     [self configNavigationBar];
     [self.view addSubview:_navigationBar];
     
     [_navigationBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.equalTo(self.view);
-        make.height.mas_equalTo(NavStatusHeight);
+        make.height.mas_equalTo(kToolsNavStatusHeight);
     }];
     
     _bottomBar = [[UIView alloc] init];
-    _bottomBar.backgroundColor = kBarTintColor;
+    _bottomBar.backgroundColor = [UIColorHex(010101) colorWithAlphaComponent:0.94];
     [self configBottomBar];
     [self.view addSubview:_bottomBar];
     
     [_bottomBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.bottom.right.equalTo(self.view);
-        make.height.mas_equalTo(kBottomSafeHeight + 50);
+        make.height.mas_equalTo(kToolsBottomSafeHeight + 42);
     }];
 }
 
 - (void)configNavigationBar {
-    UIView *bottomLine = [[UIView alloc] init];
-    bottomLine.backgroundColor = kLineColor;
-    [_navigationBar addSubview:bottomLine];
-    [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(_navigationBar);
-        make.height.mas_equalTo(0.5);
-    }];
+//    UIView *bottomLine = [[UIView alloc] init];
+//    bottomLine.backgroundColor = kLineColor;
+//    [_navigationBar addSubview:bottomLine];
+//    [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.bottom.equalTo(_navigationBar);
+//        make.height.mas_equalTo(0.5);
+//    }];
     
     _backItem = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_backItem setImage:[UIImage imageNamed:@"public_icon_back"] forState:UIControlStateNormal];
+    [_backItem setImage:[UIImage imageNamed:@"ejtools_back"] forState:UIControlStateNormal];
     [_backItem addTarget:self action:@selector(handleClickBackItem) forControlEvents:UIControlEventTouchUpInside];
     _backItem.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_navigationBar addSubview:_backItem];
     
     _titleLabel = [[UILabel alloc] init];
     _titleLabel.font = [UIFont systemFontOfSize:18];
-    _titleLabel.textColor = kTintColor;
+    _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.text = @"预览";
     [_navigationBar addSubview:_titleLabel];
@@ -231,45 +241,34 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [_navigationBar addSubview:_selectButton];
     _selectButton.hidden = !_showSelectButton;
     
-    _backItem.frame = CGRectMake(8, StatusHeight, 25, NavStatusHeight - StatusHeight);
-    _selectButton.frame = CGRectMake(self.view.width - 30 - 13, StatusHeight, 30, 30);
+    _backItem.frame = CGRectMake(8, kToolsStatusHeight, 25, kToolsNavStatusHeight - kToolsStatusHeight);
+    _selectButton.frame = CGRectMake(self.view.width - 30 - 13, kToolsStatusHeight, 30, 30);
     _selectButton.centerY = _backItem.centerY;
     
     _titleLabel.frame = CGRectMake(_backItem.right + 10, _backItem.top, _selectButton.left - 10 - _backItem.right - 10, _backItem.height);
 }
 
 - (void)configBottomBar {
-    UIView * topLine = [[UIView alloc] init];
-    topLine.backgroundColor = kLineColor;
-    [_bottomBar addSubview:topLine];
-    [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.right.equalTo(_bottomBar);
-        make.height.mas_equalTo(0.5);
-    }];
+//    UIView * topLine = [[UIView alloc] init];
+//    topLine.backgroundColor = kLineColor;
+//    [_bottomBar addSubview:topLine];
+//    [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.top.right.equalTo(_bottomBar);
+//        make.height.mas_equalTo(0.5);
+//    }];
     
-//    _indexLabel = [[UILabel alloc] init];
-//    _indexLabel.font = [UIFont systemFontOfSize:16];
-//    _indexLabel.textColor = kTintColor;
-//    [_bottomBar addSubview:_indexLabel];
     
     if (_showCropButton) {
         _cropButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_cropButton setTitle:@"编辑" forState:UIControlStateNormal];
-        _cropButton.titleLabel.font = [UIFont systemFontOfSize:16];
-        [_cropButton setTitleColor:kMajorColor forState:UIControlStateNormal];
+        _cropButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_cropButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
         _cropButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_cropButton addTarget:self action:@selector(handleClickCropButton) forControlEvents:UIControlEventTouchUpInside];
         [_bottomBar addSubview:_cropButton];
     }
-//    if (_showSelectButton) {
-//        _selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [_selectButton setImage:[UIImage imageNamed:@"imagePicker_icon_normal"] forState:UIControlStateNormal];
-//        [_selectButton setImage:[UIImage imageNamed:@"imagePicker_icon_selected"] forState:UIControlStateSelected];
-//        [_selectButton addTarget:self action:@selector(handleClickSelectButton) forControlEvents:UIControlEventTouchUpInside];
-//        [_bottomBar addSubview:_selectButton];
-//    }
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _doneButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [_doneButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
     [_doneButton setTitle:@"确定" forState:UIControlStateNormal];
     [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_normal"] forState:UIControlStateNormal];
@@ -283,15 +282,13 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [_doneButton addTarget:self action:@selector(handleClickDoneButton) forControlEvents:UIControlEventTouchUpInside];
     [_bottomBar addSubview:_doneButton];
     
-//    _indexLabel.frame = CGRectMake(14, 0, 85, 50);
-    _cropButton.frame = CGRectMake(14, 0, 45, 50);
-//    _doneButton.frame = CGRectMake(0, 0, 30, 50);
-//    _doneButton.right = kScreenWidth - 13;
+    _cropButton.frame = CGRectMake(14, 0, 45, 42);
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(_bottomBar.mas_right).offset(-13);
-        make.height.mas_equalTo(30);
+        make.height.mas_equalTo(27);
         make.width.mas_greaterThanOrEqualTo(50);
-        make.top.equalTo(_bottomBar.mas_top).offset(10);
+        make.top.equalTo(_bottomBar.mas_top).offset(6);
+//        make.centerY.equalTo(_bottomBar);
     }];
 }
 
@@ -780,8 +777,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
             // Add play button if needed
             if (page.displayingVideo) {
                 UIButton *playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                [playButton setImage:[UIImage imageNamed:@"home_icon_play"] forState:UIControlStateNormal];
-                [playButton setImage:[UIImage imageNamed:@"home_icon_play"] forState:UIControlStateHighlighted];
+                [playButton setImage:[UIImage imageNamed:@"ejtools_play"] forState:UIControlStateNormal];
+                [playButton setImage:[UIImage imageNamed:@"ejtools_play"] forState:UIControlStateHighlighted];
                 [playButton addTarget:self action:@selector(playButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
                 [playButton sizeToFit];
                 playButton.frame = [self frameForPlayButton:playButton atIndex:index];
@@ -902,6 +899,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     CGRect frame = self.view.bounds;// [[UIScreen mainScreen] bounds];
     frame.origin.x -= PADDING;
     frame.size.width += (2 * PADDING);
+    frame.size.height -= (kToolsStatusHeight + kToolsBottomSafeHeight);
     return CGRectIntegral(frame);
 }
 
@@ -958,10 +956,11 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 - (CGRect)frameForPlayButton:(UIButton *)playButton atIndex:(NSUInteger)index {
     CGRect pageFrame = [self frameForPageAtIndex:index];
-    return CGRectMake(floorf(CGRectGetMidX(pageFrame) - playButton.frame.size.width / 2),
-                      floorf(CGRectGetMidY(pageFrame) - playButton.frame.size.height / 2),
-                      playButton.frame.size.width,
-                      playButton.frame.size.height);
+//    return CGRectMake(floorf(CGRectGetMidX(pageFrame) - playButton.frame.size.width / 2),
+//                      floorf(CGRectGetMidY(pageFrame) - playButton.frame.size.height / 2),
+//                      playButton.frame.size.width,
+//                      playButton.frame.size.height);
+    return pageFrame;
 }
 
 #pragma mark - UIScrollView Delegate
@@ -1095,9 +1094,9 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [videoPlayer dismissViewControllerAnimated:NO completion:^{
         EJPhoto * photo = (EJPhoto *)[self photoAtIndex:_currentPageIndex];
         if (photo.asset) {
-            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:photo.asset defaultDuration:kInterceptDefaultDuration];
+            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:photo.asset defaultDuration:_maxVideoDuration];
             vc.delegate = self;
-            [self presentViewController:vc animated:YES completion:nil];
+            [self ej_presentViewController:vc animated:YES completion:nil];
         }
     }];
 }
@@ -1147,7 +1146,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     EJVideoPlayerVC * vc = [[EJVideoPlayerVC alloc] initWithURL:videoURL.absoluteString];
     vc.delegate = self;
     vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:vc animated:YES completion:nil];
+    [self ej_presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)clearCurrentVideo {
@@ -1371,9 +1370,9 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         PHAsset * asset = photo.asset;
         if (asset.mediaType == PHAssetMediaTypeVideo) {
             // 视频裁剪
-            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:kInterceptDefaultDuration];
+            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:_maxVideoDuration];
             vc.delegate = self;
-            [self presentViewController:vc animated:YES completion:nil];
+            [self ej_presentViewController:vc animated:YES completion:nil];
             return;
         }
         if (asset.mediaType == PHAssetMediaTypeImage) {

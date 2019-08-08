@@ -7,6 +7,7 @@
 //
 
 #import "EJCameraShotView.h"
+#import "EJPhotoSelectDefine.h"
 #import <YYKit/YYKit.h>
 
 typedef enum : NSUInteger {
@@ -122,7 +123,7 @@ typedef enum : NSUInteger {
     
     timeCount = 0;
     
-    _closeBtn = [[LSButton alloc] initWithFrame:CGRectMake([UIView ej_widthAt5ByWidth:28], StatusHeight + 20, 27, 27)];
+    _closeBtn = [[LSButton alloc] initWithFrame:CGRectMake([UIView ej_widthAt5ByWidth:28], kToolsStatusHeight + 20, 27, 27)];
     _closeBtn.expendDirection = ExpandingDirectionAll;
     _closeBtn.expendX = 15;
     _closeBtn.expendY = 15;
@@ -132,7 +133,7 @@ typedef enum : NSUInteger {
     
     [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(26, 26));
-        make.top.equalTo(self.mas_top).offset(StatusHeight + 14);
+        make.top.equalTo(self.mas_top).offset(kToolsStatusHeight + 14);
         make.left.equalTo(self.mas_left).offset(17);
     }];
 
@@ -146,7 +147,7 @@ typedef enum : NSUInteger {
     
     [_changeDeviceBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(27, 27));
-        make.top.equalTo(self.mas_top).offset(StatusHeight + 14);
+        make.top.equalTo(self.mas_top).offset(kToolsStatusHeight + 14);
         make.right.equalTo(self.mas_right).offset(-17);
     }];
     
@@ -178,7 +179,12 @@ typedef enum : NSUInteger {
         UIButton * photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [photoButton setTitle:@"照片" forState:UIControlStateNormal];
         [photoButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
+#if defined(kMajorColor)
         [photoButton setTitleColor:kMajorColor forState:UIControlStateSelected];
+#else
+        [photoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+#endif
+        
         photoButton.titleLabel.font = [UIFont systemFontOfSize:13];
         photoButton.frame = CGRectMake(0, 0, 45, 20);
         photoButton.selected = YES;
@@ -187,7 +193,11 @@ typedef enum : NSUInteger {
         UIButton * videoButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [videoButton setTitle:@"视频" forState:UIControlStateNormal];
         [videoButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
+#if defined(kMajorColor)
         [videoButton setTitleColor:kMajorColor forState:UIControlStateSelected];
+#else
+        [videoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+#endif
         videoButton.titleLabel.font = [UIFont systemFontOfSize:13];
         videoButton.frame = CGRectMake(45, 0, 45, 20);
         [_selectScroll addSubview:videoButton];
@@ -198,7 +208,11 @@ typedef enum : NSUInteger {
         [_toolView addSubview:_selectScroll];
         
         _selectedDot = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, 4)];
+#if defined(kMajorColor)
         _selectedDot.backgroundColor = kMajorColor;
+#else
+        _selectedDot.backgroundColor = [UIColor whiteColor];
+#endif
         _selectedDot.layer.cornerRadius = 2;
         _selectedDot.layer.masksToBounds = YES;
         [_toolView addSubview:_selectedDot];
@@ -277,7 +291,7 @@ typedef enum : NSUInteger {
     }];
     
     
-    _recordingView = [[UIView alloc] initWithFrame:CGRectMake(10, StatusHeight + 20, 88, 40)];
+    _recordingView = [[UIView alloc] initWithFrame:CGRectMake(10, kToolsStatusHeight + 20, 88, 40)];
     _recordingView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
     _recordingView.layer.cornerRadius = 5;
     _recordingView.layer.masksToBounds = YES;
@@ -286,11 +300,11 @@ typedef enum : NSUInteger {
     
     [_recordingView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(88, 40));
-        make.top.equalTo(self.mas_top).offset(20 + StatusHeight);
+        make.top.equalTo(self.mas_top).offset(20 + kToolsStatusHeight);
         make.left.equalTo(self.mas_left).offset(10);
     }];
 
-    _recordingImg = [[UIView alloc] initWithFrame:CGRectMake(20, StatusHeight + 20, 8, 8)];
+    _recordingImg = [[UIView alloc] initWithFrame:CGRectMake(20, kToolsStatusHeight + 20, 8, 8)];
     _recordingImg.backgroundColor = [UIColor redColor];
     _recordingImg.layer.cornerRadius = 4;
     _recordingImg.layer.masksToBounds = YES;
@@ -303,7 +317,7 @@ typedef enum : NSUInteger {
         make.centerY.equalTo(_recordingView.mas_centerY);
     }];
 
-    _videoTimeLab = [[UILabel alloc] initWithFrame:CGRectMake(_recordingImg.right + 5, StatusHeight + 20, 62, 20)];
+    _videoTimeLab = [[UILabel alloc] initWithFrame:CGRectMake(_recordingImg.right + 5, kToolsStatusHeight + 20, 62, 20)];
     _videoTimeLab.text = @"00:00";
     _videoTimeLab.font = [UIFont systemFontOfSize:15];
     _videoTimeLab.textColor = UIColorHex(ffffff);
@@ -454,7 +468,7 @@ typedef enum : NSUInteger {
     dispatch_async(dispatch_get_main_queue(), ^{
         CGAffineTransform transform = CGAffineTransformIdentity;
 
-        _recordingView.frame = CGRectMake(10, StatusHeight + 20, 88, 40);
+        _recordingView.frame = CGRectMake(10, kToolsStatusHeight + 20, 88, 40);
         switch (orientation) {
             case AVCaptureVideoOrientationPortrait:
             case AVCaptureVideoOrientationPortraitUpsideDown: {
@@ -465,12 +479,12 @@ typedef enum : NSUInteger {
                 _recordingView.layer.anchorPoint = CGPointMake(0.5, 0.5);
                 _recordingView.layer.position = CGPointZero;
                 _recordingView.transform = CGAffineTransformIdentity;
-                _recordingView.frame = CGRectMake(10, StatusHeight + 20, 88, 40);
+                _recordingView.frame = CGRectMake(10, kToolsStatusHeight + 20, 88, 40);
                 
                 _recordingView.layer.anchorPoint = CGPointMake(0.5, 0.5);
                 _recordingView.layer.position = CGPointZero;
                 _recordingView.transform = CGAffineTransformIdentity;
-                _recordingView.frame = CGRectMake(10, StatusHeight + 20, 88, 40);
+                _recordingView.frame = CGRectMake(10, kToolsStatusHeight + 20, 88, 40);
                 
                 _previewImage.transform = CGAffineTransformIdentity;
                 _previewLabel.transform = CGAffineTransformIdentity;
@@ -489,10 +503,10 @@ typedef enum : NSUInteger {
                 _recordingView.layer.anchorPoint = CGPointMake(0.5, 0.5);
                 _recordingView.layer.position = CGPointZero;
                 _recordingView.transform = CGAffineTransformIdentity;
-                _recordingView.frame = CGRectMake(10, StatusHeight + 20, 88, 40);
+                _recordingView.frame = CGRectMake(10, kToolsStatusHeight + 20, 88, 40);
                 
                 _recordingView.layer.anchorPoint = CGPointMake(0, 1);
-                _recordingView.layer.position = CGPointMake(StatusHeight + 20 - 7.5, 10 + 12.5);
+                _recordingView.layer.position = CGPointMake(kToolsStatusHeight + 20 - 7.5, 10 + 12.5);
                 _recordingView.transform = CGAffineTransformRotate(transform, M_PI_2);
                 
                 _previewImage.transform = CGAffineTransformRotate(transform, M_PI_2);
@@ -511,10 +525,10 @@ typedef enum : NSUInteger {
                 _recordingView.layer.anchorPoint = CGPointMake(0.5, 0.5);
                 _recordingView.layer.position = CGPointZero;
                 _recordingView.transform = CGAffineTransformIdentity;
-                _recordingView.frame = CGRectMake(10, StatusHeight + 20, 88, 40);
+                _recordingView.frame = CGRectMake(10, kToolsStatusHeight + 20, 88, 40);
                 
                 _recordingView.layer.anchorPoint = CGPointMake(1, 1);
-                _recordingView.layer.position = CGPointMake(StatusHeight + 20 + 7.5, 10 + 12.5);
+                _recordingView.layer.position = CGPointMake(kToolsStatusHeight + 20 + 7.5, 10 + 12.5);
                 _recordingView.transform = CGAffineTransformRotate(transform, -M_PI_2);
                 
                 _previewImage.transform = CGAffineTransformRotate(transform, -M_PI_2);

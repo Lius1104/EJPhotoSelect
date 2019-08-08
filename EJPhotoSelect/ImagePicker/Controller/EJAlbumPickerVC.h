@@ -6,14 +6,15 @@
 //  Copyright © 2019 LiuShuang. All rights reserved.
 //
 
-#import "EJViewController.h"
+//#import "EJViewController.h"
+#import <UIKit/UIKit.h>
 #import "ImagePickerEnums.h"
 
 //NS_ASSUME_NONNULL_BEGIN
 typedef void(^ClickAlbumBlock)(PHAssetCollection * collection);
 
 
-@interface EJAlbumPickerVC : EJViewController
+@interface EJAlbumPickerVC : UIViewController
 
 - (instancetype)initWithSourceType:(E_SourceType)sourceType clickAlbumBlock:(ClickAlbumBlock)block;
 

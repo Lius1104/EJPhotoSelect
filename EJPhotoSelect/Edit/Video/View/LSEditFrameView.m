@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIImageView * leftView;
 
+@property (nonatomic, strong) UIView * selectedView;
+
 @property (nonatomic, strong) UIImageView * rightView;
 
 @end
@@ -50,7 +52,8 @@
 }
 
 - (void)setupUI {
-    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+//    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+    self.backgroundColor = [UIColor clearColor];
     
     _validLayer = [[CALayer alloc] init];
     _validLayer.frame = _initRect;
@@ -58,19 +61,23 @@
     _validLayer.borderColor = [UIColor clearColor].CGColor;
     [self.layer addSublayer:_validLayer];
     
-    _leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"left"]];
+    _leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ejtools_intercept_left"]];
     _leftView.userInteractionEnabled = YES;
     _leftView.tag = 0;
     UIPanGestureRecognizer *lg = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanAction:)];
     [_leftView addGestureRecognizer:lg];
     [self addSubview:_leftView];
     
-    _rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right"]];
+    _rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ejtools_intercept_right"]];
     _rightView.userInteractionEnabled = YES;
     _rightView.tag = 1;
     UIPanGestureRecognizer *rg = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanAction:)];
     [_rightView addGestureRecognizer:rg];
     [self addSubview:_rightView];
+    
+    _selectedView = [[UIView alloc] init];
+    _selectedView.backgroundColor = [UIColorHex(3D4444) colorWithAlphaComponent:0.3];
+    [self addSubview:_selectedView];
 }
 
 - (void)setValidRect:(CGRect)validRect {
@@ -78,35 +85,39 @@
     
     _leftView.frame = CGRectMake(validRect.origin.x, 0, _itemSize.width/2, _itemSize.height);
     _rightView.frame = CGRectMake(validRect.origin.x+validRect.size.width-_itemSize.width/2, 0, _itemSize.width/2, _itemSize.height);
-    
+    _selectedView.frame = CGRectMake(_leftView.right, 0, _rightView.left - _leftView.right, _itemSize.height);
     [self setNeedsDisplay];
 }
 
 - (void)setInitRect:(CGRect)initRect {
     _initRect = initRect;
-    _validLayer.frame = _initRect;
+//    _validLayer.frame = _initRect;
+    CGRect layerRect = _initRect;
+    layerRect.origin.x += 14;
+    layerRect.size.width -= 28;
+    _validLayer.frame = layerRect;
 }
 
 - (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextClearRect(context, self.validRect);
-    
-    CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextSetLineWidth(context, 4.0);
-    
-    CGPoint topPoints[2];
-    topPoints[0] = CGPointMake(self.validRect.origin.x, 0);
-    topPoints[1] = CGPointMake(self.validRect.origin.x+self.validRect.size.width, 0);
-    
-    CGPoint bottomPoints[2];
-    bottomPoints[0] = CGPointMake(self.validRect.origin.x, _itemSize.height);
-    bottomPoints[1] = CGPointMake(self.validRect.origin.x+self.validRect.size.width, _itemSize.height);
-    
-    CGContextAddLines(context, topPoints, 2);
-    CGContextAddLines(context, bottomPoints, 2);
-    
-    CGContextDrawPath(context, kCGPathStroke);
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//
+//    CGContextClearRect(context, self.validRect);
+//
+//    CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
+//    CGContextSetLineWidth(context, 4.0);
+//
+//    CGPoint topPoints[2];
+//    topPoints[0] = CGPointMake(self.validRect.origin.x, 0);
+//    topPoints[1] = CGPointMake(self.validRect.origin.x+self.validRect.size.width, 0);
+//
+//    CGPoint bottomPoints[2];
+//    bottomPoints[0] = CGPointMake(self.validRect.origin.x, _itemSize.height);
+//    bottomPoints[1] = CGPointMake(self.validRect.origin.x+self.validRect.size.width, _itemSize.height);
+//
+//    CGContextAddLines(context, topPoints, 2);
+//    CGContextAddLines(context, bottomPoints, 2);
+//
+//    CGContextDrawPath(context, kCGPathStroke);
 }
 
 #pragma mark - action

@@ -29,8 +29,17 @@
         self.selectedSource = selectedSource == nil ? [NSMutableArray arrayWithCapacity:1] : selectedSource;
         self.showShot = showShot;
         self.allowCrop = allowCrop;
+#if defined(kBarTintColor)
         self.navigationBar.barTintColor = kBarTintColor;
+#else
+        self.navigationBar.barTintColor = [UIColor whiteColor];
+#endif
+        
+#if defined(kTintColor)
         self.navigationBar.tintColor = kTintColor;
+#else
+        self.navigationBar.tintColor = [UIColor blackColor];
+#endif
         self.navigationBar.translucent = NO;
     }
     return self;
@@ -39,6 +48,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.view.frame = [UIScreen mainScreen].bounds;
 }
 
 - (void)setCropScale:(CGFloat)cropScale {

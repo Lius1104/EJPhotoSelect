@@ -1,6 +1,0 @@
-framework module EJWarningCardKit {
-  umbrella header "EJWarningCardKit.h"
-
-  export *
-  module * { export * }
-}

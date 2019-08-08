@@ -12,6 +12,8 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <UINavigationController+FDFullscreenPopGesture.h>
 
+#import "EJPhotoSelectDefine.h"
+
 @interface LSInterceptVideo ()<LSInterceptViewDelegate>
 
 @property (nonatomic, strong) UIView * playerView;
@@ -31,7 +33,7 @@
 
 @property (nonatomic, weak) NSTimer * timer;
 @property (nonatomic, assign) CMTime startRange;
-@property (nonatomic, assign) CGFloat playDuration;
+@property (nonatomic, assign) NSTimeInterval playDuration;
 
 @property (nonatomic, strong) MBProgressHUD * hud;
 
@@ -49,7 +51,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (instancetype)initWithAsset:(PHAsset *)asset defaultDuration:(NSUInteger)duration {
+- (instancetype)initWithAsset:(PHAsset *)asset defaultDuration:(NSTimeInterval)duration {
     self = [super init];
     if (self) {
         _asset = asset;
@@ -75,7 +77,7 @@
     [self.playerView.layer addSublayer:self.playerLayer];
     
     [self.view layoutIfNeeded];
-    CGRect bounds = self.playerView.bounds;
+    CGRect bounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight - kToolsStatusHeight - 116 - kToolsBottomSafeHeight - 60);
     _playerLayer.frame = bounds;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleApplicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
@@ -115,34 +117,39 @@
 
 - (void)configSubivews {
     [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view).offset(10);
+        make.leading.equalTo(self.view).offset(3);
         if (@available(iOS 11.0, *)) {
-            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-15);
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(11);
         } else {
-            make.bottom.equalTo(self.view.mas_bottom).offset(-15);
+            make.top.equalTo(self.view.mas_bottom).offset(11);
         }
-        make.width.mas_equalTo(40);
-        make.height.mas_equalTo(35);
+        make.width.mas_equalTo(30);
+        make.height.mas_equalTo(37);
     }];
     [self.doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.cancelButton);
         make.size.equalTo(self.cancelButton);
-        make.trailing.equalTo(self.view).offset(-10);
+        make.trailing.equalTo(self.view).offset(-3);
     }];
     
     [self.operationView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view);
         make.trailing.equalTo(self.view);
-        make.bottom.equalTo(self.cancelButton.mas_top).offset(-25);
-        make.height.mas_equalTo(50);
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-50);
+        } else {
+            make.bottom.equalTo(self.view.mas_bottom).offset(-50);
+        }
+        make.height.mas_equalTo(54);
     }];
     
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
-        } else {
-            make.top.equalTo(self.view);
-        }
+//        if (@available(iOS 11.0, *)) {
+//            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+//        } else {
+//            make.top.equalTo(self.view);
+//        }
+        make.top.equalTo(self.cancelButton.mas_bottom).offset(12);
         make.leading.equalTo(self.view);
         make.trailing.equalTo(self.view);
         make.bottom.equalTo(self.operationView.mas_top).offset(-12);
@@ -312,9 +319,7 @@
 - (UIButton *)cancelButton {
     if (!_cancelButton) {
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+        [_cancelButton setImage:[UIImage imageNamed:@"ejtools_back"] forState:UIControlStateNormal];
         [_cancelButton addTarget:self action:@selector(handleClickCancelButton) forControlEvents:UIControlEventTouchUpInside];
         
         [self.view addSubview:_cancelButton];
@@ -325,9 +330,7 @@
 - (UIButton *)doneButton {
     if (!_doneButton) {
         _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_doneButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_doneButton setTitleColor:[UIColor cyanColor] forState:UIControlStateNormal];
+        [_doneButton setImage:[UIImage imageNamed:@"ejtools_intercept_done"] forState:UIControlStateNormal];
         [_doneButton addTarget:self action:@selector(handleClickDoneButton) forControlEvents:UIControlEventTouchUpInside];
         
         [self.view addSubview:_doneButton];
@@ -348,9 +351,9 @@
 - (UIView *)playerView {
     if (!_playerView) {
         _playerView = [[UIView alloc] init];
-        _playerView.contentMode = UIViewContentModeScaleAspectFit;
         _playerView.layer.masksToBounds = YES;
         [self.view addSubview:_playerView];
+        [self.view sendSubviewToBack:_playerView];
     }
     return _playerView;
 }

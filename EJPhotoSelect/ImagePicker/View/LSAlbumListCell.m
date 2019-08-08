@@ -46,7 +46,7 @@
         [self.contentView addSubview:_intoImageView];
         
         _bottomLine = [[UIView alloc] init];
-        _bottomLine.backgroundColor = kLineColor;
+        _bottomLine.backgroundColor = UIColorHex(dadada);
         [self.contentView addSubview:_bottomLine];
         
         [self configConstrains];

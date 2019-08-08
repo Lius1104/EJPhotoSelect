@@ -16,8 +16,7 @@ pod 'JPImageresizerView'
 pod 'FDFullscreenPopGesture'
 pod 'Masonry'
 pod 'LSToolsKit'
-pod 'JoyssomTool'
-pod 'EJWarningCardKit'
+
 pod 'EJTools'
 
   target 'EJPhotoBrowserTests' do

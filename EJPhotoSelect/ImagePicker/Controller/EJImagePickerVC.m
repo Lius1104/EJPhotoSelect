@@ -114,7 +114,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = UIColorHex(ffffff);
     self.title = @"选择照片视频";
-    UIBarButtonItem * leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"public_icon_back"] style:UIBarButtonItemStyleDone target:self action:@selector(handleClickLeftItem)];
+    UIBarButtonItem * leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ejtools_back"] style:UIBarButtonItemStyleDone target:self action:@selector(handleClickLeftItem)];
     self.navigationItem.leftBarButtonItem = leftItem;
     
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -365,9 +365,9 @@
             [self.navigationController pushViewController:vc animated:YES];
         }];
     } else {
-        LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:first defaultDuration:kInterceptDefaultDuration];
+        LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:first defaultDuration:_maxVideoDuration];
         vc.delegate = self;
-        [self presentViewController:vc animated:YES completion:nil];
+        [self ej_presentViewController:vc animated:YES completion:nil];
     }
 }
 
@@ -672,7 +672,7 @@
     }
     EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:shotType delegate:self suggestOrientation:orientation /*allowPreview:YES*/ maxCount:1];
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nav animated:YES completion:nil];
+    [self ej_presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark - EJCameraShotVCDelegate
@@ -704,7 +704,7 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:EJ_ShotType_Photo delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait /*allowPreview:YES*/ maxCount:1];
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
-            [self presentViewController:vc animated:YES completion:nil];
+            [self ej_presentViewController:vc animated:YES completion:nil];
         });
     } else {
     }

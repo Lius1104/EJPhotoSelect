@@ -6,7 +6,8 @@
 //  Copyright © 2019 LiuShuang. All rights reserved.
 //
 
-#import "EJViewController.h"
+//#import "EJViewController.h"
+#import <UIKit/UIKit.h>
 #import "ImagePickerEnums.h"
 
 @protocol EJImagePickerDelegate <NSObject>
@@ -17,7 +18,7 @@
 
 //NS_ASSUME_NONNULL_BEGIN
 
-@interface EJImagePickerVC : EJViewController
+@interface EJImagePickerVC : UIViewController
 
 @property (nonatomic, weak) id <EJImagePickerDelegate> delegate;
 

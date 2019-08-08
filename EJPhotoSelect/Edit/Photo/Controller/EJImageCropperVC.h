@@ -6,7 +6,7 @@
 //  Copyright © 2019 LiuShuang. All rights reserved.
 //
 
-#import "EJViewController.h"
+#import <UIKit/UIKit.h>
 
 @protocol EJImageCropperDelegate <NSObject>
 
@@ -18,7 +18,7 @@
 
 //NS_ASSUME_NONNULL_BEGIN
 
-@interface EJImageCropperVC : EJViewController
+@interface EJImageCropperVC : UIViewController
 
 @property (nonatomic, weak) id <EJImageCropperDelegate> delegate;
 

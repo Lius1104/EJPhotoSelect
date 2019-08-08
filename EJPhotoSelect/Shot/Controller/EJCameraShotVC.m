@@ -7,7 +7,7 @@
 //
 
 #import "EJCameraShotVC.h"
-
+#import "EJPhotoSelectDefine.h"
 #import <CoreMotion/CoreMotion.h>
 #import "EJPhotoBrowser.h"
 #import <UINavigationController+FDFullscreenPopGesture.h>
@@ -286,7 +286,7 @@
     layer.masksToBounds = YES;
         
     CGFloat height = kScreenWidth / 3.f * 4.f;
-    CGFloat bottomSpace = 96 + kBottomSafeHeight;
+    CGFloat bottomSpace = 96 + kToolsBottomSafeHeight;
     CGFloat top = kScreenHeight - bottomSpace - height;
     if (top < 0) {
         top = 0;
@@ -313,7 +313,7 @@
     if (preset == AVCaptureSessionPreset640x480) {
         
         CGFloat height = kScreenWidth / 3.f * 4.f;
-        CGFloat bottomSpace = 96 + kBottomSafeHeight;
+        CGFloat bottomSpace = 96 + kToolsBottomSafeHeight;
         CGFloat top = kScreenHeight - bottomSpace - height;
         if (top < 0) {
             top = 0;
@@ -495,7 +495,7 @@
         switch (orientation) {
             case AVCaptureVideoOrientationPortrait: {
                 _orientationLabel.layer.position = CGPointZero;
-                _orientationLabel.frame = CGRectMake((kScreenWidth - 190) / 2.f, StatusHeight, 190, 40);
+                _orientationLabel.frame = CGRectMake((kScreenWidth - 190) / 2.f, kToolsStatusHeight, 190, 40);
                 _orientationLabel.transform = CGAffineTransformIdentity;
             }
                 break;
@@ -519,7 +519,7 @@
                 break;
             case AVCaptureVideoOrientationPortraitUpsideDown: {
                 _orientationLabel.layer.position = CGPointZero;
-                _orientationLabel.frame = CGRectMake((kScreenWidth - 190) / 2.f, kScreenHeight - kBottomSafeHeight - 100 - 40, 190, 40);
+                _orientationLabel.frame = CGRectMake((kScreenWidth - 190) / 2.f, kScreenHeight - kToolsBottomSafeHeight - 100 - 40, 190, 40);
                 _orientationLabel.transform = CGAffineTransformRotate(transform, M_PI);
             }
                 break;
@@ -896,7 +896,7 @@
 
 - (UILabel *)orientationLabel {
     if (!_orientationLabel) {
-        _orientationLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - 190) / 2.f, StatusHeight, 190, 40)];
+        _orientationLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - 190) / 2.f, kToolsStatusHeight, 190, 40)];
         _orientationLabel.backgroundColor = [UIColorHex(333333) colorWithAlphaComponent:0.4];
         _orientationLabel.font = [UIFont systemFontOfSize:13];
         _orientationLabel.textColor = UIColorHex(fefefe);

@@ -114,7 +114,7 @@
 //            NSUInteger maxCount = 9;
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait maxCount:maxCount];
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
-            [self presentViewController:nav animated:YES completion:nil];
+            [self ej_presentViewController:nav animated:YES completion:nil];
         }];
         UIAlertAction * localAction = [UIAlertAction actionWithTitle:@"从本地选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             // 跳转到 本地照片选择
@@ -135,7 +135,7 @@
             
             // delegate
             vc.pickerDelegate = self;
-            [self presentViewController:vc animated:YES completion:nil];
+            [self ej_presentViewController:vc animated:YES completion:nil];
         }];
         [alertC addAction:shotAction];
         [alertC addAction:localAction];

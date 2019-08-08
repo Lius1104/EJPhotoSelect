@@ -34,7 +34,6 @@
 		53E0336022FA767600AB3B04 /* LSEditFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332822FA767600AB3B04 /* LSEditFrameView.m */; };
 		53E0336122FA767600AB3B04 /* LSVideoFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332922FA767600AB3B04 /* LSVideoFrameCell.m */; };
 		53E0336222FA767600AB3B04 /* LSInterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0332A22FA767600AB3B04 /* LSInterceptView.m */; };
-		53E0336322FA767600AB3B04 /* EJViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333122FA767600AB3B04 /* EJViewController.m */; };
 		53E0336422FA767600AB3B04 /* EJImageCropperVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333222FA767600AB3B04 /* EJImageCropperVC.m */; };
 		53E0336522FA767600AB3B04 /* EJTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333622FA767600AB3B04 /* EJTapDetectingImageView.m */; };
 		53E0336622FA767600AB3B04 /* EJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0333922FA767600AB3B04 /* EJPhoto.m */; };
@@ -79,6 +78,7 @@
 /* Begin PBXFileReference section */
 		0F865038130F1F453864CA1D /* Pods-EJPhotoBrowserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowserTests.debug.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowserTests/Pods-EJPhotoBrowserTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5312DF8922C220E700A59718 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		534AB7F622FBF7DF0047B20D /* EJPhotoSelectDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJPhotoSelectDefine.h; sourceTree = "<group>"; };
 		5369123122FAB00F00D8B5F2 /* EJImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageManager.h; sourceTree = "<group>"; };
 		5369123222FAB00F00D8B5F2 /* ImagePickerEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerEnums.h; sourceTree = "<group>"; };
 		5369123322FAB00F00D8B5F2 /* EJImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageManager.m; sourceTree = "<group>"; };
@@ -119,7 +119,6 @@
 		53E0331A22FA767600AB3B04 /* UIViewController+LSAuthorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LSAuthorization.h"; sourceTree = "<group>"; };
 		53E0332222FA767600AB3B04 /* LSInterceptVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSInterceptVideo.h; sourceTree = "<group>"; };
 		53E0332322FA767600AB3B04 /* LSInterceptVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSInterceptVideo.m; sourceTree = "<group>"; };
-		53E0332522FA767600AB3B04 /* LSSourceCrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSSourceCrop.h; sourceTree = "<group>"; };
 		53E0332722FA767600AB3B04 /* LSVideoFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LSVideoFrameCell.xib; sourceTree = "<group>"; };
 		53E0332822FA767600AB3B04 /* LSEditFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSEditFrameView.m; sourceTree = "<group>"; };
 		53E0332922FA767600AB3B04 /* LSVideoFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSVideoFrameCell.m; sourceTree = "<group>"; };
@@ -128,9 +127,7 @@
 		53E0332C22FA767600AB3B04 /* LSVideoFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSVideoFrameCell.h; sourceTree = "<group>"; };
 		53E0332D22FA767600AB3B04 /* LSEditFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSEditFrameView.h; sourceTree = "<group>"; };
 		53E0333022FA767600AB3B04 /* EJImageCropperVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageCropperVC.h; sourceTree = "<group>"; };
-		53E0333122FA767600AB3B04 /* EJViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJViewController.m; sourceTree = "<group>"; };
 		53E0333222FA767600AB3B04 /* EJImageCropperVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageCropperVC.m; sourceTree = "<group>"; };
-		53E0333322FA767600AB3B04 /* EJViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJViewController.h; sourceTree = "<group>"; };
 		53E0333522FA767600AB3B04 /* EJZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJZoomingScrollView.h; sourceTree = "<group>"; };
 		53E0333622FA767600AB3B04 /* EJTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJTapDetectingImageView.m; sourceTree = "<group>"; };
 		53E0333722FA767600AB3B04 /* UIImage+EJPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EJPhotoBrowser.h"; sourceTree = "<group>"; };
@@ -169,7 +166,6 @@
 		53E2789D22B87B0900B65C7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53E2790322B88F9F00B65C7E /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		53E2791B22B8926B00B65C7E /* EJPrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJPrefixHeader.pch; sourceTree = "<group>"; };
-		53E2791C22B8938500B65C7E /* EJUserDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJUserDefine.h; sourceTree = "<group>"; };
 		53E2791D22B8948800B65C7E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		658B5D164F9798D73DD0DE7F /* Pods-EJPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EJPhotoBrowser.debug.xcconfig"; path = "Target Support Files/Pods-EJPhotoBrowser/Pods-EJPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 		780319760F14163697AC7A8B /* Pods_EJPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EJPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +249,7 @@
 				53E0331F22FA767600AB3B04 /* Edit */,
 				53E0333422FA767600AB3B04 /* PhotoBrowser */,
 				53E0334422FA767600AB3B04 /* Shot */,
+				534AB7F622FBF7DF0047B20D /* EJPhotoSelectDefine.h */,
 			);
 			name = EJPhotoSelect;
 			path = ../../EJPhotoSelect;
@@ -270,8 +267,8 @@
 		53E032F922FA767600AB3B04 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				53E032FA22FA767600AB3B04 /* EJVideoPlayerVC.m */,
 				53E032FB22FA767600AB3B04 /* EJVideoPlayerVC.h */,
+				53E032FA22FA767600AB3B04 /* EJVideoPlayerVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -279,8 +276,8 @@
 		53E032FC22FA767600AB3B04 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */,
 				53E032FE22FA767600AB3B04 /* EJPlayerControlView.h */,
+				53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -299,12 +296,12 @@
 		53E0330122FA767600AB3B04 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				53E0330222FA767600AB3B04 /* EJImagePickerVC.h */,
-				53E0330322FA767600AB3B04 /* EJImagePickerNVC.h */,
-				53E0330422FA767600AB3B04 /* EJAlbumPickerVC.m */,
-				53E0330522FA767600AB3B04 /* EJImagePickerNVC.m */,
-				53E0330622FA767600AB3B04 /* EJImagePickerVC.m */,
 				53E0330722FA767600AB3B04 /* EJAlbumPickerVC.h */,
+				53E0330422FA767600AB3B04 /* EJAlbumPickerVC.m */,
+				53E0330322FA767600AB3B04 /* EJImagePickerNVC.h */,
+				53E0330522FA767600AB3B04 /* EJImagePickerNVC.m */,
+				53E0330222FA767600AB3B04 /* EJImagePickerVC.h */,
+				53E0330622FA767600AB3B04 /* EJImagePickerVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -362,7 +359,6 @@
 			children = (
 				53E0332122FA767600AB3B04 /* Controller */,
 				53E0332422FA767600AB3B04 /* Model */,
-				53E0332522FA767600AB3B04 /* LSSourceCrop.h */,
 				53E0332622FA767600AB3B04 /* View */,
 			);
 			path = Video;
@@ -387,13 +383,13 @@
 		53E0332622FA767600AB3B04 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				53E0332722FA767600AB3B04 /* LSVideoFrameCell.xib */,
-				53E0332822FA767600AB3B04 /* LSEditFrameView.m */,
-				53E0332922FA767600AB3B04 /* LSVideoFrameCell.m */,
-				53E0332A22FA767600AB3B04 /* LSInterceptView.m */,
-				53E0332B22FA767600AB3B04 /* LSInterceptView.h */,
-				53E0332C22FA767600AB3B04 /* LSVideoFrameCell.h */,
 				53E0332D22FA767600AB3B04 /* LSEditFrameView.h */,
+				53E0332822FA767600AB3B04 /* LSEditFrameView.m */,
+				53E0332B22FA767600AB3B04 /* LSInterceptView.h */,
+				53E0332A22FA767600AB3B04 /* LSInterceptView.m */,
+				53E0332C22FA767600AB3B04 /* LSVideoFrameCell.h */,
+				53E0332922FA767600AB3B04 /* LSVideoFrameCell.m */,
+				53E0332722FA767600AB3B04 /* LSVideoFrameCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -410,9 +406,7 @@
 			isa = PBXGroup;
 			children = (
 				53E0333022FA767600AB3B04 /* EJImageCropperVC.h */,
-				53E0333122FA767600AB3B04 /* EJViewController.m */,
 				53E0333222FA767600AB3B04 /* EJImageCropperVC.m */,
-				53E0333322FA767600AB3B04 /* EJViewController.h */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -420,20 +414,20 @@
 		53E0333422FA767600AB3B04 /* PhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				53E0333522FA767600AB3B04 /* EJZoomingScrollView.h */,
-				53E0333622FA767600AB3B04 /* EJTapDetectingImageView.m */,
-				53E0333722FA767600AB3B04 /* UIImage+EJPhotoBrowser.h */,
-				53E0333822FA767600AB3B04 /* EJPhotoBrowser.h */,
-				53E0333922FA767600AB3B04 /* EJPhoto.m */,
-				53E0333A22FA767600AB3B04 /* EJTapDetectingView.h */,
-				53E0333B22FA767600AB3B04 /* EJPhotoProtocol.h */,
-				53E0333C22FA767600AB3B04 /* EJZoomingScrollView.m */,
-				53E0333D22FA767600AB3B04 /* EJPhotoBrowserPrivate.h */,
-				53E0333E22FA767600AB3B04 /* UIImage+EJPhotoBrowser.m */,
-				53E0333F22FA767600AB3B04 /* EJTapDetectingImageView.h */,
-				53E0334022FA767600AB3B04 /* EJTapDetectingView.m */,
 				53E0334122FA767600AB3B04 /* EJPhoto.h */,
+				53E0333922FA767600AB3B04 /* EJPhoto.m */,
+				53E0333822FA767600AB3B04 /* EJPhotoBrowser.h */,
 				53E0334222FA767600AB3B04 /* EJPhotoBrowser.m */,
+				53E0333D22FA767600AB3B04 /* EJPhotoBrowserPrivate.h */,
+				53E0333B22FA767600AB3B04 /* EJPhotoProtocol.h */,
+				53E0333F22FA767600AB3B04 /* EJTapDetectingImageView.h */,
+				53E0333622FA767600AB3B04 /* EJTapDetectingImageView.m */,
+				53E0333A22FA767600AB3B04 /* EJTapDetectingView.h */,
+				53E0334022FA767600AB3B04 /* EJTapDetectingView.m */,
+				53E0333522FA767600AB3B04 /* EJZoomingScrollView.h */,
+				53E0333C22FA767600AB3B04 /* EJZoomingScrollView.m */,
+				53E0333722FA767600AB3B04 /* UIImage+EJPhotoBrowser.h */,
+				53E0333E22FA767600AB3B04 /* UIImage+EJPhotoBrowser.m */,
 			);
 			path = PhotoBrowser;
 			sourceTree = "<group>";
@@ -508,7 +502,6 @@
 				53E2787822B87B0700B65C7E /* AppDelegate.m */,
 				53E2788022B87B0800B65C7E /* Assets.xcassets */,
 				53E2791B22B8926B00B65C7E /* EJPrefixHeader.pch */,
-				53E2791C22B8938500B65C7E /* EJUserDefine.h */,
 				53E2788522B87B0800B65C7E /* Info.plist */,
 				53E2788222B87B0800B65C7E /* LaunchScreen.storyboard */,
 				53E2788622B87B0800B65C7E /* main.m */,
@@ -795,7 +788,6 @@
 				53E0336022FA767600AB3B04 /* LSEditFrameView.m in Sources */,
 				53E0335322FA767600AB3B04 /* EJ_AlbumModel.m in Sources */,
 				53E0336A22FA767600AB3B04 /* EJPhotoBrowser.m in Sources */,
-				53E0336322FA767600AB3B04 /* EJViewController.m in Sources */,
 				53E0334F22FA767600AB3B04 /* EJPlayerControlView.m in Sources */,
 				53E0336D22FA767600AB3B04 /* EJCameraShotView.m in Sources */,
 				53E0335522FA767600AB3B04 /* LSAssetCollectionToolBar.m in Sources */,

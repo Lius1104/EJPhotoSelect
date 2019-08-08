@@ -17,11 +17,11 @@
 
 @property (nonatomic, assign) CGSize itemImgSize;
 
-@property (nonatomic, assign) NSUInteger maximumDuration;
+@property (nonatomic, assign) NSTimeInterval maximumDuration;
 /**
  视频时间长度
  */
-@property (nonatomic, assign) NSUInteger duration;
+@property (nonatomic, assign) NSTimeInterval duration;
 
 @property (nonatomic, strong) AVAssetImageGenerator * generator;
 
@@ -40,7 +40,7 @@
 
 @synthesize validRect = _validRect;
 
-- (instancetype)initWithAsset:(AVAsset *)asset maximumDuration:(NSUInteger)duration {
+- (instancetype)initWithAsset:(AVAsset *)asset maximumDuration:(NSTimeInterval)duration {
     self = [super init];
     if (self) {
         
@@ -54,8 +54,12 @@
 }
 
 - (void)commonInit {
-    _itemCellSize = CGSizeMake(28, 50);
-    _itemImgSize = CGSizeMake(56, 100);
+    CGFloat cellWidth = 28;
+    if (kScreenWidth >= 375) {
+        cellWidth = 32;
+    }
+    _itemCellSize = CGSizeMake(cellWidth, 50);
+    _itemImgSize = CGSizeMake(cellWidth * 2, 100);
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat left = ceil((width - _itemCellSize.width * 10) / 2.f);
     _validRect = CGRectMake(left, 0, _itemCellSize.width * 10, _itemCellSize.height);
@@ -63,7 +67,10 @@
 
 - (void)configSubviews {
     [self.collection mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self);
+//        make.edges.equalTo(self);
+        make.left.right.equalTo(self);
+        make.height.mas_equalTo(_itemCellSize.height);
+        make.centerY.equalTo(self);
     }];
     [self.cropView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
@@ -114,12 +121,16 @@
 
 - (CMTime)getStartTime {
     CGRect rect = [self.collection convertRect:self.cropView.validRect fromView:self.cropView];
+    rect.origin.x += 14;
+    rect.size.width -= 28;
     CGFloat s = MAX(0, _timeUnit * rect.origin.x / (_itemCellSize.width));
     return CMTimeMakeWithSeconds(s, _asset.duration.timescale);
 }
 
 - (CMTime)getEndTime {
     CGRect rect = [self.collection convertRect:self.cropView.validRect fromView:self.cropView];
+    rect.origin.x += 14;
+    rect.size.width -= 28;
     CGFloat s = MAX(0, _timeUnit * CGRectGetMaxX(rect) / (_itemCellSize.width));
     return CMTimeMakeWithSeconds(s, _asset.duration.timescale);
 }
@@ -129,10 +140,10 @@
     
     CGFloat duration = _timeUnit * self.validRect.size.width / (_itemCellSize.width);
 
-    self.progressLine.frame = CGRectMake(self.validRect.origin.x, 0, 1, _itemCellSize.height);
+    self.progressLine.frame = CGRectMake(self.validRect.origin.x, 0, 1, _itemCellSize.height + 4);
     [self.cropView addSubview:_progressLine];
     [UIView animateWithDuration:duration delay:.0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
-        self->_progressLine.frame = CGRectMake(CGRectGetMaxX(self->_validRect) - 1, 0, 1, self->_itemCellSize.height);
+        self->_progressLine.frame = CGRectMake(CGRectGetMaxX(self->_validRect) - 1, 0, 1, self->_itemCellSize.height + 4);
     } completion:nil];
 }
 
@@ -237,12 +248,16 @@
 - (UICollectionView *)collection {
     if (!_collection) {
         UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.itemSize = CGSizeMake(28, 50);
+        CGFloat cellWidth = 28;
+        if (kScreenWidth >= 375) {
+            cellWidth = 32;
+        }
+        layout.itemSize = CGSizeMake(cellWidth, _itemCellSize.height);
         layout.sectionInset = UIEdgeInsetsZero;
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        _collection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 375, 50) collectionViewLayout:layout];
+        _collection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 375, _itemCellSize.height) collectionViewLayout:layout];
         [_collection registerNib:[UINib nibWithNibName:@"LSVideoFrameCell" bundle:nil] forCellWithReuseIdentifier:@"LSVideoFrameCell"];
         _collection.delegate = self;
         _collection.dataSource = self;
@@ -269,9 +284,13 @@
 
 - (LSEditFrameView *)cropView {
     if (!_cropView) {
-        _cropView = [[LSEditFrameView alloc] initWithItemSize:_itemCellSize initRect:_validRect];
+        CGRect validRect = _validRect;
+        validRect.origin.x -= 14;
+        validRect.size.width += 28;
+        _cropView = [[LSEditFrameView alloc] initWithItemSize:_itemCellSize initRect:validRect];
         _cropView.delegate = self;
-        _cropView.validRect = _validRect;
+        _cropView.initRect = validRect;
+        _cropView.validRect = validRect;
         [self addSubview:_cropView];
     }
     return _cropView;
@@ -279,8 +298,10 @@
 
 - (UIView *)progressLine {
     if (!_progressLine) {
-        _progressLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, _itemCellSize.height)];
-        _progressLine.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
+        _progressLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, _itemCellSize.height + 4)];
+        _progressLine.layer.cornerRadius = 1;
+        _progressLine.layer.masksToBounds = YES;
+        _progressLine.backgroundColor = [UIColor whiteColor];
     }
     return _progressLine;
 }
@@ -289,13 +310,21 @@
     if (validRect.origin.x == _validRect.origin.x && validRect.origin.y == _validRect.origin.y && _validRect.size.width == validRect.size.width && _validRect.size.height == validRect.size.height) {
     } else {
         _validRect = validRect;
-        _cropView.validRect = _validRect;
+        CGRect cropValidRect = _validRect;
+        cropValidRect.origin.x -= 14;
+        cropValidRect.size.width += 28;
+        _cropView.validRect = cropValidRect;
     }
 }
 
 - (CGRect)validRect {
-    _validRect = _cropView.validRect;
+    CGRect cropValidRect = _cropView.validRect;
+    cropValidRect.origin.x += 14;
+    cropValidRect.size.width -= 28;
+    _validRect = cropValidRect;
     return _validRect;
+//    _validRect = _cropView.validRect;
+//    return _validRect;
 }
 
 @end

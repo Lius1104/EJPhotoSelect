@@ -7,6 +7,7 @@
 //
 
 #import "EJPlayerControlView.h"
+#import "EJPhotoSelectDefine.h"
 
 @interface EJPlayerControlView ()
 
@@ -31,14 +32,6 @@
 
 #define kTopControlHeight       44
 #define kBottomControlHeight    50
-
-#define kIs_iphone (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-#define kIs_iPhoneX kScreenWidth >=375.0f && kScreenHeight >=812.0f&& kIs_iphone
-
-/*状态栏和导航栏总高度*/
-#define kNavStatusHeight (CGFloat)(kIs_iPhoneX?(88.0):(64.0))
-/*底部安全区域远离高度*/
-#define kBottomSafeHeight (CGFloat)(kIs_iPhoneX?(34.0):(0))
 
 - (instancetype)initWithHideMore:(BOOL)hideMore {
     self = [super init];
@@ -65,20 +58,20 @@
     
     [_topControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.equalTo(self);
-        make.height.mas_equalTo(kNavStatusHeight);
+        make.height.mas_equalTo(kToolsNavStatusHeight);
     }];
     [_bottomControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self);
-        make.height.mas_equalTo(kBottomControlHeight + kBottomSafeHeight);
+        make.height.mas_equalTo(kBottomControlHeight + kToolsBottomSafeHeight);
     }];
 }
 
 - (void)configSubviews:(UIEdgeInsets)safeInsets {
     // config top control
-    _topFrame = CGRectMake(0, 0, self.bounds.size.width, kNavStatusHeight);
+    _topFrame = CGRectMake(0, 0, self.bounds.size.width, kToolsNavStatusHeight);
     [self configTopSubviews];
     // config bottom control
-    _bottomFrame = CGRectMake(0, self.bounds.size.height - (kBottomControlHeight + kBottomSafeHeight), self.bounds.size.width, kBottomControlHeight + kBottomSafeHeight);
+    _bottomFrame = CGRectMake(0, self.bounds.size.height - (kBottomControlHeight + kToolsBottomSafeHeight), self.bounds.size.width, kBottomControlHeight + kToolsBottomSafeHeight);
     [self configBottomSubviews];
 }
 

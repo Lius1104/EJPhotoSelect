@@ -29,7 +29,7 @@
 
 @property (nonatomic, weak) id <LSInterceptViewDelegate> delegate;
 
-- (instancetype)initWithAsset:(AVAsset *)asset maximumDuration:(NSUInteger)duration;
+- (instancetype)initWithAsset:(AVAsset *)asset maximumDuration:(NSTimeInterval)duration;
 
 - (CMTime)getStartTime;
 

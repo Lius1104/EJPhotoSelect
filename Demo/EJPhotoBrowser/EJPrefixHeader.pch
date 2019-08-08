@@ -18,15 +18,13 @@
 #import <LSToolsKit/LSToolsKit.h>
 
 #import <EJTools.h>
-#import <EJWarningCardKit/EJWarningCardKit.h>
-#import <JoyssomTool/JoyssomTool.h>
-
-#import "EJUserDefine.h"
+#import <EJTools/EJWarningCardView.h>
+#import <EJTools/EJProgressHUD.h>
 
 
 #import <AVFoundation/AVFoundation.h>
 
-#import "LSSourceCrop.h"
+#import "LSInterceptVideo.h"
 
 #define  kTintColor UIColorHex(333333)
 

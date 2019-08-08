@@ -22,9 +22,9 @@
 
 @property (nonatomic, strong, readonly) PHAsset * asset;
 
-@property (nonatomic, assign, readonly) NSUInteger duration;
+@property (nonatomic, assign, readonly) NSTimeInterval duration;
 
-- (instancetype)initWithAsset:(PHAsset *)asset defaultDuration:(NSUInteger)duration;
+- (instancetype)initWithAsset:(PHAsset *)asset defaultDuration:(NSTimeInterval)duration;
 
 @end
 

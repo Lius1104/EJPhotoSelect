@@ -663,7 +663,7 @@ typedef NS_ENUM(NSInteger, PanDirection) {
         _playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
         _playerLayer.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
         _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-        _playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
+        _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
     }
     return _playerLayer;
 }
@@ -683,7 +683,7 @@ typedef NS_ENUM(NSInteger, PanDirection) {
     if (!_loading) {
         _loading = [[UIActivityIndicatorView alloc] init];
         _loading.frame = CGRectMake(0, 0, 50, 50);
-        _loading.tintColor = [UIColor whiteColor];
+        _loading.tintColor = [UIColor blackColor];
         [self.view addSubview:_loading];
     }
     return _loading;

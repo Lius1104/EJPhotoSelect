@@ -70,6 +70,11 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 //    [self jumpToAlbum:_userLibrary animated:NO];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.view.frame = [UIScreen mainScreen].bounds;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     // 获取所有相册

@@ -38,14 +38,14 @@
 		_tapView = [[EJTapDetectingView alloc] initWithFrame:self.bounds];
 		_tapView.tapDelegate = self;
 		_tapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		_tapView.backgroundColor = UIColorHex(ffffff);
+		_tapView.backgroundColor = [UIColor blackColor];
 		[self addSubview:_tapView];
 		
 		// Image view
 		_photoImageView = [[EJTapDetectingImageView alloc] initWithFrame:CGRectZero];
 		_photoImageView.tapDelegate = self;
 		_photoImageView.contentMode = UIViewContentModeCenter;
-		_photoImageView.backgroundColor = UIColorHex(ffffff);
+		_photoImageView.backgroundColor = [UIColor blackColor];
 		[self addSubview:_photoImageView];
 		
 		// Loading indicator
