@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "EJPhotoSelect"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "本地照片选择器"
 
   # This description is used to generate tags and improve search results.
@@ -90,7 +90,7 @@ Pod::Spec.new do |spec|
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "EJPhotoSelect", "EJPhotoSelect/**/*", "EJPhotoSelect/**/**/*"
+  spec.source_files  = "EJPhotoSelect", "EJPhotoSelect/**/*.{h,m}", "EJPhotoSelect/**/**/*.{h,m}"
   # spec.exclude_files = "Classes/Exclude"
 
   spec.public_header_files = "EJPhotoSelect/EJPhotoSelectDefine.h", "EJPhotoSelect/**/*.h", "EJPhotoSelect/**/**/*.h"
@@ -105,7 +105,7 @@ Pod::Spec.new do |spec|
   #
 
   # spec.resource  = "icon.png"
-  # spec.resources = "Resources/*.png"
+  spec.resources = "EJPhotoSelect/Resources/*.xib"
 
   # spec.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
