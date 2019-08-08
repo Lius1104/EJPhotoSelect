@@ -8,6 +8,7 @@
 
 //#import "EJViewController.h"
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
 #import "ImagePickerEnums.h"
 
 @protocol EJImagePickerDelegate <NSObject>

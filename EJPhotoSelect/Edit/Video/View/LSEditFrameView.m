@@ -7,6 +7,7 @@
 //
 
 #import "LSEditFrameView.h"
+#import <YYKit/YYKit.h>
 
 @interface LSEditFrameView () {
     CGSize _itemSize;
@@ -36,16 +37,18 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     //扩大下有效范围
-    CGRect left = _leftView.frame;
-    left.origin.x -= _itemSize.width/2;
-    left.size.width += _itemSize.width/2;
-    CGRect right = _rightView.frame;
-    right.size.width += _itemSize.width/2;
+//    CGRect left = _leftView.frame;
+//    left.origin.x -= _itemSize.width/2;
+//    left.size.width += _itemSize.width/2;
+
+    CGRect leftRect = CGRectMake(CGRectGetMinX(_leftView.frame) - _itemSize.width / 2, CGRectGetMinY(_leftView.frame), CGRectGetWidth(_leftView.frame) + _itemSize.width/2, CGRectGetHeight(_leftView.frame));
     
-    if (CGRectContainsPoint(left, point)) {
+    CGRect rightRect = CGRectMake(CGRectGetMinX(_rightView.frame), CGRectGetMinY(_rightView.frame), CGRectGetWidth(_rightView.frame) + _itemSize.width/2, CGRectGetHeight(_rightView.frame));
+    
+    if (CGRectContainsPoint(leftRect, point)) {
         return _leftView;
     }
-    if (CGRectContainsPoint(right, point)) {
+    if (CGRectContainsPoint(rightRect, point)) {
         return _rightView;
     }
     return nil;
@@ -85,7 +88,8 @@
     
     _leftView.frame = CGRectMake(validRect.origin.x, 0, _itemSize.width/2, _itemSize.height);
     _rightView.frame = CGRectMake(validRect.origin.x+validRect.size.width-_itemSize.width/2, 0, _itemSize.width/2, _itemSize.height);
-    _selectedView.frame = CGRectMake(_leftView.right, 0, _rightView.left - _leftView.right, _itemSize.height);
+//    _selectedView.frame = CGRectMake(_leftView.right, 0, _rightView.left - _leftView.right, _itemSize.height);
+    _selectedView.frame = CGRectMake(CGRectGetMaxX(_leftView.frame), 0, CGRectGetMinY(_rightView.frame) - CGRectGetMaxX(_leftView.frame), _itemSize.height);
     [self setNeedsDisplay];
 }
 

@@ -9,6 +9,9 @@
 #import "EJCameraShotView.h"
 #import "EJPhotoSelectDefine.h"
 #import <YYKit/YYKit.h>
+#import <Masonry/Masonry.h>
+#import <LSToolsKit/LSToolsKit.h>
+#import <EJTools/EJTools.h>
 
 typedef enum : NSUInteger {
     E_CurrentType_Photo         = 0,
@@ -21,8 +24,6 @@ typedef enum : NSUInteger {
 
 //关闭
 @property (nonatomic, strong) LSButton * closeBtn;
-
-//@property (nonatomic, strong) LSButton * doneBtn;
 
 //切换摄像头
 @property (nonatomic, strong) LSButton * changeDeviceBtn;

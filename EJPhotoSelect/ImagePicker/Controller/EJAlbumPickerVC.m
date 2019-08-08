@@ -7,6 +7,8 @@
 //
 
 #import "EJAlbumPickerVC.h"
+#import <YYKit/YYKit.h>
+#import <Masonry/Masonry.h>
 #import "EJ_AlbumModel.h"
 #import "ImagePickerEnums.h"
 #import "EJImageManager.h"

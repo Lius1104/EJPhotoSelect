@@ -7,7 +7,9 @@
 //
 
 #import "LSInterceptView.h"
+#import <Masonry/Masonry.h>
 #import <objc/runtime.h>
+#import <YYKit/YYKit.h>
 #import "LSVideoFrameCell.h"
 #import "LSEditFrameView.h"
 
@@ -73,7 +75,10 @@
         make.centerY.equalTo(self);
     }];
     [self.cropView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self);
+//        make.edges.equalTo(self);
+        make.left.right.equalTo(self);
+        make.height.mas_equalTo(_itemCellSize.height);
+        make.centerY.equalTo(self);
     }];
 }
 
@@ -298,7 +303,7 @@
 
 - (UIView *)progressLine {
     if (!_progressLine) {
-        _progressLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, _itemCellSize.height + 4)];
+        _progressLine = [[UIView alloc] initWithFrame:CGRectMake(0, 2, 2, _itemCellSize.height + 4)];
         _progressLine.layer.cornerRadius = 1;
         _progressLine.layer.masksToBounds = YES;
         _progressLine.backgroundColor = [UIColor whiteColor];

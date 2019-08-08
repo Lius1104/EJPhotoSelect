@@ -12,7 +12,12 @@
 #import "EJPhotoSelectDefine.h"
 
 #import "EJImageCropperVC.h"
-#import <UINavigationController+FDFullscreenPopGesture.h>
+#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
+#import <Masonry/Masonry.h>
+#import <YYKit/YYKit.h>
+#import <LSToolsKit/LSToolsKit.h>
+#import <EJTools/EJTools.h>
+#import <SDWebImage/SDWebImage.h>
 
 #import "EJVideoPlayerVC.h"
 #import "LSInterceptVideo.h"
@@ -22,6 +27,8 @@
 static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 @interface EJPhotoBrowser ()<EJImageCropperDelegate, EJVideoPlayerDelegate, LSInterceptVideoDelegate>
+
+@property (nonatomic, strong) EJProgressHUD * progressHUD;
 
 @end
 
@@ -262,14 +269,14 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         _cropButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_cropButton setTitle:@"编辑" forState:UIControlStateNormal];
         _cropButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_cropButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
+        [_cropButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _cropButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_cropButton addTarget:self action:@selector(handleClickCropButton) forControlEvents:UIControlEventTouchUpInside];
         [_bottomBar addSubview:_cropButton];
     }
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_doneButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
+    [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_doneButton setTitle:@"确定" forState:UIControlStateNormal];
     [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_normal"] forState:UIControlStateNormal];
     [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_disabled"] forState:UIControlStateDisabled];

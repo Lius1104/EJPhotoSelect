@@ -10,8 +10,9 @@
 #import "LSInterceptView.h"
 #import "LSSaveToAlbum.h"
 #import <MBProgressHUD/MBProgressHUD.h>
-#import <UINavigationController+FDFullscreenPopGesture.h>
-
+#import <YYKit/YYKit.h>
+#import <Masonry/Masonry.h>
+#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import "EJPhotoSelectDefine.h"
 
 @interface LSInterceptVideo ()<LSInterceptViewDelegate>

@@ -7,11 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MBProgressHUD/MBProgressHUD.h>
 #import <MediaPlayer/MediaPlayer.h>
-//#import "EJGridViewController.h"
 #import "EJZoomingScrollView.h"
-#import "EJProgressHUD.h"
 
 // Declare private methods of browser
 @interface EJPhotoBrowser () {
@@ -47,7 +44,7 @@
     
 	NSTimer *_controlVisibilityTimer;
 //    UIBarButtonItem *_previousButton, *_nextButton, *_actionButton, *_doneButton;
-    EJProgressHUD *_progressHUD;
+//    EJProgressHUD *_progressHUD;
     
     // Grid
 //    EJGridViewController *_gridController;

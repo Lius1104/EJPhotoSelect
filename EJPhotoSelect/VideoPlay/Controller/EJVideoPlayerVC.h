@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
 
 @class EJVideoPlayerVC;
 @protocol EJVideoPlayerDelegate <NSObject>

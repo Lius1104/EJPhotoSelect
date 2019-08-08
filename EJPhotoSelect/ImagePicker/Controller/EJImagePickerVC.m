@@ -12,6 +12,11 @@
 #import "LSAssetCollectionToolBar.h"
 #import "ImagePickerEnums.h"
 #import <PhotosUI/PhotosUI.h>
+#import <EJTools/UIViewController+EJAdd.h>
+#import <Masonry/Masonry.h>
+#import <LSToolsKit/LSToolsKit.h>
+#import <EJTools/EJTools.h>
+#import <YYKit/YYKit.h>
 #import "UIViewController+LSAuthorization.h"
 #import "EJImagePickerShotCell.h"
 #import "EJCameraShotVC.h"
@@ -168,7 +173,11 @@
                     albumBtn.frame = CGRectMake(0, 0, 50, 34);
                     [albumBtn setTitle:@"相册" forState:UIControlStateNormal];
                     albumBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+#if defined(kTintColor)
                     [albumBtn setTitleColor:kTintColor forState:UIControlStateNormal];
+#else
+                    [albumBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+#endif
                     [albumBtn addTarget:self action:@selector(handleClickRightItem) forControlEvents:UIControlEventTouchUpInside];
                     UIBarButtonItem * rightItem = [[UIBarButtonItem alloc] initWithCustomView:albumBtn];
                     self.navigationItem.rightBarButtonItem = rightItem;
@@ -704,7 +713,7 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:EJ_ShotType_Photo delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait /*allowPreview:YES*/ maxCount:1];
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
-            [self ej_presentViewController:vc animated:YES completion:nil];
+            [self ej_presentViewController:nav animated:YES completion:nil];
         });
     } else {
     }

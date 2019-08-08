@@ -7,10 +7,14 @@
 //
 
 #import "EJCameraShotVC.h"
-#import "EJPhotoSelectDefine.h"
 #import <CoreMotion/CoreMotion.h>
+#import <EJTools/EJTools.h>
+#import <LSToolsKit/LSToolsKit.h>
+#import <YYKit/YYKit.h>
+#import <Masonry/Masonry.h>
+#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
+#import "EJPhotoSelectDefine.h"
 #import "EJPhotoBrowser.h"
-#import <UINavigationController+FDFullscreenPopGesture.h>
 #import "UIViewController+LSAuthorization.h"
 
 #import "NSString+EJShot.h"

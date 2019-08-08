@@ -7,6 +7,8 @@
 //
 
 #import "LSAssetCollectionToolBar.h"
+#import <Masonry/Masonry.h>
+#import <YYKit/YYKit.h>
 
 @interface LSAssetCollectionToolBar ()
 
@@ -66,7 +68,11 @@
 
 - (void)setupSubviews {
     _previewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+#if defined(kTintColor)
     [_previewButton setTitleColor:kTintColor forState:UIControlStateNormal];
+#else
+    [_previewButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+#endif
     _previewButton.titleLabel.font = [UIFont systemFontOfSize:16];
     _previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_previewButton addTarget:self action:@selector(handleClickPreviewButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -85,7 +91,7 @@
     [self addSubview:_originalButton];
     
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_doneButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
+    [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_normal"] forState:UIControlStateNormal];
     [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_disabled"] forState:UIControlStateDisabled];
@@ -130,7 +136,7 @@
 
 - (void)configSourceCount:(NSUInteger)count {
     if (_isShowCount) {
-        NSMutableAttributedString * attStr = [[NSMutableAttributedString alloc] initWithString:@"确定" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : UIColorHex(ffffff)}];
+        NSMutableAttributedString * attStr = [[NSMutableAttributedString alloc] initWithString:@"确定" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor whiteColor]}];
         if (count == 0) {
             [_previewButton setTitle:@"预览" forState:UIControlStateNormal];
             [_doneButton setAttributedTitle:attStr forState:UIControlStateDisabled];
@@ -145,7 +151,7 @@
                 numString = [NSString stringWithFormat:@"(%d/%d)", (int)count, (int)_maxCount];
             }
             if ([numString length] > 0) {
-                NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12], NSForegroundColorAttributeName : UIColorHex(ffffff)}];
+                NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12], NSForegroundColorAttributeName : [UIColor whiteColor]}];
                 [attStr appendAttributedString:numStr];
             }
             [_doneButton setAttributedTitle:attStr forState:UIControlStateNormal];

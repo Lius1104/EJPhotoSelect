@@ -7,6 +7,7 @@
 //
 
 #import "EJImagePickerNVC.h"
+#import <Photos/Photos.h>
 #import "EJImagePickerVC.h"
 
 @interface EJImagePickerNVC ()<EJImagePickerDelegate>

@@ -7,6 +7,8 @@
 //
 
 #import "LSAssetItemCell.h"
+#import <YYKit/YYKit.h>
+#import <Masonry/Masonry.h>
 
 @interface LSAssetItemCell ()
 
@@ -77,11 +79,6 @@
         make.width.equalTo(self.mas_width).multipliedBy(0.25);
         make.height.equalTo(_normalButton.mas_width);
     }];
-    
-//    [_playImage mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(30, 30));
-//        make.center.equalTo(self);
-//    }];
     
     [_videoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.mas_left).offset(5);

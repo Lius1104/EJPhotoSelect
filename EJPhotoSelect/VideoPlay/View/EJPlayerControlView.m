@@ -8,6 +8,8 @@
 
 #import "EJPlayerControlView.h"
 #import "EJPhotoSelectDefine.h"
+#import <Masonry/Masonry.h>
+#import <YYKit/YYKit.h>
 
 @interface EJPlayerControlView ()
 

@@ -7,8 +7,10 @@
 //
 
 #import "EJImageCropperVC.h"
-#import <JPImageresizerView.h>
-#import <UINavigationController+FDFullscreenPopGesture.h>
+#import <YYKit/YYKit.h>
+#import <Masonry/Masonry.h>
+#import <JPImageresizerView/JPImageresizerView.h>
+#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 
 @interface EJImageCropperVC ()
 

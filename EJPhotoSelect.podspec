@@ -90,10 +90,10 @@ Pod::Spec.new do |spec|
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "EJPhotoSelect", "EJPhotoSelect/**/*.{h,m}"
+  spec.source_files  = "EJPhotoSelect", "EJPhotoSelect/**/*", "EJPhotoSelect/**/**/*"
   # spec.exclude_files = "Classes/Exclude"
 
-  spec.public_header_files = "EJPhotoSelect/**/*.h"
+  spec.public_header_files = "EJPhotoSelect/EJPhotoSelectDefine.h", "EJPhotoSelect/**/*.h", "EJPhotoSelect/**/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -117,7 +117,7 @@ Pod::Spec.new do |spec|
   #
 
   # spec.framework  = "SomeFramework"
-  spec.frameworks = "UIKit", "Foundation"
+  spec.frameworks = "UIKit", "Foundation", "AssetsLibrary", "MediaPlayer", "CoreMotion", "AVFoundation", "Photos", "PhotosUI"
 
   # spec.library   = "iconv"
   # spec.libraries = "iconv", "xml2"
@@ -133,6 +133,7 @@ Pod::Spec.new do |spec|
 
   # spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # spec.dependency "JSONKit", "~> 1.4"
+  spec.dependency 'EJTools'
   spec.dependency 'SDWebImage'
   spec.dependency 'DACircularProgress'
   spec.dependency 'MBProgressHUD'
@@ -141,42 +142,38 @@ Pod::Spec.new do |spec|
   spec.dependency 'FDFullscreenPopGesture'
   spec.dependency 'Masonry'
   spec.dependency 'LSToolsKit'
-  spec.dependency 'JoyssomTool'
-  spec.dependency 'EJWarningCardKit'
-  spec.dependency 'EJTools'
+  
 
-  spec.subspec 'VideoPlay' do |ss|
-    ss.ios.deployment_target = '8.0'
-    ss.public_header_files = "EJPhotoSelect/VideoPlay/**/*.h"
-    ss.source_files = "EJPhotoSelect/VideoPlay/**/*.{h,m}"
-    # ss.dependency 'SDWebImage'
-    # ss.dependency 'YYKit'
-  end
+ #  spec.subspec 'VideoPlay' do |ss|
+ #    ss.ios.deployment_target = '8.0'
+ #    ss.public_header_files = "EJPhotoSelect/VideoPlay/**/*.h"
+ #    ss.source_files = "EJPhotoSelect/VideoPlay/**/*.{h,m}"
+ #    # ss.dependency 'SDWebImage'
+ #    # ss.dependency 'YYKit'
+ #  end
 
-  spec.subspec 'ImagePicker' do |ss|
-    ss.ios.deployment_target = '8.0'
-    ss.public_header_files = "EJPhotoSelect/ImagePicker/**/*.h"
-    ss.source_files = "EJPhotoSelect/ImagePicker/**/*.{h,m}"
-    # ss.dependency 'DZNEmptyDataSet'
-    # ss.dependency 'LSToolsKit'
-  end
+ #  spec.subspec 'ImagePicker' do |ss|
+ #    ss.ios.deployment_target = '8.0'
+ #    ss.public_header_files = "EJPhotoSelect/ImagePicker/**/*.h"
+ #    ss.source_files = "EJPhotoSelect/ImagePicker/**/*.{h,m}"
+ #  end
 
-  spec.subspec 'Edit' do |ss|
-    ss.ios.deployment_target = '8.0'
-    ss.public_header_files = "EJPhotoSelect/Edit/**/*.h"
-    ss.source_files = "EJPhotoSelect/Edit/**/*.{h,m}"
-    # ss.dependency 'MBProgressHUD'
-  end
-  spec.subspec 'PhotoBrowser' do |ss|
-    ss.ios.deployment_target = '8.0'
-    ss.public_header_files = "EJPhotoSelect/PhotoBrowser/*.h"
-    ss.source_files = "EJPhotoSelect/PhotoBrowser/*.{h,m}"
-    # ss.dependency 'MJRefresh'
-  end
-  spec.subspec 'Shot' do |ss|
-	ss.ios.deployment_target = '8.0'
-	ss.public_header_files = "EJPhotoSelect/Shot/**/*.h"
-    ss.source_files = "EJPhotoSelect/Shot/**/*.{h,m}"
-  end
+ #  spec.subspec 'Edit' do |ss|
+ #    ss.ios.deployment_target = '8.0'
+ #    ss.public_header_files = "EJPhotoSelect/Edit/**/*.h"
+ #    ss.source_files = "EJPhotoSelect/Edit/**/*.{h,m}"
+ #  end
+
+ #  spec.subspec 'PhotoBrowser' do |ss|
+ #    ss.ios.deployment_target = '8.0'
+ #    ss.public_header_files = "EJPhotoSelect/PhotoBrowser/*.h"
+ #    ss.source_files = "EJPhotoSelect/PhotoBrowser/*.{h,m}"
+ #    # ss.dependency 'MJRefresh'
+ #  end
+ #  spec.subspec 'Shot' do |ss|
+	# ss.ios.deployment_target = '8.0'
+	# ss.public_header_files = "EJPhotoSelect/Shot/**/*.h"
+ #    ss.source_files = "EJPhotoSelect/Shot/**/*.{h,m}"
+ #  end
 
 end
