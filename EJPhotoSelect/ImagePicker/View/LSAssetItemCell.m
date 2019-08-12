@@ -37,8 +37,8 @@
         [self addSubview:_livePhotoIcon];
         
         _normalButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_normalButton setImage:[UIImage imageNamed:@"imagePicker_icon_normal"] forState:UIControlStateNormal];
-        [_normalButton setImage:[UIImage imageNamed:@"imagePicker_icon_selected"] forState:UIControlStateSelected];
+        [_normalButton setImage:[UIImage imageNamed:@"ejtools_imagePicker_normal"] forState:UIControlStateNormal];
+        [_normalButton setImage:[UIImage imageNamed:@"ejtools_imagePicker_selected"] forState:UIControlStateSelected];
         
         _normalButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         _normalButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;

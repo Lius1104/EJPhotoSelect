@@ -583,7 +583,7 @@ typedef NS_ENUM(NSInteger, PanDirection) {
     _cardView.showFrom = WarningCardShowFromRightTop;
     _cardView.titleFont = [UIFont systemFontOfSize:15];
     _cardView.textColor = [UIColor blackColor];
-    _cardView.backgroundImg = [UIImage imageNamed:@"data_img_popup"];
+    _cardView.backgroundImg = [UIImage imageNamed:@"ejtools_video_player_menu"];
     _cardView.contentLeft = 24;
     [_cardView show];
 }
@@ -692,20 +692,6 @@ typedef NS_ENUM(NSInteger, PanDirection) {
     }
     return _loading;
 }
-
-//- (EJWarningCardView *)cardView {
-//    if (!_cardView) {
-//        _cardView = [[EJWarningCardView alloc] initWithTitleArray:@[@"编辑"] imageArray:nil AtPoint:CGPointMake(_controlView.width - 10, CGRectGetMaxY(_controlView.topFrame) + 5) AndSize:CGSizeMake(80, 40) EdgeInset:UIEdgeInsetsZero delegate:self];
-//        _cardView.isShowBg = NO;
-//        _cardView.frame = CGRectMake(0, CGRectGetMaxY(_controlView.topFrame), _controlView.width, CGRectGetMinY(_controlView.bottomFrame) - CGRectGetMaxY(_controlView.topFrame));
-//        _cardView.showFrom = WarningCardShowFromRightTop;
-//        _cardView.titleFont = [UIFont systemFontOfSize:15];
-//        _cardView.textColor = [UIColor blackColor];
-//        _cardView.backgroundImg = [UIImage imageNamed:@"data_img_popup"];
-//        _cardView.contentLeft = 24;
-//    }
-//    return _cardView;
-//}
 
 - (MPVolumeView *)volumeView {
     if (!_volumeView) {

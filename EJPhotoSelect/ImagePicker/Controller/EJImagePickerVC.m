@@ -136,7 +136,7 @@
         self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
     }
     
-    UIBarButtonItem * leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ejtools_back"] style:UIBarButtonItemStyleDone target:self action:@selector(handleClickLeftItem)];
+    UIBarButtonItem * leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ejtools_imagePicker_back"] style:UIBarButtonItemStyleDone target:self action:@selector(handleClickLeftItem)];
     self.navigationItem.leftBarButtonItem = leftItem;
     
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {

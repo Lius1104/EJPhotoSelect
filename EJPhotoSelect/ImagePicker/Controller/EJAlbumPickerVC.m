@@ -223,7 +223,8 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     
     EJ_AlbumModel * album = self.albumSource[indexPath.row];
     [cell setUpCoverImage:album.coverImg];
-    NSMutableAttributedString * titleString = [[NSMutableAttributedString alloc] initWithString:album.assetCollection.localizedTitle attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: UIColorHex(333333)}];
+    NSString * title = [album.assetCollection.localizedTitle length] > 0 ? album.assetCollection.localizedTitle : @"";
+    NSMutableAttributedString * titleString = [[NSMutableAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: UIColorHex(333333)}];
     NSAttributedString * countString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" · %d", (int)album.sourceCount] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: UIColorHex(333333)}];
     [titleString appendAttributedString:countString];
     cell.titleLabel.attributedText = titleString;

@@ -128,7 +128,7 @@ typedef enum : NSUInteger {
     _closeBtn.expendDirection = ExpandingDirectionAll;
     _closeBtn.expendX = 15;
     _closeBtn.expendY = 15;
-    [_closeBtn setImage:[UIImage imageNamed:@"public_icon_close"] forState:UIControlStateNormal];
+    [_closeBtn setImage:[UIImage imageNamed:@"ejtools_shot_close"] forState:UIControlStateNormal];
     [_closeBtn addTarget:self action:@selector(handleCloseAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_closeBtn];
     
@@ -142,7 +142,7 @@ typedef enum : NSUInteger {
     _changeDeviceBtn.expendDirection = ExpandingDirectionAll;
     _changeDeviceBtn.expendX = 10;
     _changeDeviceBtn.expendY = 10;
-    [_changeDeviceBtn setImage:[UIImage imageNamed:@"castScreen_shoot_switch"] forState:UIControlStateNormal];
+    [_changeDeviceBtn setImage:[UIImage imageNamed:@"ejtools_shot_switch"] forState:UIControlStateNormal];
     [_changeDeviceBtn addTarget:self action:@selector(handleChangeDeviceAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_changeDeviceBtn];
     
@@ -235,8 +235,8 @@ typedef enum : NSUInteger {
     _cameraBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 66, 66)];
     _cameraBtn.bottom = frame.size.height - [UIView ej_heightAt5ByHeight:48];
     _cameraBtn.centerX = frame.size.width / 2.f;
-    [_cameraBtn setImage:[UIImage imageNamed:@"public_icon_camera_selected"] forState:UIControlStateNormal];
-    [_cameraBtn setImage:[UIImage imageNamed:@"castScreen_shoot_upload"] forState:UIControlStateSelected];
+    [_cameraBtn setImage:[UIImage imageNamed:@"ejtools_shot_selected"] forState:UIControlStateNormal];
+    [_cameraBtn setImage:[UIImage imageNamed:@"ejtools_shot_upload"] forState:UIControlStateSelected];
     [_cameraBtn addTarget:self action:@selector(handleCameraAction:) forControlEvents:UIControlEventTouchUpInside];
     [_toolView addSubview:_cameraBtn];
     
@@ -249,26 +249,12 @@ typedef enum : NSUInteger {
             make.centerY.equalTo(_toolView);
         }
     }];
-
-//    _videoBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-//    _videoBtn.right = frame.size.width - [UIView ej_widthAt5ByWidth:40];
-//    _videoBtn.centerY = _cameraBtn.centerY;
-//    [_videoBtn setImage:[UIImage imageNamed:@"public_icon_video"] forState:UIControlStateNormal];
-//    [_videoBtn setImage:[UIImage imageNamed:@"shot_icon_camera"] forState:UIControlStateSelected];
-//    [_videoBtn addTarget:self action:@selector(handleVideoAction:) forControlEvents:UIControlEventTouchUpInside];
-//    [_toolView addSubview:_videoBtn];
-//
-//    [_videoBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(30, 30));
-//        make.right.equalTo(_toolView.mas_right).offset(-25);
-//        make.centerY.equalTo(_cameraBtn.mas_centerY);
-//    }];
     
     
     _doneBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
     _doneBtn.right = frame.size.width - [UIView ej_widthAt5ByWidth:40];
     _doneBtn.centerY = _cameraBtn.centerY;
-    [_doneBtn setImage:[UIImage imageNamed:@"shot_done"] forState:UIControlStateNormal];
+    [_doneBtn setImage:[UIImage imageNamed:@"ejtools_shot_done"] forState:UIControlStateNormal];
     [_doneBtn addTarget:self action:@selector(handleClickDone:) forControlEvents:UIControlEventTouchUpInside];
     _doneBtn.hidden = YES;
     [_toolView addSubview:_doneBtn];
@@ -281,8 +267,8 @@ typedef enum : NSUInteger {
     
 
     _shootBtn = [[UIButton alloc] initWithFrame:_cameraBtn.frame];
-    [_shootBtn setImage:[UIImage imageNamed:@"public_icon_video_selected"] forState:UIControlStateNormal];
-    [_shootBtn setImage:[UIImage imageNamed:@"public_icon_video_pressed"] forState:UIControlStateSelected];
+    [_shootBtn setImage:[UIImage imageNamed:@"ejtools_shot_video_selected"] forState:UIControlStateNormal];
+    [_shootBtn setImage:[UIImage imageNamed:@"ejtools_shot_video_pressed"] forState:UIControlStateSelected];
     [_shootBtn addTarget:self action:@selector(handleShootAction:) forControlEvents:UIControlEventTouchUpInside];
     _shootBtn.alpha = 0.f;
     [_toolView addSubview:_shootBtn];

@@ -229,7 +229,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 //    }];
     
     _backItem = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_backItem setImage:[UIImage imageNamed:@"ejtools_back"] forState:UIControlStateNormal];
+    [_backItem setImage:[UIImage imageNamed:@"ejtools_photobrowser_back"] forState:UIControlStateNormal];
     [_backItem addTarget:self action:@selector(handleClickBackItem) forControlEvents:UIControlEventTouchUpInside];
     _backItem.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_navigationBar addSubview:_backItem];
@@ -242,8 +242,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [_navigationBar addSubview:_titleLabel];
     
     _selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_selectButton setImage:[UIImage imageNamed:@"imagePicker_icon_normal"] forState:UIControlStateNormal];
-    [_selectButton setImage:[UIImage imageNamed:@"imagePicker_icon_selected"] forState:UIControlStateSelected];
+    [_selectButton setImage:[UIImage imageNamed:@"ejtools_imagePicker_normal"] forState:UIControlStateNormal];
+    [_selectButton setImage:[UIImage imageNamed:@"ejtools_imagePicker_selected"] forState:UIControlStateSelected];
     [_selectButton addTarget:self action:@selector(handleClickSelectButton) forControlEvents:UIControlEventTouchUpInside];
     [_navigationBar addSubview:_selectButton];
     _selectButton.hidden = !_showSelectButton;
@@ -278,8 +278,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_doneButton setTitle:@"确定" forState:UIControlStateNormal];
-    [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_normal"] forState:UIControlStateNormal];
-    [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_disabled"] forState:UIControlStateDisabled];
+    [_doneButton setBackgroundImage:[UIImage imageNamed:@"ejtools_btn_normal"] forState:UIControlStateNormal];
+    [_doneButton setBackgroundImage:[UIImage imageNamed:@"ejtools_btn_disabled"] forState:UIControlStateDisabled];
     if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
         NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
         if (maxCount != 1) {

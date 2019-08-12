@@ -320,7 +320,7 @@
 - (UIButton *)cancelButton {
     if (!_cancelButton) {
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_cancelButton setImage:[UIImage imageNamed:@"ejtools_back"] forState:UIControlStateNormal];
+        [_cancelButton setImage:[UIImage imageNamed:@"ejtools_interceptVideo_back"] forState:UIControlStateNormal];
         [_cancelButton addTarget:self action:@selector(handleClickCancelButton) forControlEvents:UIControlEventTouchUpInside];
         
         [self.view addSubview:_cancelButton];

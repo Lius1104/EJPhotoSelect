@@ -291,7 +291,7 @@
     if (!_backButton) {
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.frame = CGRectMake(0, 0, 35, kTopControlHeight);
-        [_backButton setImage:[UIImage imageNamed:@"icon_back"] forState:UIControlStateNormal];
+        [_backButton setImage:[UIImage imageNamed:@"ejtools_video_player_back"] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(handleClickBackButton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
@@ -314,8 +314,8 @@
     if (!_changeButton) {
         _changeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeButton.frame = CGRectMake(0, 0, 35, kTopControlHeight);
-        [_changeButton setImage:[UIImage imageNamed:@"横屏"] forState:UIControlStateNormal];
-        [_changeButton setImage:[UIImage imageNamed:@"竖屏"] forState:UIControlStateSelected];
+        [_changeButton setImage:[UIImage imageNamed:@"ejtools_video_player_landscape"] forState:UIControlStateNormal];
+        [_changeButton setImage:[UIImage imageNamed:@"ejtools_video_player_portrait"] forState:UIControlStateSelected];
         [_changeButton addTarget:self action:@selector(handleClickChangeButton:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _changeButton;
@@ -325,7 +325,7 @@
     if (!_moreButton) {
         _moreButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _moreButton.frame = CGRectMake(0, 0, 35, kTopControlHeight);
-        [_moreButton setImage:[UIImage imageNamed:@"TR_detail_More"] forState:UIControlStateNormal];
+        [_moreButton setImage:[UIImage imageNamed:@"ejtools_video_player_more"] forState:UIControlStateNormal];
         [_moreButton addTarget:self action:@selector(handleClickMoreButton) forControlEvents:UIControlEventTouchUpInside];
         
         _moreButton.hidden = _hideMore;
@@ -336,8 +336,8 @@
 - (UIButton *)playButton {
     if (!_playButton) {
         _playButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, kBottomControlHeight)];
-        [_playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        [_playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
+        [_playButton setImage:[UIImage imageNamed:@"ejtools_video_player_play"] forState:UIControlStateNormal];
+        [_playButton setImage:[UIImage imageNamed:@"ejtools_video_player_pause"] forState:UIControlStateSelected];
         [_playButton addTarget:self action:@selector(handleClickPlayButton:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _playButton;
@@ -379,7 +379,7 @@
         _videoSlider = [[UISlider alloc] init];
         _videoSlider.minimumTrackTintColor = [UIColor whiteColor];
         _videoSlider.maximumTrackTintColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3];
-        [_videoSlider setThumbImage:[UIImage imageNamed:@"slider"] forState:UIControlStateNormal];
+        [_videoSlider setThumbImage:[UIImage imageNamed:@"ejtools_video_player_slider"] forState:UIControlStateNormal];
         
         [_videoSlider addTarget:self action:@selector(handleSliderTouchBegan:) forControlEvents:UIControlEventTouchDown];
         

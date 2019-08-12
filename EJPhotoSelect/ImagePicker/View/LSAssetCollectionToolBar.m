@@ -97,8 +97,8 @@
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_normal"] forState:UIControlStateNormal];
-    [_doneButton setBackgroundImage:[UIImage imageNamed:@"btn_disabled"] forState:UIControlStateDisabled];
+    [_doneButton setBackgroundImage:[UIImage imageNamed:@"ejtools_btn_normal"] forState:UIControlStateNormal];
+    [_doneButton setBackgroundImage:[UIImage imageNamed:@"ejtools_btn_disabled"] forState:UIControlStateDisabled];
     [_doneButton addTarget:self action:@selector(handleClickDoneButton:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:_doneButton];
