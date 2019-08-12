@@ -27,6 +27,8 @@
 
 #import "LSInterceptVideo.h"
 
+#import "EJPhotoConfig.h"
+
 @interface EJImagePickerVC ()<UICollectionViewDelegate, UICollectionViewDataSource, PHPhotoLibraryChangeObserver, LSAssetCollectionToolBarDelegate, EJImagePickerShotCellDelegate, EJCameraShotVCDelegate, EJPhotoBrowserDelegate, EJImageCropperDelegate, LSInterceptVideoDelegate> {
     CGRect previousPreheatRect;
     BOOL _isLocalSelected;
@@ -119,6 +121,21 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = UIColorHex(ffffff);
     self.title = @"选择照片视频";
+    
+    if ([EJPhotoConfig sharedPhotoConfig].barTintColor) {
+       self.navigationController.navigationBar.barTintColor = [EJPhotoConfig sharedPhotoConfig].barTintColor;
+    } else {
+        self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    }
+    
+    if ([EJPhotoConfig sharedPhotoConfig].tintColor) {
+        self.navigationController.navigationBar.tintColor = [EJPhotoConfig sharedPhotoConfig].tintColor;
+        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [EJPhotoConfig sharedPhotoConfig].tintColor};
+    } else {
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
+    }
+    
     UIBarButtonItem * leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ejtools_back"] style:UIBarButtonItemStyleDone target:self action:@selector(handleClickLeftItem)];
     self.navigationItem.leftBarButtonItem = leftItem;
     
@@ -173,11 +190,12 @@
                     albumBtn.frame = CGRectMake(0, 0, 50, 34);
                     [albumBtn setTitle:@"相册" forState:UIControlStateNormal];
                     albumBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-#if defined(kTintColor)
-                    [albumBtn setTitleColor:kTintColor forState:UIControlStateNormal];
-#else
-                    [albumBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-#endif
+                    if ([EJPhotoConfig sharedPhotoConfig].tintColor) {
+                        [albumBtn setTitleColor:[EJPhotoConfig sharedPhotoConfig].tintColor forState:UIControlStateNormal];
+                    } else {
+                        [albumBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                    }
+
                     [albumBtn addTarget:self action:@selector(handleClickRightItem) forControlEvents:UIControlEventTouchUpInside];
                     UIBarButtonItem * rightItem = [[UIBarButtonItem alloc] initWithCustomView:albumBtn];
                     self.navigationItem.rightBarButtonItem = rightItem;
@@ -615,6 +633,9 @@
 
 #pragma mark - LSAssetCollectionToolBarDelegate
 - (void)ls_assetCollectionToolBarDidClickPreviewButton {
+    if ([self.selectedSource count] == 0) {
+        return;
+    }
     // 跳转到 图片浏览
     NSUInteger currentIndex = 0;
     // 图片浏览
@@ -680,6 +701,7 @@
         orientation = AVCaptureVideoOrientationLandscapeLeft;
     }
     EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:shotType delegate:self suggestOrientation:orientation /*allowPreview:YES*/ maxCount:1];
+    vc.forcedCrop = _forcedCrop;
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self ej_presentViewController:nav animated:YES completion:nil];
 }
@@ -712,6 +734,7 @@
     if (_isLocalSelected == NO) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:EJ_ShotType_Photo delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait /*allowPreview:YES*/ maxCount:1];
+            vc.forcedCrop = _forcedCrop;
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self ej_presentViewController:nav animated:YES completion:nil];
         });
@@ -721,19 +744,19 @@
 
 - (void)ej_imageCropperVCDidCrop:(UIImage *)image {
     [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-        if ([assetLocalId length] > 0) {
-            PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
-            [self.selectedSource removeAllObjects];
-            [self.selectedSource addObject:asset];
-            if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-                [self.delegate ej_imagePickerDidSelected:self.selectedSource];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([assetLocalId length] > 0) {
+                PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
+                [self.selectedSource removeAllObjects];
+                [self.selectedSource addObject:asset];
+                if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
+                    [self.delegate ej_imagePickerDidSelected:self.selectedSource];
+                }
+                [self dismissViewControllerAnimated:YES completion:nil];
+            } else {
                 [EJProgressHUD showAlert:@"保存失败" forView:self.view];
-            });
-        }
+            }
+        });
     }];
 }
 
@@ -857,7 +880,6 @@
     CGFloat imageSize = MAX(screen.bounds.size.width, screen.bounds.size.height) * 1.5;
     CGSize imageTargetSize = CGSizeMake(imageSize * scale, imageSize * scale);
     EJPhoto * currPhoto = [EJPhoto photoWithAsset:asset targetSize:imageTargetSize];
-//    [self.browserSource insertObject:currPhoto atIndex:0];
     if (currentAsset) {
         NSUInteger currentIndex = [self.selectedSource indexOfObject:currentAsset];
         [self.selectedSource replaceObjectAtIndex:currentIndex withObject:asset];

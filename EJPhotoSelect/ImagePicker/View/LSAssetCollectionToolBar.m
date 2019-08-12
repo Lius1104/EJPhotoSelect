@@ -9,6 +9,7 @@
 #import "LSAssetCollectionToolBar.h"
 #import <Masonry/Masonry.h>
 #import <YYKit/YYKit.h>
+#import "EJPhotoConfig.h"
 
 @interface LSAssetCollectionToolBar ()
 
@@ -68,14 +69,17 @@
 
 - (void)setupSubviews {
     _previewButton = [UIButton buttonWithType:UIButtonTypeCustom];
-#if defined(kTintColor)
-    [_previewButton setTitleColor:kTintColor forState:UIControlStateNormal];
-#else
-    [_previewButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-#endif
+    
+    if ([EJPhotoConfig sharedPhotoConfig].majorTitleColor) {
+        [_previewButton setTitleColor:[EJPhotoConfig sharedPhotoConfig].majorTitleColor forState:UIControlStateNormal];
+    } else {
+        [_previewButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    
     _previewButton.titleLabel.font = [UIFont systemFontOfSize:16];
     _previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_previewButton addTarget:self action:@selector(handleClickPreviewButton:) forControlEvents:UIControlEventTouchUpInside];
+    _previewButton.enabled = NO;
     [self addSubview:_previewButton];
     
     _originalButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -141,8 +145,10 @@
             [_previewButton setTitle:@"预览" forState:UIControlStateNormal];
             [_doneButton setAttributedTitle:attStr forState:UIControlStateDisabled];
             _doneButton.enabled = NO;
+            _previewButton.enabled = NO;
         } else {
             _doneButton.enabled = YES;
+            _previewButton.enabled = YES;
             [_previewButton setTitle:[NSString stringWithFormat:@"预览(%d)", (int)count] forState:UIControlStateNormal];
             NSString * numString;
             if (_showPercentage == NO || _maxCount == 0) {

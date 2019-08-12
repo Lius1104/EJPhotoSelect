@@ -113,6 +113,8 @@
             NSUInteger maxCount = (_config.maxSelectCount == 0 ? NSUIntegerMax : _config.maxSelectCount);
 //            NSUInteger maxCount = 9;
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait maxCount:maxCount];
+            vc.forcedCrop = _config.forcedCrop;
+            vc.cropScale = 0.5;
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self ej_presentViewController:nav animated:YES completion:nil];
         }];

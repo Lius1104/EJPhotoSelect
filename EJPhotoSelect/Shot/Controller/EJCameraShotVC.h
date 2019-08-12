@@ -24,6 +24,14 @@
 
 @property (nonatomic, assign, readonly) NSUInteger maxCount;
 
+/**
+ 是否强制裁剪
+ */
+@property (nonatomic, assign) BOOL forcedCrop;
+
+/// 图片裁剪比例，默认为 0
+@property (nonatomic, assign) CGFloat cropScale;
+
 - (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
 
 - (instancetype)initWithShotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;

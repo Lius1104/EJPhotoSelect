@@ -78,6 +78,9 @@
         _maxCount = maxCount;
         _suggestOrientation = suggestOrientation;
         _shotCount = 0;
+        
+        _forcedCrop = NO;
+        _cropScale = 0;
     }
     return self;
 }
@@ -92,6 +95,9 @@
         _maxCount = maxCount;
         _suggestOrientation = suggestOrientation;
         _shotCount = 0;
+        
+        _forcedCrop = NO;
+        _cropScale = 0;
     }
     return self;
 }
@@ -537,10 +543,6 @@
     });
 }
 
-//- (void)showPhotoBrowser {
-//    EJPhotoBrowser *
-//}
-
 - (void)handleJudgeSystemFreeSize:(NSTimer *)timer {
     BOOL isEnough = [UIDevice isEnoughFreeSizePer:0.01];
     if (!isEnough) {
@@ -718,6 +720,8 @@
     brower.showCropButton = YES;
     brower.showSelectButton = YES;
     [brower setCurrentPhotoIndex:0];
+    brower.isPreview = YES;
+    brower.forcedCrop = _forcedCrop;
     [self.navigationController pushViewController:brower animated:YES];
 }
 
@@ -770,6 +774,18 @@
         }
         [photoBrowser reloadData];
     }
+}
+
+- (NSUInteger)photoBrowserMaxSelectePhotoCount:(EJPhotoBrowser *)photoBrowser {
+    return _maxCount;
+}
+
+- (NSUInteger)photoBrowserSelectedPhotoCount:(EJPhotoBrowser *)photoBrowser {
+    return [self.assetIds count];
+}
+
+- (CGFloat)photoBrowser:(EJPhotoBrowser *)photoBrowser crapScaleAtIndex:(NSUInteger)index {
+    return _cropScale;
 }
 
 - (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index assetId:(NSString *)assetId {

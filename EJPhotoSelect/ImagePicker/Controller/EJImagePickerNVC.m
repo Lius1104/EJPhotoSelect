@@ -9,6 +9,7 @@
 #import "EJImagePickerNVC.h"
 #import <Photos/Photos.h>
 #import "EJImagePickerVC.h"
+#import "EJPhotoConfig.h"
 
 @interface EJImagePickerNVC ()<EJImagePickerDelegate>
 
@@ -30,17 +31,21 @@
         self.selectedSource = selectedSource == nil ? [NSMutableArray arrayWithCapacity:1] : selectedSource;
         self.showShot = showShot;
         self.allowCrop = allowCrop;
-#if defined(kBarTintColor)
-        self.navigationBar.barTintColor = kBarTintColor;
-#else
-        self.navigationBar.barTintColor = [UIColor whiteColor];
-#endif
+
+        if ([EJPhotoConfig sharedPhotoConfig].barTintColor) {
+            self.navigationBar.barTintColor = [EJPhotoConfig sharedPhotoConfig].barTintColor;
+        } else {
+            self.navigationBar.barTintColor = [UIColor whiteColor];
+        }
         
-#if defined(kTintColor)
-        self.navigationBar.tintColor = kTintColor;
-#else
-        self.navigationBar.tintColor = [UIColor blackColor];
-#endif
+        if ([EJPhotoConfig sharedPhotoConfig].tintColor) {
+            self.navigationBar.tintColor = [EJPhotoConfig sharedPhotoConfig].tintColor;
+            self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [EJPhotoConfig sharedPhotoConfig].tintColor};
+        } else {
+            self.navigationBar.tintColor = [UIColor blackColor];
+            self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
+        }
+
         self.navigationBar.translucent = NO;
     }
     return self;

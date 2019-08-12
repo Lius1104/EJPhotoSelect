@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "EJPhotoConfig.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [[LSSaveToAlbum mainSave] configCustomAlbumName:@"本地资源处理"];
+    [EJPhotoConfig sharedPhotoConfig].tintColor = [UIColor redColor];
+    [EJPhotoConfig sharedPhotoConfig].barTintColor = [UIColor greenColor];
+    
     return YES;
 }
 

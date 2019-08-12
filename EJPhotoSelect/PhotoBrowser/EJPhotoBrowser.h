@@ -143,6 +143,7 @@
  */
 @property (nonatomic, assign) NSTimeInterval maxVideoDuration;
 
+
 /**
  是否是预览
  */

@@ -304,10 +304,15 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         NSString * title = @"确定";
         if ([self.delegate respondsToSelector:@selector(photoBrowserSelectedPhotoCount:)] && [self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
             NSUInteger selectedCount = [self.delegate photoBrowserSelectedPhotoCount:self];
-            title = [title stringByAppendingString:[NSString stringWithFormat:@"(%d", (int)selectedCount]];
             NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+            if (selectedCount == maxCount && maxCount == 1) {
+            } else {
+                title = [title stringByAppendingString:[NSString stringWithFormat:@"(%d", (int)selectedCount]];
+            }
             if (maxCount == NSUIntegerMax || maxCount == 0) {
                 title = [title stringByAppendingString:@")"];
+            } else if (maxCount == 1) {
+                
             } else {
                 title = [title stringByAppendingString:[NSString stringWithFormat:@"/%d)", (int)maxCount]];
             }
@@ -1475,9 +1480,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                         } else {
                             NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
                         }
-//                        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
-//                            [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
-//                        }
                     } else {
                         // 获取当前的预选状态
                         BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
