@@ -16,6 +16,8 @@
 
 @end
 
+static NSString * EJCameraShotDismissedNotification = @"EJCameraShotDismissedNotification";//EJCameraShotVC dismiss
+
 #define kVideoShotDuration  (60 * 3)
 
 @interface EJCameraShotVC : UIViewController

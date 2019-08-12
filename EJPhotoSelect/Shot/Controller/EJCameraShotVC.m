@@ -609,7 +609,9 @@
     if ([self.delegate respondsToSelector:@selector(ej_shotVCDidShot:)]) {
         [self.delegate ej_shotVCDidShot:self.assetIds];
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:EJCameraShotDismissedNotification object:nil];
+    }];
 }
 
 - (void)ej_cameraShotViewDidClickToChangeDevice {
