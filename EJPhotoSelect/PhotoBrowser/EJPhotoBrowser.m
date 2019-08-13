@@ -94,7 +94,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     _recycledPages = [[NSMutableSet alloc] init];
     _photos = [[NSMutableArray alloc] init];
     _thumbPhotos = [[NSMutableArray alloc] init];
-//    _currentGridContentOffset = CGPointMake(0, CGFLOAT_MAX);
     _didSavePreviousStateOfNavBar = NO;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -293,7 +292,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(_bottomBar.mas_right).offset(-13);
         make.height.mas_equalTo(27);
-        make.width.mas_greaterThanOrEqualTo(50);
+        make.width.mas_equalTo(56);
         make.top.equalTo(_bottomBar.mas_top).offset(6);
 //        make.centerY.equalTo(_bottomBar);
     }];
@@ -339,6 +338,11 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
             _doneButton.enabled = YES;
             [_doneButton setTitle:@"确定" forState:UIControlStateNormal];
         }
+        CGFloat doneWidth = ceil([_doneButton.currentTitle boundingRectWithSize:CGSizeZero options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : _doneButton.titleLabel.font} context:nil].size.width);
+        doneWidth = (doneWidth + 12) > 56 ? (doneWidth + 12) : 56;
+        [_doneButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(doneWidth);
+        }];
     }
 }
 

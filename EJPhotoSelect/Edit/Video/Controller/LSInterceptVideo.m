@@ -123,7 +123,7 @@
     [self.doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.cancelButton);
         make.size.equalTo(self.cancelButton);
-        make.trailing.equalTo(self.view).offset(-3);
+        make.trailing.equalTo(self.view).offset(-7);
     }];
     
     [self.operationView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -287,7 +287,8 @@
     
     CGFloat end = CMTimeGetSeconds([_operationView getEndTime]);
     CGFloat start = CMTimeGetSeconds([_operationView getStartTime]);
-    _targetDurationLabel.text = [NSString stringWithFormat:@"%d秒", (int)(end - start)];
+    CGFloat result = ceil(end - start);
+    _targetDurationLabel.text = [NSString stringWithFormat:@"%d秒", (int)result];
 }
 
 - (void)ls_interceptViewDidEndChangeTime:(CMTime)time duration:(CGFloat)duration {
@@ -315,7 +316,8 @@
     
     CGFloat end = CMTimeGetSeconds([_operationView getEndTime]);
     CGFloat start = CMTimeGetSeconds([_operationView getStartTime]);
-    _targetDurationLabel.text = [NSString stringWithFormat:@"%d秒", (int)(end - start)];
+    CGFloat result = ceil(end - start);
+    _targetDurationLabel.text = [NSString stringWithFormat:@"%d秒", (int)result];
     
     [self startTimer];
 }

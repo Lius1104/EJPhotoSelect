@@ -89,7 +89,6 @@
     [_originalButton setImage:[UIImage imageNamed:@"source_normal"] forState:UIControlStateNormal];
     [_originalButton setImage:[UIImage imageNamed:@"source_selected"] forState:UIControlStateSelected];
     _originalButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 5);
-//    _originalButton.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, -5);
     _originalButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_originalButton addTarget:self action:@selector(handleClickOriginalButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_originalButton];
@@ -134,7 +133,9 @@
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.trailing.equalTo(self.mas_trailing).offset(-10);
         make.centerY.equalTo(self);
-        make.width.mas_greaterThanOrEqualTo(56);
+//        make.width.mas_greaterThanOrEqualTo(56);
+        make.width.mas_equalTo(56);
+        make.height.mas_equalTo(27);
     }];
 }
 
@@ -162,6 +163,12 @@
             }
             [_doneButton setAttributedTitle:attStr forState:UIControlStateNormal];
         }
+        
+        CGFloat doneWidth = ceil([attStr boundingRectWithSize:CGSizeZero options:NSStringDrawingUsesLineFragmentOrigin context:nil].size.width);
+        doneWidth = (doneWidth + 12) > 56 ? doneWidth + 12 : 56;
+        [_doneButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(doneWidth);
+        }];
     }
 }
 

@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)ej_shotDicPath;
 
-+ (NSString *)shortedSecond:(NSUInteger)second;
++ (NSString *)shortedSecond:(CGFloat)second;
 
 @end
 
