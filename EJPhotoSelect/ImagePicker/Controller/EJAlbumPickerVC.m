@@ -86,7 +86,6 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 
 #pragma mark - private
 - (void)getAllAssetCollections {
-    // 监测权限，哈哈，不知道为什么今天很开心
     _smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     _userAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil];
     [self updateAlbums];
@@ -113,41 +112,32 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     for (PHAssetCollection * assetCollection in _smartAlbums) {
         if (assetCollection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumAllHidden) continue;
         if (assetCollection.assetCollectionSubtype == 1000000201) continue; //『最近删除』相册
-        if (assetCollection.assetCollectionSubtype != PHAssetCollectionSubtypeSmartAlbumAllHidden) {
-            EJ_AlbumModel * album = [[EJ_AlbumModel alloc] init];
-            album.assetCollection = assetCollection;
-            if (assetCollection.estimatedAssetCount == NSNotFound) {
-                PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
-                album.sourceCount = result.count;
-            } else {
-                album.sourceCount = assetCollection.estimatedAssetCount;
-            }
-            if (album.sourceCount == 0) {
-                continue;
-            }
-            if (assetCollection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumUserLibrary) {
-                _userLibrary = assetCollection;
-                [self.albumSource insertObject:album atIndex:0];
-            } else {
-                [self.albumSource addObject:album];
-            }
-            if (album.sourceCount > 0) {
-                // 获取 相册封面
-                @weakify(self);
-                [self getAssetCollection:assetCollection coverImg:^(UIImage *coverImg) {
-                    album.coverImg = coverImg;
-                    [weak_self.tableView reloadData];
-                }];
-            }
+        PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
+        NSUInteger count = result.count;
+        if (count == 0) {
+            continue;
+        }
+        EJ_AlbumModel * album = [[EJ_AlbumModel alloc] init];
+        album.assetCollection = assetCollection;
+        album.sourceCount = count;
+        if (assetCollection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumUserLibrary) {
+            _userLibrary = assetCollection;
+            [self.albumSource insertObject:album atIndex:0];
+        } else {
+            [self.albumSource addObject:album];
+        }
+        if (album.sourceCount > 0) {
+            // 获取 相册封面
+            @weakify(self);
+            [self getAssetCollection:assetCollection coverImg:^(UIImage *coverImg) {
+                album.coverImg = coverImg;
+                [weak_self.tableView reloadData];
+            }];
         }
     }
     for (PHAssetCollection * assetCollection in _userAlbums) {
-        NSUInteger count = assetCollection.estimatedAssetCount;
-        if (count == NSNotFound) {
-            PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
-            count = result.count;
-        }
-        
+        PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
+        NSUInteger count = result.count;
         if (count > 0) {
             EJ_AlbumModel * album = [[EJ_AlbumModel alloc] init];
             album.assetCollection = assetCollection;
@@ -164,13 +154,28 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 }
 
 - (void)getAssetCollection:(PHAssetCollection *)assetCollection coverImg:(PHCoverImageBlock)coverImageBlock {
-    PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:nil];
+    PHFetchOptions * options = [[PHFetchOptions alloc] init];
+    switch (_assetType) {
+        case E_SourceType_All: {
+            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld || mediaType == %ld", PHAssetMediaTypeImage, PHAssetMediaTypeVideo];
+        }
+            break;
+        case E_SourceType_Image: {
+            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+        }
+            break;
+        case E_SourceType_Video: {
+            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeVideo];
+        }
+            break;
+    }
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
     if (fetchResult.count <= 0) {
         coverImageBlock(nil);
         return;
     }
     
-    PHAsset * asset = [fetchResult firstObject];
+    PHAsset * asset = [fetchResult lastObject];
     [[EJImageManager manager].cachingImageManager requestImageForAsset:asset targetSize:CGSizeMake(120, 120) contentMode:PHImageContentModeAspectFill options:[EJImageManager manager].imageOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         coverImageBlock(result);
     }];
