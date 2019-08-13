@@ -968,11 +968,11 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 - (CGRect)frameForPlayButton:(UIButton *)playButton atIndex:(NSUInteger)index {
     CGRect pageFrame = [self frameForPageAtIndex:index];
-//    return CGRectMake(floorf(CGRectGetMidX(pageFrame) - playButton.frame.size.width / 2),
-//                      floorf(CGRectGetMidY(pageFrame) - playButton.frame.size.height / 2),
-//                      playButton.frame.size.width,
-//                      playButton.frame.size.height);
-    return pageFrame;
+    return CGRectMake(floorf(CGRectGetMidX(pageFrame) - playButton.frame.size.width / 2),
+                      floorf(CGRectGetMidY(pageFrame) - playButton.frame.size.height / 2),
+                      playButton.frame.size.width,
+                      playButton.frame.size.height);
+//    return pageFrame;
 }
 
 #pragma mark - UIScrollView Delegate

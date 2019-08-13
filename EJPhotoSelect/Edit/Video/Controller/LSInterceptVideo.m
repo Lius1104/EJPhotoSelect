@@ -22,6 +22,8 @@
 @property (nonatomic, strong) AVPlayerItem * playerItem;
 @property (nonatomic, strong) AVPlayerLayer * playerLayer;
 
+@property (nonatomic, strong) UILabel * targetDurationLabel;
+
 @property (nonatomic, strong) LSInterceptView * operationView;
 
 @property (nonatomic, strong) UIButton * cancelButton;
@@ -56,10 +58,11 @@
     self = [super init];
     if (self) {
         _asset = asset;
-        if (_asset.duration < duration) {
+        NSTimeInterval targetDuration = duration <= 0 ? 180 : duration;
+        if (_asset.duration < targetDuration) {
             _duration = _asset.duration;
         } else {
-            _duration = duration;
+            _duration = targetDuration;
         }
     }
     return self;
@@ -78,7 +81,7 @@
     [self.playerView.layer addSublayer:self.playerLayer];
     
     [self.view layoutIfNeeded];
-    CGRect bounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight - kToolsStatusHeight - 116 - kToolsBottomSafeHeight - 60);
+    CGRect bounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight - kToolsStatusHeight - 114 - kToolsBottomSafeHeight - 60 - 6 - [UIFont systemFontOfSize:13].lineHeight);
     _playerLayer.frame = bounds;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleApplicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
@@ -95,16 +98,6 @@
         });
     }];
 }
-
-//- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//    [self.navigationController setNavigationBarHidden:YES animated:animated];
-//}
-//
-//- (void)viewWillDisappear:(BOOL)animated {
-//    [super viewWillDisappear:animated];
-//    [self.navigationController setNavigationBarHidden:NO animated:animated];
-//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
@@ -137,23 +130,24 @@
         make.leading.equalTo(self.view);
         make.trailing.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
-            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-50);
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-58);
         } else {
-            make.bottom.equalTo(self.view.mas_bottom).offset(-50);
+            make.bottom.equalTo(self.view.mas_bottom).offset(-58);
         }
-        make.height.mas_equalTo(54);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.targetDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.equalTo(self.view);
+        make.height.mas_equalTo(ceil([UIFont systemFontOfSize:13].lineHeight));
+        make.bottom.equalTo(_operationView.mas_top).offset(-6);
     }];
     
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        if (@available(iOS 11.0, *)) {
-//            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
-//        } else {
-//            make.top.equalTo(self.view);
-//        }
         make.top.equalTo(self.cancelButton.mas_bottom).offset(12);
         make.leading.equalTo(self.view);
         make.trailing.equalTo(self.view);
-        make.bottom.equalTo(self.operationView.mas_top).offset(-12);
+        make.bottom.equalTo(self.targetDurationLabel.mas_top).offset(-12);
     }];
 }
 
@@ -290,6 +284,10 @@
     [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     [self stopTimer];
     [self.player pause];
+    
+    CGFloat end = CMTimeGetSeconds([_operationView getEndTime]);
+    CGFloat start = CMTimeGetSeconds([_operationView getStartTime]);
+    _targetDurationLabel.text = [NSString stringWithFormat:@"%d秒", (int)(end - start)];
 }
 
 - (void)ls_interceptViewDidEndChangeTime:(CMTime)time duration:(CGFloat)duration {
@@ -314,6 +312,11 @@
     } else {
         _playDuration = _duration;
     }
+    
+    CGFloat end = CMTimeGetSeconds([_operationView getEndTime]);
+    CGFloat start = CMTimeGetSeconds([_operationView getStartTime]);
+    _targetDurationLabel.text = [NSString stringWithFormat:@"%d秒", (int)(end - start)];
+    
     [self startTimer];
 }
 
@@ -337,6 +340,18 @@
         [self.view addSubview:_doneButton];
     }
     return _doneButton;
+}
+
+- (UILabel *)targetDurationLabel {
+    if (!_targetDurationLabel) {
+        _targetDurationLabel = [[UILabel alloc] init];
+        _targetDurationLabel.font = [UIFont systemFontOfSize:13];
+        _targetDurationLabel.textColor = [UIColor whiteColor];
+        _targetDurationLabel.textAlignment = NSTextAlignmentCenter;
+        
+        [self.view addSubview:_targetDurationLabel];
+    }
+    return _targetDurationLabel;
 }
 
 - (LSInterceptView *)operationView {

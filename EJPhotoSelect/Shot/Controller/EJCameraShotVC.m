@@ -387,7 +387,6 @@
                 [self.assetIds addObject:assetLocalId];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (self.maxCount == 1) {
-//                        [self ls_teachingShotViewDidClickToClose];
                         [self ej_cameraShotViewDidClickPreviews];
                     } else {
                         _shotView.img = resultImg;
@@ -571,7 +570,8 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [_hud hideAnimated:YES];
                     if (self.maxCount == 1) {
-                        [self ej_cameraShotViewDidClickToClose];
+//                        [self ej_cameraShotViewDidClickToClose];
+                        [self ej_cameraShotViewDidClickDone];
                     } else {
                         self.shotView.img = coverImage;
                         self.shotView.previewCount = self.assetIds.count;

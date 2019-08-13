@@ -60,7 +60,7 @@
     if (kScreenWidth >= 375) {
         cellWidth = 32;
     }
-    _itemCellSize = CGSizeMake(cellWidth, 50);
+    _itemCellSize = CGSizeMake(cellWidth, 36);
     _itemImgSize = CGSizeMake(cellWidth * 2, 100);
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat left = ceil((width - _itemCellSize.width * 10) / 2.f);
@@ -145,10 +145,11 @@
     
     CGFloat duration = _timeUnit * self.validRect.size.width / (_itemCellSize.width);
 
-    self.progressLine.frame = CGRectMake(self.validRect.origin.x, 0, 1, _itemCellSize.height + 4);
-    [self.cropView addSubview:_progressLine];
+    self.progressLine.frame = CGRectMake(self.validRect.origin.x, 0, 2, _itemCellSize.height + 4);
+//    [self.cropView addSubview:_progressLine];
+    [self addSubview:_progressLine];
     [UIView animateWithDuration:duration delay:.0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
-        self->_progressLine.frame = CGRectMake(CGRectGetMaxX(self->_validRect) - 1, 0, 1, self->_itemCellSize.height + 4);
+        self->_progressLine.frame = CGRectMake(CGRectGetMaxX(self->_validRect) - 1, 0, 2, self->_itemCellSize.height + 4);
     } completion:nil];
 }
 

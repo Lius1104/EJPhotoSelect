@@ -88,8 +88,9 @@
     
     _leftView.frame = CGRectMake(validRect.origin.x, 0, _itemSize.width/2, _itemSize.height);
     _rightView.frame = CGRectMake(validRect.origin.x+validRect.size.width-_itemSize.width/2, 0, _itemSize.width/2, _itemSize.height);
-//    _selectedView.frame = CGRectMake(_leftView.right, 0, _rightView.left - _leftView.right, _itemSize.height);
-    _selectedView.frame = CGRectMake(CGRectGetMaxX(_leftView.frame), 0, CGRectGetMinY(_rightView.frame) - CGRectGetMaxX(_leftView.frame), _itemSize.height);
+
+    _selectedView.frame = CGRectMake(CGRectGetMaxX(_leftView.frame), 0, CGRectGetMinX(_rightView.frame) - CGRectGetMaxX(_leftView.frame), _itemSize.height);
+//    NSLog(@"%@", NSStringFromCGRect(_selectedView.frame));
     [self setNeedsDisplay];
 }
 
