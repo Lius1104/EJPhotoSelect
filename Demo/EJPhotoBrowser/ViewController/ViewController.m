@@ -45,6 +45,12 @@
     [self.collectionView registerNib:[UINib nibWithNibName:@"EJAddCell" bundle:nil] forCellWithReuseIdentifier:@"EJAddCell"];
     [self.collectionView registerNib:[UINib nibWithNibName:@"EJSelectedCell" bundle:nil] forCellWithReuseIdentifier:@"EJSelectedCell"];
     
+    if (@available(iOS 11.0, *)) {
+        self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    
     _config = [[EJConfigModel alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleConfigDone:) name:@"Config" object:nil];

@@ -111,11 +111,11 @@
 
 - (void)configSubivews {
     [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view).offset(3);
+        make.left.equalTo(self.view.mas_left).offset(3);
         if (@available(iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(11);
         } else {
-            make.top.equalTo(self.view.mas_bottom).offset(11);
+            make.top.equalTo(self.view.mas_top).offset(11);
         }
         make.width.mas_equalTo(30);
         make.height.mas_equalTo(37);
@@ -123,12 +123,26 @@
     [self.doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.cancelButton);
         make.size.equalTo(self.cancelButton);
-        make.trailing.equalTo(self.view).offset(-7);
+        make.right.equalTo(self.view.mas_right).offset(-7);
+    }];
+    
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cancelButton.mas_bottom).offset(12);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+    }];
+    
+    [self.targetDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.playerView.mas_bottom).offset(12);
+        make.left.right.equalTo(self.view);
+        make.height.mas_equalTo(ceil([UIFont systemFontOfSize:13].lineHeight));
+        
     }];
     
     [self.operationView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view);
-        make.trailing.equalTo(self.view);
+        make.top.equalTo(_targetDurationLabel.mas_bottom).offset(6);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
             make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-58);
         } else {
@@ -137,18 +151,7 @@
         make.height.mas_equalTo(40);
     }];
     
-    [self.targetDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.trailing.equalTo(self.view);
-        make.height.mas_equalTo(ceil([UIFont systemFontOfSize:13].lineHeight));
-        make.bottom.equalTo(_operationView.mas_top).offset(-6);
-    }];
     
-    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.cancelButton.mas_bottom).offset(12);
-        make.leading.equalTo(self.view);
-        make.trailing.equalTo(self.view);
-        make.bottom.equalTo(self.targetDurationLabel.mas_top).offset(-12);
-    }];
 }
 
 //- (BOOL)prefersStatusBarHidden {
@@ -359,6 +362,7 @@
 - (LSInterceptView *)operationView {
     if (!_operationView) {
         _operationView = [[LSInterceptView alloc] initWithAsset:nil maximumDuration:_duration];
+//        _operationView.frame =  CGRectMake(0, 0, kScreenWidth, 40);
         _operationView.backgroundColor = [UIColor blackColor];
         _operationView.delegate = self;
         [self.view addSubview:_operationView];
