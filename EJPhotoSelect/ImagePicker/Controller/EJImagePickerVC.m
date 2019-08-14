@@ -883,11 +883,11 @@
     if (currentAsset) {
         NSUInteger currentIndex = [self.selectedSource indexOfObject:currentAsset];
         [self.selectedSource replaceObjectAtIndex:currentIndex withObject:asset];
-        if (photoBrowser.isPreview) {
-            [self.browserSource replaceObjectAtIndex:currentIndex withObject:currPhoto];
-        } else {
-            [self.browserSource insertObject:currPhoto atIndex:0];
-        }
+//        if (photoBrowser.isPreview) {
+            [self.browserSource replaceObjectAtIndex:index withObject:currPhoto];
+//        } else {
+//            [self.browserSource insertObject:currPhoto atIndex:0];
+//        }
     } else {
         [self.selectedSource addObject:asset];
         [self.browserSource insertObject:currPhoto atIndex:0];
