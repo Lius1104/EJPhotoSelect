@@ -115,6 +115,8 @@
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait maxCount:maxCount];
             vc.forcedCrop = _config.forcedCrop;
             vc.cropScale = 0.5;
+            vc.allowBoth = NO;
+            vc.videoShotCount = 1;
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self ej_presentViewController:nav animated:YES completion:nil];
         }];

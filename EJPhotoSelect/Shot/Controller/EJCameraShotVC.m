@@ -81,6 +81,8 @@
         
         _forcedCrop = NO;
         _cropScale = 0;
+        
+        self.allowBoth = YES;
     }
     return self;
 }
@@ -91,13 +93,14 @@
         _delegate = delegate;
         _shotTime = shotTime;
         _shotType = shotType;
-//        _allowPreview = allowPreview;
         _maxCount = maxCount;
         _suggestOrientation = suggestOrientation;
         _shotCount = 0;
         
         _forcedCrop = NO;
         _cropScale = 0;
+        
+        self.allowBoth = YES;
     }
     return self;
 }
@@ -115,7 +118,7 @@
     [self initCamera];
     _shotView = [[EJCameraShotView alloc] initWithFrame:self.view.bounds shotTime:_shotTime shotType:self.shotType];
     _shotView.delegate = self;
-//    [_shotView showPreviewImage:NO];
+    _shotView.allowBoth = _allowBoth;
     [self.view addSubview:_shotView];
     
     [_shotView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -132,7 +135,6 @@
     //kvo
     [self addObserver:self forKeyPath:@"orientation" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEnterBg) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 
@@ -218,14 +220,6 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:_localFilePath]) {
         [[NSFileManager defaultManager] removeItemAtPath:_localFilePath error:nil];
     }
-//    if (_player) {
-//        [_player pause];
-//        _player = nil;
-//    }
-//    if (_playerLayer) {
-//        [_playerLayer removeFromSuperlayer];
-//        _playerLayer = nil;
-//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -570,7 +564,6 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [_hud hideAnimated:YES];
                     if (self.maxCount == 1) {
-//                        [self ej_cameraShotViewDidClickToClose];
                         [self ej_cameraShotViewDidClickDone];
                     } else {
                         self.shotView.img = coverImage;
@@ -636,7 +629,15 @@
     } else if (_shotType == EJ_ShotType_Video) {
         _hud.label.text = [NSString stringWithFormat:@"最多只能拍摄%d个视频", (int)_maxCount];
     } else {
-        _hud.label.text = [NSString stringWithFormat:@"最多只能拍摄%d个照片或视频", (int)_maxCount];
+        if (_allowBoth) {
+            _hud.label.text = [NSString stringWithFormat:@"最多只能拍摄%d个照片或视频", (int)_maxCount];
+        } else {
+            if (_shotView.currentType == E_CurrentType_Photo) {
+                _hud.label.text = [NSString stringWithFormat:@"最多只能拍摄%d个照片", (int)_maxCount];
+            } else {
+                _hud.label.text = [NSString stringWithFormat:@"最多只能拍摄%d个视频", (int)_videoShotCount];
+            }
+        }
     }
     CGAffineTransform transform = CGAffineTransformIdentity;
     switch (_orientation) {
@@ -699,11 +700,30 @@
 }
 
 - (BOOL)ej_cameraShotViewCanShot {
-    if ([self.assetIds count] < _maxCount || _shotCount < _maxCount) {
-        return YES;
+    if (_shotType == EJ_ShotType_Both && _allowBoth == NO) {
+        // 判断当前拍摄的是照片还是视频
+        if (_shotView.currentType == E_CurrentType_Photo) {
+            if ([self.assetIds count] < _maxCount || _shotCount < _maxCount) {
+                return YES;
+            } else {
+                [self showMaxCountHud];
+                return NO;
+            }
+        } else {
+            if ([self.assetIds count] < _videoShotCount || _shotCount < _videoShotCount) {
+                return YES;
+            } else {
+                [self showMaxCountHud];
+                return NO;
+            }
+        }
     } else {
-        [self showMaxCountHud];
-        return NO;
+        if ([self.assetIds count] < _maxCount || _shotCount < _maxCount) {
+            return YES;
+        } else {
+            [self showMaxCountHud];
+            return NO;
+        }
     }
 }
 
@@ -753,17 +773,9 @@
 - (void)photoBrowser:(EJPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
     if (selected == NO) {
         [self.browserSource removeObjectAtIndex:index];
-//        if (index == self.assetIds.count - 1) {
-//            NSString * Id = [self.assetIds objectAtIndex:index];
-//            PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[Id] options:nil].firstObject;
-//            [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-//                _shotView.img = result;
-//            }];
-//        }
         [self.assetIds removeObjectAtIndex:index];
         _shotCount --;
         if ([self.assetIds count] > 0) {
-//            NSString * Id = [self.assetIds objectAtIndex:index];
             NSString * Id = [self.assetIds lastObject];
             PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[Id] options:nil].firstObject;
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
@@ -902,6 +914,20 @@
 }
 
 #pragma mark - getter or setter
+- (void)setAllowBoth:(BOOL)allowBoth {
+    _allowBoth = allowBoth;
+    if (_shotView) {
+        _shotView.allowBoth = allowBoth;
+    }
+    if (_allowBoth == NO) {
+        if (_videoShotCount == -1) {
+            _videoShotCount = _maxCount;
+        }
+    } else {
+        _videoShotCount = -1;
+    }
+}
+
 - (NSMutableArray *)assetIds {
     if (!_assetIds) {
         _assetIds = [NSMutableArray arrayWithCapacity:1];

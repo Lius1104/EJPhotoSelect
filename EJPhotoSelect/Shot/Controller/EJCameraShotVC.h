@@ -34,6 +34,14 @@ static NSString * EJCameraShotDismissedNotification = @"EJCameraShotDismissedNot
 /// 图片裁剪比例，默认为 0
 @property (nonatomic, assign) CGFloat cropScale;
 
+/// 仅在 shotType 为 EJ_ShotType_Both 是有效，默认为 YES。allowBoth = NO 时，不能再切换照片和视频
+@property (nonatomic, assign) BOOL allowBoth;
+
+/// 仅在 shotType 为 EJ_ShotType_Both 且 allowBoth 为 NO 时有效，此时 maxCount 为图片允许拍摄数量, 默认与 maxCount 相同
+@property (nonatomic, assign) NSUInteger videoShotCount;
+
+
+
 - (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
 
 - (instancetype)initWithShotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;

@@ -13,10 +13,7 @@
 #import <LSToolsKit/LSToolsKit.h>
 #import <EJTools/EJTools.h>
 
-typedef enum : NSUInteger {
-    E_CurrentType_Photo         = 0,
-    E_CurrentType_Video,
-} E_CurrentType;
+
 
 @interface EJCameraShotView ()<UIScrollViewDelegate> {
     NSInteger timeCount;
@@ -59,8 +56,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UILabel * previewLabel;
 
 @property (nonatomic, assign) BOOL isShowPreview;
-
-@property (nonatomic, assign) E_CurrentType currentType;
 
 @property (nonatomic, strong) NSArray <UISwipeGestureRecognizer *>* swipeGestures;
 
@@ -314,22 +309,7 @@ typedef enum : NSUInteger {
         make.left.equalTo(_recordingImg.mas_right).offset(10);
         make.top.bottom.equalTo(_recordingView);
         make.right.lessThanOrEqualTo(_recordingView.mas_right).offset(-15);
-//        make.right.greaterThanOrEqualTo(_recordingView.mas_right).offset(-6);
     }];
-
-//    _reshotBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
-//    [_reshotBtn setTitle:@"重拍" forState:UIControlStateNormal];
-//    _reshotBtn.centerY = _cameraBtn.centerY;
-//    _reshotBtn.right = frame.size.width - [UIView widthAt5ByWidth:70];
-//    _reshotBtn.hidden = YES;
-//    [_reshotBtn addTarget:self action:@selector(handleReshotAction:) forControlEvents:UIControlEventTouchUpInside];
-//    [_toolView addSubview:_reshotBtn];
-//
-//    [_reshotBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(_toolView.mas_right).offset(-35);
-//        make.size.mas_equalTo(CGSizeMake(40, 20));
-//        make.centerY.equalTo(_cameraBtn.mas_centerY);
-//    }];
     
     _previewImage = [[UIImageView alloc] init];
     _previewImage.backgroundColor = UIColorHex(999999);
@@ -381,15 +361,12 @@ typedef enum : NSUInteger {
     
     switch (_shotType) {
         case EJ_ShotType_Photo: {
-//            _videoBtn.hidden = YES;
             _cameraBtn.hidden = NO;
             _shootBtn.hidden = YES;
         }
             break;
         case EJ_ShotType_Video: {
             [self handleChangeCurrentShotType];
-//            [self handleVideoAction:_videoBtn];
-//            _videoBtn.hidden = YES;
         }
             break;
         default:
@@ -410,18 +387,13 @@ typedef enum : NSUInteger {
 
 - (void)setImg:(UIImage *)img {
     _img = img;
-//    if (!_isShowPreview) {
-//        self.topImageView.hidden = NO;
-//        self.topImageView.image = _img;
-//    } else {
-        if (_img) {
-            _previewImage.hidden = NO;
-            _previewImage.image = _img;
-        } else {
-            _previewImage.hidden = YES;
-            _previewImage.image = _img;
-        }
-//    }
+    if (_img) {
+        _previewImage.hidden = NO;
+        _previewImage.image = _img;
+    } else {
+        _previewImage.hidden = YES;
+        _previewImage.image = _img;
+    }
     _doneBtn.hidden = _previewImage.isHidden;
 }
 
@@ -526,38 +498,11 @@ typedef enum : NSUInteger {
                 }];
             }
                 break;
-//            case AVCaptureVideoOrientationPortraitUpsideDown: {
-//                _cameraBtn.transform = CGAffineTransformRotate(transform, M_PI);
-//                _videoBtn.transform = CGAffineTransformRotate(transform, M_PI);
-//                _reshotBtn.transform = CGAffineTransformRotate(transform, M_PI);
-//
-//                _recordingView.layer.anchorPoint = CGPointMake(0.5, 0.5);
-//                _recordingView.layer.position = CGPointZero;
-//                _recordingView.transform = CGAffineTransformIdentity;
-//                _recordingView.frame = CGRectMake(10, StatusHeight + 20, 88, 40);
-//
-//                _recordingView.layer.anchorPoint = CGPointMake(0.5, 0.5);
-//                _recordingView.layer.position = CGPointMake(StatusHeight + 20 + 40, 10);
-//                _recordingView.transform = CGAffineTransformRotate(transform, M_PI);
-//                _recordingView.frame = CGRectMake(10, StatusHeight + 20, 88, 40);
-//
-//                _previewImage.transform = CGAffineTransformRotate(transform, M_PI);
-//                _previewLabel.transform = CGAffineTransformRotate(transform, M_PI);
-//                [_previewLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-//                    make.left.equalTo(_previewImage.mas_right).offset(-60);
-//                    make.bottom.equalTo(_previewImage.mas_top).offset(60);
-//                }];
-//            }
-//                break;
             default:
                 break;
         }
     });
 }
-
-//- (void)showPreviewImage:(BOOL)isShow {
-//    _isShowPreview = isShow;
-//}
 
 - (void)startRecordVideo {
     // 隐藏 scroll，禁用 swipe 手势
@@ -573,11 +518,10 @@ typedef enum : NSUInteger {
     _videoTimeLab.text = @"00:00";
     timeCount = 0;
     _recordingView.hidden = NO;
-    if (_isShowPreview) {
-        _previewImage.hidden = YES;
-        _previewLabel.hidden = YES;
-    }
-    //        _videoBtn.hidden = YES;
+    
+    _previewImage.hidden = YES;
+    _previewLabel.hidden = YES;
+    
     _doneBtn.hidden = YES;
     //更新拍摄时间
     _timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(handleUpdateTime) userInfo:nil repeats:YES];
@@ -593,7 +537,7 @@ typedef enum : NSUInteger {
     }];
     
     _changeDeviceBtn.hidden = NO;
-    _shootBtn.selected = !_shootBtn.isSelected;
+    _shootBtn.selected = NO;
     if (_timer) {
         [_timer invalidate];
         _timer = nil;
@@ -605,13 +549,22 @@ typedef enum : NSUInteger {
         _cameraBtn.alpha = 1.f;
         _cameraBtn.selected = YES;
     } else {
-//        _videoBtn.hidden = NO;
         _doneBtn.hidden = NO;
     }
     _closeBtn.hidden = NO;
     if (_isShowPreview) {
         _previewImage.hidden = NO;
         _previewLabel.hidden = NO;
+    }
+}
+
+- (void)setUpAllowBoth {
+    if (_shotType == EJ_ShotType_Both) {
+        _selectScroll.hidden = !_allowBoth;
+        _selectedDot.hidden = !_allowBoth;
+        [_swipeGestures enumerateObjectsUsingBlock:^(UISwipeGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            obj.enabled = _allowBoth;
+        }];
     }
 }
 
@@ -630,6 +583,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)handleCameraAction:(UIButton *)sender {
+    [self setUpAllowBoth];
     if (sender.isSelected == NO) {
         BOOL isCanShot = YES;
         if ([self.delegate respondsToSelector:@selector(ej_cameraShotViewCanShot)]) {
@@ -645,56 +599,18 @@ typedef enum : NSUInteger {
             [_delegate ej_cameraShotViewDidClickCameraButtonToTakePhoto];
         }
         if (_isShowPreview) {
-//            _videoBtn.hidden = YES;
             _doneBtn.hidden = YES;
-//            _reshotBtn.hidden = NO;
-//            _closeBtn.hidden = NO;
         }
     } else {
         sender.enabled = NO;
-//        _reshotBtn.enabled = NO;
         if ([_delegate respondsToSelector:@selector(ej_cameraShotViewDidClickToSend)]) {
             [_delegate ej_cameraShotViewDidClickToSend];
         }
     }
 }
 
-//- (void)handleVideoAction:(UIButton *)sender {
-//    //动画隐藏／显示对应按钮
-//    _changeDeviceBtn.hidden = NO;
-//    sender.selected = !sender.isSelected;
-//    if (sender.isSelected) {
-//        _currentType = E_CurrentType_Video;
-//        _selectScroll.contentOffset = CGPointMake(45, 0);
-//    } else {
-//        _currentType = E_CurrentType_Photo;
-//        _selectScroll.contentOffset = CGPointMake(0, 0);
-//    }
-//    [self.selectItem enumerateObjectsUsingBlock:^(UIButton * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        if (idx == _selectScroll.contentOffset.x / 45) {
-//            obj.selected = YES;
-//        } else {
-//            obj.selected = NO;
-//        }
-//    }];
-//
-//    if ([self.delegate respondsToSelector:@selector(ej_cameraShotViewDidChangeToShotPhoto:)]) {
-//        [self.delegate ej_cameraShotViewDidChangeToShotPhoto:sender.selected];
-//    }
-//    [UIView animateWithDuration:animateDuration delay:0.f options:UIViewAnimationOptionCurveEaseOut animations:^{
-//        if (sender.selected) {
-//            _cameraBtn.alpha = 0.f;
-//            _shootBtn.alpha = 1.f;
-//        } else {
-//            _cameraBtn.alpha = 1.f;
-//            _shootBtn.alpha = 0.f;
-//        }
-//    } completion:^(BOOL finished) {
-//    }];
-//}
-
 - (void)handleShootAction:(UIButton *)sender {
-    NSLog(@"%@", sender.selected ? @" YES" : @"NO");
+    
     if (sender.isSelected == NO) {
         BOOL isCanShot = YES;
         if ([self.delegate respondsToSelector:@selector(ej_cameraShotViewCanShot)]) {
@@ -711,31 +627,13 @@ typedef enum : NSUInteger {
     } else {
         [self stopRecordVideo];
     }
+    
+    [self setUpAllowBoth];
+    
     if ([_delegate respondsToSelector:@selector(ej_cameraShotViewDidClickToRecordVideoWithStart:)]) {
         [_delegate ej_cameraShotViewDidClickToRecordVideoWithStart:sender.isSelected];
     }
 }
-
-//- (void)handleReshotAction:(UIButton *)sender {
-//    self.layer.contents = nil;
-//    sender.hidden = YES;
-//    _videoTimeLab.text = @"00:00";
-//    timeCount = 0;
-//    _cameraBtn.selected = NO;
-//    _videoBtn.hidden = NO;
-////    _changeDeviceBtn.hidden = NO;
-////    _closeBtn.hidden = NO;
-//    _videoBtn.selected = NO;
-////    self.topImageView.hidden=YES;
-//    if (self.shotType == EJ_ShotType_Video) {
-//        [self handleVideoAction:_videoBtn];
-//        _videoBtn.hidden = YES;
-//    }
-//
-//    if ([_delegate respondsToSelector:@selector(ej_cameraShotViewDidClickToRerecord)]) {
-//        [_delegate ej_cameraShotViewDidClickToRerecord];
-//    }
-//}
 
 - (void)handleUpdateTime {
     timeCount ++;
@@ -776,7 +674,6 @@ typedef enum : NSUInteger {
             if (_currentType == E_CurrentType_Photo) {
                 _currentType = E_CurrentType_Video;
                 [self handleChangeCurrentShotType];
-//                [self handleVideoAction:_videoBtn];
             }
         }
         if (sender.direction == UISwipeGestureRecognizerDirectionRight) {
@@ -786,7 +683,6 @@ typedef enum : NSUInteger {
             if (_currentType == E_CurrentType_Video) {
                 _currentType = E_CurrentType_Photo;
                 [self handleChangeCurrentShotType];
-//                [self handleVideoAction:_videoBtn];
             }
         }
     }
@@ -811,16 +707,13 @@ typedef enum : NSUInteger {
     if ([self.delegate respondsToSelector:@selector(ej_cameraShotViewDidChangeToShotPhoto:)]) {
         [self.delegate ej_cameraShotViewDidChangeToShotPhoto:(_currentType == E_CurrentType_Photo)];
     }
-//    [UIView animateWithDuration:animateDuration delay:0.f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        if (_currentType == E_CurrentType_Video) {
-            _cameraBtn.alpha = 0.f;
-            _shootBtn.alpha = 1.f;
-        } else {
-            _cameraBtn.alpha = 1.f;
-            _shootBtn.alpha = 0.f;
-        }
-//    } completion:^(BOOL finished) {
-//    }];
+    if (_currentType == E_CurrentType_Video) {
+        _cameraBtn.alpha = 0.f;
+        _shootBtn.alpha = 1.f;
+    } else {
+        _cameraBtn.alpha = 1.f;
+        _shootBtn.alpha = 0.f;
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -829,9 +722,20 @@ typedef enum : NSUInteger {
     NSUInteger index = scrollView.contentOffset.x / scrollView.frame.size.width;
     if (index != _currentType) {
         _currentType = (E_CurrentType)index;
-//        [self handleVideoAction:_videoBtn];
         [self handleChangeCurrentShotType];
     }
+}
+
+#pragma mark - getter or setter
+- (void)setAllowBoth:(BOOL)allowBoth {
+    _allowBoth = allowBoth;
+//    if (_shotType == EJ_ShotType_Both) {
+//        _selectScroll.hidden = !_allowBoth;
+//        _selectedDot.hidden = !_allowBoth;
+//        [_swipeGestures enumerateObjectsUsingBlock:^(UISwipeGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            obj.enabled = _allowBoth;
+//        }];
+//    }
 }
 
 @end

@@ -44,6 +44,11 @@ typedef enum : NSUInteger {
     EJ_ShotType_Video,
 } EJ_ShotType;
 
+typedef enum : NSUInteger {
+    E_CurrentType_Photo         = 0,
+    E_CurrentType_Video,
+} E_CurrentType;
+
 @interface EJCameraShotView : UIView
 
 @property (nonatomic, strong) UIImage * img;
@@ -54,9 +59,14 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, assign, readonly) EJ_ShotType shotType;
 
-- (instancetype)initWithFrame:(CGRect)frame shotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType;
+/// 仅在 shotType 为 EJ_ShotType_Both 是有效，默认为 YES。allowBoth = NO 时，不能再切换照片和视频
+@property (nonatomic, assign) BOOL allowBoth;
 
-//- (void)showPreviewImage:(BOOL)isShow;
+@property (nonatomic, assign, readonly) E_CurrentType currentType;
+
+
+
+- (instancetype)initWithFrame:(CGRect)frame shotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType;
 
 - (void)configOrientation:(AVCaptureVideoOrientation)orientation;
 
