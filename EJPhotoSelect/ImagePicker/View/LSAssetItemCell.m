@@ -76,7 +76,7 @@
     
     [_normalButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.right.equalTo(self);
-        make.width.equalTo(self.mas_width).multipliedBy(0.25);
+        make.width.equalTo(self.mas_width).multipliedBy(0.5);
         make.height.equalTo(_normalButton.mas_width);
     }];
     
