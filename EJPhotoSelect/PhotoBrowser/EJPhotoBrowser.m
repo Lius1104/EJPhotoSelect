@@ -1470,10 +1470,10 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 }
 
 - (void)ej_imageCropperVCDidCrop:(PHAsset *)asset {
-    [self.progressHUD showAnimated:YES];
     if (asset) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_progressHUD hideAnimated:YES];
+//            [self.progressHUD showAnimated:YES];
+//            [_progressHUD hideAnimated:YES];
 //            if ([assetLocalId length] > 0) {
                 if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
                     NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
