@@ -1340,8 +1340,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                             cropScale = [self.delegate photoBrowser:self crapScaleAtIndex:_currentPageIndex];
                         }
                         if (cropScale != 0) {
-                            
-                            needCrop = fabs(photo.asset.pixelWidth * 1.0 / photo.asset.pixelHeight - cropScale) <= 0.1;
+                            double result = fabs(photo.asset.pixelWidth * 1.0 / photo.asset.pixelHeight - cropScale);
+                            needCrop = result > 0.1;
                         }
                     }
                 }
@@ -1357,9 +1357,9 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                         // 弹框提醒裁剪
                         NSString * msg;
                         if (photo.isVideo) {
-                            msg = @"所选视频超出限定时长，请裁剪编辑后再上传？";
+                            msg = @"所选视频超出限定时长，请裁剪编辑后再上传！";
                         } else {
-                            msg = @"比例不合适，请裁剪编辑后再上传？";
+                            msg = @"比例不合适，请裁剪编辑后再上传！";
                         }
                         UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:msg preferredStyle:UIAlertControllerStyleAlert];
                         UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
