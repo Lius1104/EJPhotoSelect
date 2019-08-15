@@ -40,6 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL forcedCrop;
 
+@property (nonatomic, assign) BOOL browserAfterShot;
+
+
 #pragma mark - UI
 @property (nonatomic, assign) UIEdgeInsets sectionInsets;
 @property (nonatomic, assign) NSUInteger cellSpace;

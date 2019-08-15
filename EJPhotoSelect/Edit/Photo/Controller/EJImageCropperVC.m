@@ -179,7 +179,7 @@
             [[LSSaveToAlbum mainSave] saveImage:resizeImage successBlock:^(NSString *assetLocalId) {
                 PHAsset * asset;
                 if (assetLocalId) {
-                    asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil];
+                    asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
                 }
                 if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:)]) {
                     [self.delegate ej_imageCropperVCDidCrop:asset];
@@ -187,9 +187,9 @@
             }];
         }
         
-        if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:)]) {
-            [self.delegate ej_imageCropperVCDidCrop:resizeImage];
-        }
+//        if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:)]) {
+//            [self.delegate ej_imageCropperVCDidCrop:resizeImage];
+//        }
         
         self.doneBtn.enabled = YES;
         [self.navigationController popViewControllerAnimated:YES];

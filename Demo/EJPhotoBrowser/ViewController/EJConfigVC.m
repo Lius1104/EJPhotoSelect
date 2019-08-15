@@ -84,6 +84,11 @@
     _config.forcedCrop = sender.isOn;
 }
 
+- (IBAction)handleBrowserAfterShotChanged:(UISwitch *)sender {
+    _config.browserAfterShot = sender.isOn;
+}
+
+
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self.view endEditing:YES];

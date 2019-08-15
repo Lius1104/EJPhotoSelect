@@ -23,6 +23,7 @@
         _directEdit = YES;
         _previewDelete = YES;
         _forcedCrop = YES;
+        _browserAfterShot = YES;
         
         _sectionInsets = UIEdgeInsetsZero;
         _cellSpace = 2;
