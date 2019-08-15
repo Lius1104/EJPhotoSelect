@@ -1340,7 +1340,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                             cropScale = [self.delegate photoBrowser:self crapScaleAtIndex:_currentPageIndex];
                         }
                         if (cropScale != 0) {
-                            needCrop = photo.asset.pixelWidth * 1.0 / photo.asset.pixelHeight != cropScale;
+                            
+                            needCrop = fabs(photo.asset.pixelWidth * 1.0 / photo.asset.pixelHeight - cropScale) <= 0.1;
                         }
                     }
                 }
