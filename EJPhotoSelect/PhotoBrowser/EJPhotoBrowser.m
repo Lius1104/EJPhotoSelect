@@ -21,6 +21,7 @@
 
 #import "EJVideoPlayerVC.h"
 #import "LSInterceptVideo.h"
+#import "EJPhotoConfig.h"
 
 #define PADDING                  0//10
 
@@ -1363,9 +1364,15 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                         }
                         UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:msg preferredStyle:UIAlertControllerStyleAlert];
                         UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+                        if ([EJPhotoConfig sharedPhotoConfig].alertCancelColor) {
+                            [cancelAction setValue:[EJPhotoConfig sharedPhotoConfig].alertCancelColor forKey:@"titleTextColor"];
+                        }
                         UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"编辑" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                             [self handleClickCropButton];
                         }];
+                        if ([EJPhotoConfig sharedPhotoConfig].alertDefaultColor) {
+                            [doneAction setValue:[EJPhotoConfig sharedPhotoConfig].alertDefaultColor forKey:@"titleTextColor"];
+                        }
                         [alertC addAction:cancelAction];
                         [alertC addAction:doneAction];
                         [self presentViewController:alertC animated:YES completion:nil];

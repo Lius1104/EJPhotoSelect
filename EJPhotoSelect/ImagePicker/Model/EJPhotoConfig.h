@@ -17,6 +17,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIColor * majorTitleColor;
 
+@property (nonatomic, strong) UIColor * alertCancelColor;
+
+@property (nonatomic, strong) UIColor * alertDefaultColor;
+
+@property (nonatomic, strong) UIColor * alertDestructiveColor;
+
+
 
 + (instancetype)sharedPhotoConfig;
 
