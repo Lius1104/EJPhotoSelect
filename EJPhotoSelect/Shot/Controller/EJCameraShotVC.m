@@ -55,7 +55,7 @@
 @property (nonatomic, strong) CMMotionManager* manager;
 @property (nonatomic, strong) NSOperationQueue *queque;
 
-@property (nonatomic, assign) AVCaptureVideoOrientation suggestOrientation;
+@property (nonatomic, assign) E_VideoOrientation suggestOrientation;
 @property (nonatomic, assign) AVCaptureVideoOrientation orientation;
 
 @property (nonatomic, strong) NSMutableArray * browserSource;
@@ -69,7 +69,7 @@
 @implementation EJCameraShotVC
 
 #pragma mark - life cycle
-- (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount {
+- (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(E_VideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount {
     self = [super init];
     if (self) {
         _delegate = delegate;
@@ -87,7 +87,7 @@
     return self;
 }
 
-- (instancetype)initWithShotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount {
+- (instancetype)initWithShotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(E_VideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount {
     self = [super init];
     if (self) {
         _delegate = delegate;
@@ -126,10 +126,14 @@
     }];
     
     [self.view addSubview:self.orientationLabel];
-    if (_suggestOrientation == AVCaptureVideoOrientationPortraitUpsideDown || _suggestOrientation == AVCaptureVideoOrientationPortrait) {
-        _orientationLabel.text = @"建议竖屏拍摄";
+    if (_suggestOrientation == E_VideoOrientationAll) {
+        _orientationLabel.hidden = YES;
     } else {
-        _orientationLabel.text = @"建议横屏拍摄";
+        if (_suggestOrientation == AVCaptureVideoOrientationPortraitUpsideDown || _suggestOrientation == AVCaptureVideoOrientationPortrait) {
+            _orientationLabel.text = @"建议竖屏拍摄";
+        } else {
+            _orientationLabel.text = @"建议横屏拍摄";
+        }
     }
     
     //kvo
@@ -475,11 +479,13 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:@"orientation"]) {
-        NSNumber * oldValue = change[@"old"];
-        NSNumber * currValue = change[@"new"];
-        if ([oldValue integerValue] != [currValue integerValue]) {
-            [self.shotView configOrientation:_orientation];
-            [self showAlertOrientationLabel:_orientation];
+        if (_suggestOrientation != E_VideoOrientationAll) {
+            NSNumber * oldValue = change[@"old"];
+            NSNumber * currValue = change[@"new"];
+            if ([oldValue integerValue] != [currValue integerValue]) {
+                [self.shotView configOrientation:_orientation];
+                [self showAlertOrientationLabel:_orientation];
+            }
         }
     }
 }

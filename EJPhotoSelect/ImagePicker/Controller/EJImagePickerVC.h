@@ -48,6 +48,9 @@
  */
 @property (nonatomic, assign) BOOL forcedCrop;
 
+///  拍摄完成之后 是否进入到 浏览全部本地资源页面
+@property (nonatomic, assign) BOOL browserAfterShot;
+
 /**
  配置 UI
 

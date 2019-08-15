@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
 
 @protocol EJImageCropperDelegate <NSObject>
 
 - (void)ej_imageCropperVCDidCancel;
 
-- (void)ej_imageCropperVCDidCrop:(UIImage *)image;
+- (void)ej_imageCropperVCDidCrop:(PHAsset *)asset;
 
 @end
 

@@ -42,7 +42,7 @@
     UIButton * _cropButton;// 裁剪按钮
     UIButton * _selectButton;// 选择按钮
     
-	NSTimer *_controlVisibilityTimer;
+//	NSTimer *_controlVisibilityTimer;
 //    UIBarButtonItem *_previousButton, *_nextButton, *_actionButton, *_doneButton;
 //    EJProgressHUD *_progressHUD;
     

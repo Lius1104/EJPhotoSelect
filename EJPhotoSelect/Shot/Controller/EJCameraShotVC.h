@@ -18,6 +18,14 @@
 
 static NSString * EJCameraShotDismissedNotification = @"EJCameraShotDismissedNotification";//EJCameraShotVC dismiss
 
+typedef enum : NSUInteger {
+    E_VideoOrientationAll           = 0,
+    E_VideoOrientationPortrait      = 1,
+    E_VideoOrientationUpsideDown    = 2,
+    E_VideoOrientationRight         = 3,
+    E_VideoOrientationLeft          = 4,
+} E_VideoOrientation;
+
 #define kVideoShotDuration  (60 * 3)
 
 @interface EJCameraShotVC : UIViewController
@@ -42,8 +50,8 @@ static NSString * EJCameraShotDismissedNotification = @"EJCameraShotDismissedNot
 
 
 
-- (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
+- (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(E_VideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
 
-- (instancetype)initWithShotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(AVCaptureVideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
+- (instancetype)initWithShotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(E_VideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
 
 @end

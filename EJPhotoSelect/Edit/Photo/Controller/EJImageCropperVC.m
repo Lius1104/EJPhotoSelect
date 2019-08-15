@@ -11,6 +11,7 @@
 #import <Masonry/Masonry.h>
 #import <JPImageresizerView/JPImageresizerView.h>
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
+#import <LSToolsKit/LSToolsKit.h>
 
 @interface EJImageCropperVC ()
 
@@ -160,16 +161,32 @@
     sender.enabled = NO;
     
     @weakify(self);
-    
     // 以原图尺寸进行裁剪
     [self.imageresizerView originImageresizerWithComplete:^(UIImage *resizeImage) {
         @strongify(self);
         if (!self) return;
-        
+    
         if (!resizeImage) {
             NSLog(@"没有裁剪图片");
             return;
         }
+        BOOL needSave = YES;
+        if (resizeImage.size.width == self.image.size.width && resizeImage.size.height == self.image.size.height) {
+            needSave = NO;
+        }
+        
+        if (needSave) {
+            [[LSSaveToAlbum mainSave] saveImage:resizeImage successBlock:^(NSString *assetLocalId) {
+                PHAsset * asset;
+                if (assetLocalId) {
+                    asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil];
+                }
+                if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:)]) {
+                    [self.delegate ej_imageCropperVCDidCrop:asset];
+                }
+            }];
+        }
+        
         if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:)]) {
             [self.delegate ej_imageCropperVCDidCrop:resizeImage];
         }

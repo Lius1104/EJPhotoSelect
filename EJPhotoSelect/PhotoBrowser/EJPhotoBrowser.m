@@ -247,7 +247,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [_navigationBar addSubview:_selectButton];
     _selectButton.hidden = !_showSelectButton;
     
-    _backItem.frame = CGRectMake(8, kToolsStatusHeight, 25, kToolsNavStatusHeight - kToolsStatusHeight);
+    _backItem.frame = CGRectMake(8, kToolsStatusHeight, 30, kToolsNavStatusHeight - kToolsStatusHeight);
     _selectButton.frame = CGRectMake(self.view.width - 30 - 13, kToolsStatusHeight, 30, 30);
     _selectButton.centerY = _backItem.centerY;
     
@@ -1006,7 +1006,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
 	// Hide controls when dragging begins
-	[self setControlsHidden:YES animated:YES permanent:NO];
+//	[self setControlsHidden:YES animated:YES permanent:NO];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -1253,17 +1253,17 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 - (void)cancelControlHiding {
 	// If a timer exists then cancel and release
-	if (_controlVisibilityTimer) {
-		[_controlVisibilityTimer invalidate];
-		_controlVisibilityTimer = nil;
-	}
+//	if (_controlVisibilityTimer) {
+//		[_controlVisibilityTimer invalidate];
+//		_controlVisibilityTimer = nil;
+//	}
 }
 
 // Enable/disable control visiblity timer
 - (void)hideControlsAfterDelay {
 	if (![self areControlsHidden]) {
         [self cancelControlHiding];
-		_controlVisibilityTimer = [NSTimer scheduledTimerWithTimeInterval:self.delayToHideElements target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
+//		_controlVisibilityTimer = [NSTimer scheduledTimerWithTimeInterval:self.delayToHideElements target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
 	}
 }
 
@@ -1345,8 +1345,12 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                     }
                 }
                 if (_forcedCrop) {
-                    [self handleClickCropButton];
-                    return;
+                    if (needCrop) {
+                        [self handleClickCropButton];
+                        return;
+                    } else {
+                        // 不需要裁剪
+                    }
                 } else {
                     if (needCrop) {
                         // 弹框提醒裁剪
@@ -1465,12 +1469,12 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     
 }
 
-- (void)ej_imageCropperVCDidCrop:(UIImage *)image {
+- (void)ej_imageCropperVCDidCrop:(PHAsset *)asset {
     [self.progressHUD showAnimated:YES];
-    [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
+    if (asset) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [_progressHUD hideAnimated:YES];
-            if ([assetLocalId length] > 0) {
+//            if ([assetLocalId length] > 0) {
                 if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
                     NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
                     if (maxCount == 1) {
@@ -1493,7 +1497,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                     }
                 }
                 if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
-                    [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:assetLocalId];
+                    [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
                 }
                 if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
                     NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
@@ -1504,9 +1508,12 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                         [self.navigationController popViewControllerAnimated:YES];
                     }
                 }
-            }
+//            }
         });
-    }];
+    }
+//    [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
+//
+//    }];
 }
 
 #pragma mark - Action Progress

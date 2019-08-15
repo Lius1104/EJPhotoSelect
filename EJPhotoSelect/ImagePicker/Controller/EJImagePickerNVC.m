@@ -116,6 +116,17 @@
     }
 }
 
+- (void)setBrowserAfterShot:(BOOL)browserAfterShot {
+    _browserAfterShot = browserAfterShot;
+    for (UIViewController * itemVC in self.viewControllers) {
+        if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
+            EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
+            picker.browserAfterShot = browserAfterShot;
+            break;
+        }
+    }
+}
+
 - (void)configSectionInserts:(UIEdgeInsets)inserts cellSpace:(NSUInteger)cellSpace numOfLineCells:(NSUInteger)num {
     for (UIViewController * itemVC in self.viewControllers) {
         if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
