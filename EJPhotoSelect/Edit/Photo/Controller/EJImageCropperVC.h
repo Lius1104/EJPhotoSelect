@@ -13,7 +13,7 @@
 
 - (void)ej_imageCropperVCDidCancel;
 
-- (void)ej_imageCropperVCDidCrop:(PHAsset *)asset;
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop;
 
 @end
 

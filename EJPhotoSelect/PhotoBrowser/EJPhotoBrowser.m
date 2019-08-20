@@ -1502,51 +1502,65 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     
 }
 
-- (void)ej_imageCropperVCDidCrop:(PHAsset *)asset {
-    if (asset) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.progressHUD showAnimated:YES];
-//            [_progressHUD hideAnimated:YES];
-//            if ([assetLocalId length] > 0) {
-                if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
-                    NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
-                    if (maxCount == 1) {
-                        if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
-                            BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
-                            if (!isSelected) {
-                                if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
-                                    [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
-                                }
-                            }
-                        } else {
-                            NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
-                        }
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
+    if (image) {
+        if (isCrop) {
+            [self.progressHUD showAnimated:YES];
+            [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_progressHUD hideAnimated:YES];
+                    if ([assetLocalId length] > 0) {
+                        PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
+                        [self configCroppedImage:asset];
                     } else {
-                        // 获取当前的预选状态
-                        BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
-                        if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                        [EJProgressHUD showAlert:@"保存失败" forView:self.view];
+                    }
+                });
+            }];
+        } else {
+            EJPhoto * photo = [self photoAtIndex:_currentPageIndex];
+            PHAsset * asset = photo.asset;
+            [self configCroppedImage:asset];
+        }
+    }
+}
+
+- (void)configCroppedImage:(PHAsset *)asset {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+            if (maxCount == 1) {
+                if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
+                    BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                    if (!isSelected) {
+                        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
                             [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
                         }
                     }
+                } else {
+                    NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
                 }
-                if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
-                    [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
+            } else {
+                // 获取当前的预选状态
+                BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                    [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
                 }
-                if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
-                    NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
-                    if (maxCount == 1) {
-                        if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
-                            [self.delegate photoBrowserDidFinish:self];
-                        }
-                        [self.navigationController popViewControllerAnimated:YES];
-                    }
+            }
+        }
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
+            [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
+        }
+        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+            if (maxCount == 1) {
+                if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
+                    [self.delegate photoBrowserDidFinish:self];
                 }
-//            }
-        });
-    }
-//    [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-//
-//    }];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        }
+    });
 }
 
 #pragma mark - Action Progress

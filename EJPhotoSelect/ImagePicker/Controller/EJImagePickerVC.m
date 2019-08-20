@@ -802,37 +802,33 @@
     }
 }
 
-- (void)ej_imageCropperVCDidCrop:(PHAsset *)asset {
-    if (asset) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            if ([assetLocalId length] > 0) {
-//                PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
-                [self.selectedSource removeAllObjects];
-                [self.selectedSource addObject:asset];
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
+    if (image) {
+        if (isCrop) {
+            [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([assetLocalId length] > 0) {
+                        PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
+                        [self.selectedSource removeAllObjects];
+                        [self.selectedSource addObject:asset];
+                        if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
+                            [self.delegate ej_imagePickerDidSelected:self.selectedSource];
+                        }
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    } else {
+                        [EJProgressHUD showAlert:@"保存失败" forView:self.view];
+                    }
+                });
+            }];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
                     [self.delegate ej_imagePickerDidSelected:self.selectedSource];
                 }
                 [self dismissViewControllerAnimated:YES completion:nil];
-//            } else {
-//                [EJProgressHUD showAlert:@"保存失败" forView:self.view];
-//            }
-        });
+            });
+        }
     }
-//    [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            if ([assetLocalId length] > 0) {
-//                PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
-//                [self.selectedSource removeAllObjects];
-//                [self.selectedSource addObject:asset];
-//                if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-//                    [self.delegate ej_imagePickerDidSelected:self.selectedSource];
-//                }
-//                [self dismissViewControllerAnimated:YES completion:nil];
-//            } else {
-//                [EJProgressHUD showAlert:@"保存失败" forView:self.view];
-//            }
-//        });
-//    }];
 }
 
 #pragma mark - LSInterceptVideoDelegate
