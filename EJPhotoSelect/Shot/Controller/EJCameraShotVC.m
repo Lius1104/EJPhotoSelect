@@ -569,7 +569,7 @@
                 [self.assetIds addObject:assetLocalId];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [_hud hideAnimated:YES];
-                    if (self.maxCount == 1) {
+                    if ((_allowBoth == NO && _videoShotCount == 1) || (_allowBoth && self.maxCount == 1)) {
                         [self ej_cameraShotViewDidClickDone];
                     } else {
                         self.shotView.img = coverImage;
@@ -582,6 +582,19 @@
                             }
                         }
                     }
+//                    if (self.maxCount == 1) {
+//                        [self ej_cameraShotViewDidClickDone];
+//                    } else {
+//                        self.shotView.img = coverImage;
+//                        self.shotView.previewCount = self.assetIds.count;
+//                        if ([[NSFileManager defaultManager] fileExistsAtPath:_localFilePath]) {
+//                            NSError * fileError = nil;
+//                            [[NSFileManager defaultManager] removeItemAtPath:_localFilePath error:&fileError];
+//                            if (fileError) {
+//                                NSLog(@"%@", fileError);
+//                            }
+//                        }
+//                    }
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
