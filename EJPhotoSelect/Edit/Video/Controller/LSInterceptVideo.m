@@ -14,6 +14,7 @@
 #import <Masonry/Masonry.h>
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import "EJPhotoSelectDefine.h"
+#import "EJAssetLinkLocal.h"
 
 @interface LSInterceptVideo ()<LSInterceptViewDelegate>
 
@@ -183,8 +184,9 @@
         CMTimeRange range = CMTimeRangeMake(self->_startRange, end);
         exportSession.timeRange = range;
         exportSession.shouldOptimizeForNetworkUse = YES;
-        NSString *filePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) firstObject];
-        filePath = [NSString stringWithFormat:@"%@/cropVideo.mp4", filePath];
+        NSString * localPath = [NSString stringWithFormat:@"%@.mp4", [_asset.localIdentifier stringByReplacingOccurrencesOfString:@"/" withString:@"*"]];
+        NSString *filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:localPath];
+        
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
             [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         }
@@ -199,26 +201,37 @@
                 case AVAssetExportSessionStatusExporting:
                     break;
                 case AVAssetExportSessionStatusCompleted: {
-                    [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
-                        if ([assetLocalId length] > 0) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self->_hud hideAnimated:YES];
-                                if (self.presentingViewController) {
-                                    [self dismissViewControllerAnimated:YES completion:nil];
-                                } else {
-                                    [self.navigationController popViewControllerAnimated:YES];
-                                }
-                                if ([self.delegate respondsToSelector:@selector(ls_interceptVideoDidCropVideo:)]) {
-                                    [self.delegate ls_interceptVideoDidCropVideo:assetLocalId];
-                                }
-                            });
+//                    [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
+//                        if ([assetLocalId length] > 0) {
+//                            dispatch_async(dispatch_get_main_queue(), ^{
+//                                [self->_hud hideAnimated:YES];
+//                                if (self.presentingViewController) {
+//                                    [self dismissViewControllerAnimated:YES completion:nil];
+//                                } else {
+//                                    [self.navigationController popViewControllerAnimated:YES];
+//                                }
+//                                if ([self.delegate respondsToSelector:@selector(ls_interceptVideoDidCropVideo:)]) {
+//                                    [self.delegate ls_interceptVideoDidCropVideo:assetLocalId];
+//                                }
+//                            });
+//                        } else {
+//                            dispatch_async(dispatch_get_main_queue(), ^{
+//                                self->_hud.label.text = @"保存到本地相册失败";
+//                                [self->_hud hideAnimated:YES afterDelay:1.5];
+//                            });
+//                        }
+//                    }];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self->_hud hideAnimated:YES];
+                        if (self.presentingViewController) {
+                            [self dismissViewControllerAnimated:YES completion:nil];
                         } else {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                self->_hud.label.text = @"保存到本地相册失败";
-                                [self->_hud hideAnimated:YES afterDelay:1.5];
-                            });
+                            [self.navigationController popViewControllerAnimated:YES];
                         }
-                    }];
+                        if ([self.delegate respondsToSelector:@selector(ls_interceptVideoDidCropVideo:)]) {
+                            [self.delegate ls_interceptVideoDidCropVideo:localPath];
+                        }
+                    });
                 }
                     break;
                 case AVAssetExportSessionStatusFailed:

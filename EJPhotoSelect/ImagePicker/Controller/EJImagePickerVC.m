@@ -29,8 +29,10 @@
 
 #import "EJPhotoConfig.h"
 
+#import "EJAssetLinkLocal.h"
+
 @interface EJImagePickerVC ()<UICollectionViewDelegate, UICollectionViewDataSource, PHPhotoLibraryChangeObserver, LSAssetCollectionToolBarDelegate, EJImagePickerShotCellDelegate, EJCameraShotVCDelegate, EJPhotoBrowserDelegate, EJImageCropperDelegate, LSInterceptVideoDelegate> {
-    CGRect previousPreheatRect;
+//    CGRect previousPreheatRect;
     BOOL _isLocalSelected;
 }
 
@@ -53,6 +55,8 @@
 @property (nonatomic, strong) LSAssetCollectionToolBar * toolBar;
 
 @property (nonatomic, strong) PHFetchResult <PHAsset *>* fetchResult;
+@property (nonatomic, strong) NSMutableArray <EJAssetLinkLocal *>* assetSource;
+
 
 @property (nonatomic, assign) BOOL showShot;
 
@@ -64,7 +68,9 @@
 
 @property (nonatomic, assign) NSUInteger maxSelectedCount;
 
-@property (nonatomic, strong) NSMutableArray <PHAsset *>* selectedSource;
+@property (nonatomic, strong) NSMutableArray <EJAssetLinkLocal *>* selectedSource;
+@property (nonatomic, strong) NSMutableSet <NSString *>* editSource;
+
 
 @property (nonatomic, strong) EJAlbumPickerVC * albumVC;
 
@@ -102,7 +108,14 @@
         
         _sortOrder = increaseOrder ? LSSortOrderAscending : LSSortOrderDescending;
         
-        _selectedSource = selectedSource;
+//        [self configSelectSource:selectedSource];
+//        _selectedSource = selectedSource;
+        
+        for (PHAsset * asset in selectedSource) {
+            EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
+            link.asset = asset;
+            [self.selectedSource addObject:link];
+        }
         
         _manager = [[PHCachingImageManager alloc] init];
         _options = [[PHImageRequestOptions alloc] init];
@@ -204,8 +217,8 @@
                     [self getAllAssets];
                     [_collectionView reloadData];
                     if (_sortOrder == LSSortOrderAscending) {
-                        if (_fetchResult.count > 0) {
-                            NSInteger count = _fetchResult.count;
+                        if (self.assetSource.count > 0) {
+                            NSInteger count = self.assetSource.count;
                             NSIndexPath * indexPath = [NSIndexPath indexPathForRow:(count - 1) inSection:0];
                             [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
                         }
@@ -225,9 +238,9 @@
     [super viewDidLayoutSubviews];
     if (self.isNeedScroll == YES) {
         if (_sortOrder == LSSortOrderAscending) {
-            if (_fetchResult.count > 0) {
+            if (self.assetSource.count > 0) {
                 [_collectionView reloadData];
-                NSInteger count = _fetchResult.count;
+                NSInteger count = self.assetSource.count;
                 NSIndexPath * indexPath = [NSIndexPath indexPathForRow:(count - 1) inSection:0];
                 [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
             }
@@ -279,104 +292,114 @@
     NSSortDescriptor * sort = [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:isAscending];
     options.sortDescriptors = @[sort];
     _fetchResult = [PHAsset fetchAssetsInAssetCollection:_assetCollection options:options];
+    [self assetToLinkLocal];
     if (_maxSelectedCount != 1) {
         NSString * title = [_assetCollection.localizedTitle length] > 0 ? _assetCollection.localizedTitle : @"";
-        self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)_fetchResult.count];
+        self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)self.assetSource.count];
     }
+}
+
+- (void)assetToLinkLocal {
+    [self.assetSource removeAllObjects];
+    [_fetchResult enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
+        link.asset = obj;
+        [_assetSource addObject:link];
+    }];
 }
 
 - (void)resetCachedAssets {
     [_manager stopCachingImagesForAllAssets];
-    previousPreheatRect = CGRectZero;
+//    previousPreheatRect = CGRectZero;
 }
 
-- (void)updateAssetsCache {
-    // self.view.window == nil 判断当前view是否显示在屏幕上
-    if (!self.isViewLoaded || self.view.window == nil) {
-        return;
-    }
-    
-    // 预热区域 preheatRect 是 可见区域 visibleRect 的两倍高
-    CGRect visibleRect = CGRectMake(0.f, self.collectionView.contentOffset.y, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
-    CGRect preheatRect = CGRectInset(visibleRect, 0, -0.5 * visibleRect.size.height);
-    
-    // 只有当可见区域与最后一个预热区域显著不同时才更新
-    CGFloat delta = fabs(CGRectGetMidY(preheatRect) - CGRectGetMidY(previousPreheatRect));
-    if (delta > self.view.bounds.size.height / 3.f) {
-        // 计算开始缓存和停止缓存的区域
-        [self computeDifferenceBetweenRect:previousPreheatRect andRect:preheatRect removedHandler:^(CGRect removedRect) {
-            [self imageManagerStopCachingImagesWithRect:removedRect];
-        } addedHandler:^(CGRect addedRect) {
-            [self imageManagerStartCachingImagesWithRect:addedRect];
-        }];
-        previousPreheatRect = preheatRect;
-    }
-}
+//- (void)updateAssetsCache {
+//    // self.view.window == nil 判断当前view是否显示在屏幕上
+//    if (!self.isViewLoaded || self.view.window == nil) {
+//        return;
+//    }
+//
+//    // 预热区域 preheatRect 是 可见区域 visibleRect 的两倍高
+//    CGRect visibleRect = CGRectMake(0.f, self.collectionView.contentOffset.y, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
+//    CGRect preheatRect = CGRectInset(visibleRect, 0, -0.5 * visibleRect.size.height);
+//
+//    // 只有当可见区域与最后一个预热区域显著不同时才更新
+//    CGFloat delta = fabs(CGRectGetMidY(preheatRect) - CGRectGetMidY(previousPreheatRect));
+//    if (delta > self.view.bounds.size.height / 3.f) {
+//        // 计算开始缓存和停止缓存的区域
+//        [self computeDifferenceBetweenRect:previousPreheatRect andRect:preheatRect removedHandler:^(CGRect removedRect) {
+//            [self imageManagerStopCachingImagesWithRect:removedRect];
+//        } addedHandler:^(CGRect addedRect) {
+//            [self imageManagerStartCachingImagesWithRect:addedRect];
+//        }];
+//        previousPreheatRect = preheatRect;
+//    }
+//}
 
-- (void)computeDifferenceBetweenRect:(CGRect)oldRect andRect:(CGRect)newRect removedHandler:(void (^)(CGRect removedRect))removedHandler addedHandler:(void (^)(CGRect addedRect))addedHandler {
-    if (CGRectIntersectsRect(newRect, oldRect)) {
-        CGFloat oldMaxY = CGRectGetMaxY(oldRect);
-        CGFloat oldMinY = CGRectGetMinY(oldRect);
-        CGFloat newMaxY = CGRectGetMaxY(newRect);
-        CGFloat newMinY = CGRectGetMinY(newRect);
-        //添加 向下滑动(往下翻看新的)时 newRect 除去与 oldRect 相交部分的区域（即：屏幕外底部的预热区域）
-        if (newMaxY > oldMaxY) {
-            CGRect rectToAdd = CGRectMake(newRect.origin.x, oldMaxY, newRect.size.width, (newMaxY - oldMaxY));
-            addedHandler(rectToAdd);
-        }
-        //添加 向上滑动(往上翻看之前的)时 newRect 除去与 oldRect 相交部分的区域（即：屏幕外底部的预热区域）
-        if (oldMinY > newMinY) {
-            CGRect rectToAdd = CGRectMake(newRect.origin.x, newMinY, newRect.size.width, (oldMinY - newMinY));
-            addedHandler(rectToAdd);
-        }
-        //移除 向上滑动时 oldRect 除去与 newRect 相交部分的区域（即：屏幕外底部的预热区域）
-        if (newMaxY < oldMaxY) {
-            CGRect rectToRemove = CGRectMake(newRect.origin.x, newMaxY, newRect.size.width, (oldMaxY - newMaxY));
-            removedHandler(rectToRemove);
-        }
-        //移除 向下滑动时 oldRect 除去与 newRect 相交部分的区域（即：屏幕外顶部的预热区域）
-        if (oldMinY < newMinY) {
-            CGRect rectToRemove = CGRectMake(newRect.origin.x, oldMinY, newRect.size.width, (newMinY - oldMinY));
-            removedHandler(rectToRemove);
-        }
-    } else {
-        //当 oldRect 与 newRect 没有相交区域时
-        addedHandler(newRect);
-        removedHandler(oldRect);
-    }
-}
+//- (void)computeDifferenceBetweenRect:(CGRect)oldRect andRect:(CGRect)newRect removedHandler:(void (^)(CGRect removedRect))removedHandler addedHandler:(void (^)(CGRect addedRect))addedHandler {
+//    if (CGRectIntersectsRect(newRect, oldRect)) {
+//        CGFloat oldMaxY = CGRectGetMaxY(oldRect);
+//        CGFloat oldMinY = CGRectGetMinY(oldRect);
+//        CGFloat newMaxY = CGRectGetMaxY(newRect);
+//        CGFloat newMinY = CGRectGetMinY(newRect);
+//        //添加 向下滑动(往下翻看新的)时 newRect 除去与 oldRect 相交部分的区域（即：屏幕外底部的预热区域）
+//        if (newMaxY > oldMaxY) {
+//            CGRect rectToAdd = CGRectMake(newRect.origin.x, oldMaxY, newRect.size.width, (newMaxY - oldMaxY));
+//            addedHandler(rectToAdd);
+//        }
+//        //添加 向上滑动(往上翻看之前的)时 newRect 除去与 oldRect 相交部分的区域（即：屏幕外底部的预热区域）
+//        if (oldMinY > newMinY) {
+//            CGRect rectToAdd = CGRectMake(newRect.origin.x, newMinY, newRect.size.width, (oldMinY - newMinY));
+//            addedHandler(rectToAdd);
+//        }
+//        //移除 向上滑动时 oldRect 除去与 newRect 相交部分的区域（即：屏幕外底部的预热区域）
+//        if (newMaxY < oldMaxY) {
+//            CGRect rectToRemove = CGRectMake(newRect.origin.x, newMaxY, newRect.size.width, (oldMaxY - newMaxY));
+//            removedHandler(rectToRemove);
+//        }
+//        //移除 向下滑动时 oldRect 除去与 newRect 相交部分的区域（即：屏幕外顶部的预热区域）
+//        if (oldMinY < newMinY) {
+//            CGRect rectToRemove = CGRectMake(newRect.origin.x, oldMinY, newRect.size.width, (newMinY - oldMinY));
+//            removedHandler(rectToRemove);
+//        }
+//    } else {
+//        //当 oldRect 与 newRect 没有相交区域时
+//        addedHandler(newRect);
+//        removedHandler(oldRect);
+//    }
+//}
+//
+//- (void)imageManagerStartCachingImagesWithRect:(CGRect)rect {
+//    NSMutableArray<PHAsset *> *addAssets = [self indexPathsForElementsWithRect:rect];
+//    [_manager startCachingImagesForAssets:addAssets targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:_options];
+//}
+//
+//- (void)imageManagerStopCachingImagesWithRect:(CGRect)rect {
+//    NSMutableArray<PHAsset *> *removeAssets = [self indexPathsForElementsWithRect:rect];
+//    [_manager stopCachingImagesForAssets:removeAssets targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:_options];
+//}
+//
+//- (NSMutableArray<PHAsset *> *)indexPathsForElementsWithRect:(CGRect)rect {
+//    UICollectionViewLayout *layout = self.collectionView.collectionViewLayout;
+//    NSArray<__kindof UICollectionViewLayoutAttributes *> *layoutAttributes = [layout layoutAttributesForElementsInRect:rect];
+//    NSMutableArray<PHAsset *> *assets = [NSMutableArray array];
+//    for (__kindof UICollectionViewLayoutAttributes *layoutAttr in layoutAttributes) {
+//        NSIndexPath *indexPath = layoutAttr.indexPath;
+//        if (indexPath.row < _fetchResult.count) {
+//            PHAsset *asset = [_fetchResult objectAtIndex:indexPath.item];
+//            [assets addObject:asset];
+//        }
+//    }
+//    return assets;
+//}
 
-- (void)imageManagerStartCachingImagesWithRect:(CGRect)rect {
-    NSMutableArray<PHAsset *> *addAssets = [self indexPathsForElementsWithRect:rect];
-    [_manager startCachingImagesForAssets:addAssets targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:_options];
-}
+//- (void)addSource:(PHAsset *)asset {
+//    [self.selectedSource addObject:asset];
+//}
 
-- (void)imageManagerStopCachingImagesWithRect:(CGRect)rect {
-    NSMutableArray<PHAsset *> *removeAssets = [self indexPathsForElementsWithRect:rect];
-    [_manager stopCachingImagesForAssets:removeAssets targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:_options];
-}
-
-- (NSMutableArray<PHAsset *> *)indexPathsForElementsWithRect:(CGRect)rect {
-    UICollectionViewLayout *layout = self.collectionView.collectionViewLayout;
-    NSArray<__kindof UICollectionViewLayoutAttributes *> *layoutAttributes = [layout layoutAttributesForElementsInRect:rect];
-    NSMutableArray<PHAsset *> *assets = [NSMutableArray array];
-    for (__kindof UICollectionViewLayoutAttributes *layoutAttr in layoutAttributes) {
-        NSIndexPath *indexPath = layoutAttr.indexPath;
-        if (indexPath.row < _fetchResult.count) {
-            PHAsset *asset = [_fetchResult objectAtIndex:indexPath.item];
-            [assets addObject:asset];
-        }
-    }
-    return assets;
-}
-
-- (void)addSource:(PHAsset *)asset {
-    [self.selectedSource addObject:asset];
-}
-
-- (void)removeSource:(PHAsset *)asset {
-    [self.selectedSource removeObject:asset];
-}
+//- (void)removeSource:(PHAsset *)asset {
+//    [self.selectedSource removeObject:asset];
+//}
 
 - (void)setCropScale:(CGFloat)cropScale {
     _cropScale = cropScale;
@@ -384,9 +407,9 @@
 
 - (void)jumpToCrop {
     _isLocalSelected = YES;
-    PHAsset * first = [self.selectedSource firstObject];
-    if (first.mediaType == PHAssetMediaTypeImage) {
-        [self.manager requestImageDataForAsset:first options:self.options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+    EJAssetLinkLocal * first = [self.selectedSource firstObject];
+    if (first.asset.mediaType == PHAssetMediaTypeImage) {
+        [self.manager requestImageDataForAsset:first.asset options:self.options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
             UIImage * image = [UIImage imageWithData:imageData];
             EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
             vc.cropScale = _cropScale;
@@ -395,23 +418,17 @@
             [self.navigationController pushViewController:vc animated:YES];
         }];
     } else {
-        LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:first defaultDuration:_maxVideoDuration];
+        LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:first.asset defaultDuration:_maxVideoDuration];
         vc.delegate = self;
         [self ej_presentViewController:vc animated:YES completion:nil];
     }
 }
 
 - (void)jumpToBrowser:(NSUInteger)currentIndex {
-    
-    
     // 图片浏览
-    UIScreen *screen = [UIScreen mainScreen];
-    CGFloat scale = screen.scale;
-    CGFloat imageSize = MAX(screen.bounds.size.width, screen.bounds.size.height) * 1.5;
-    CGSize imageTargetSize = CGSizeMake(imageSize * scale, imageSize * scale);
     [self.browserSource removeAllObjects];
-    for (PHAsset *asset in _fetchResult) {
-        [self.browserSource addObject:[EJPhoto photoWithAsset:asset targetSize:imageTargetSize]];
+    for (EJAssetLinkLocal *link in self.assetSource) {
+        [self.browserSource addObject:[EJPhoto photoWithAssetLink:link]];
     }
     EJPhotoBrowser * brower = [[EJPhotoBrowser alloc] initWithDelegate:self];
     brower.maxVideoDuration = _maxVideoDuration;
@@ -428,6 +445,7 @@
 
 #pragma mark - action
 - (void)handleClickLeftItem {
+    [[NSFileManager defaultManager] removeItemAtPath:[EJAssetLinkLocal rootPath] error:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -435,10 +453,10 @@
     [self.navigationController pushViewController:self.albumVC animated:YES];
 }
 
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self updateAssetsCache];
-}
+//#pragma mark - UIScrollViewDelegate
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    [self updateAssetsCache];
+//}
 
 #pragma mark - PHPhotoLibraryChangeObserver
 - (void)photoLibraryDidChange:(PHChange *)changeInstance {
@@ -448,9 +466,10 @@
     }
     dispatch_sync(dispatch_get_main_queue(), ^{
         self.fetchResult = [changeDetail fetchResultAfterChanges];
+        [self assetToLinkLocal];
         if (_maxSelectedCount != 1) {
             NSString * title = [self.assetCollection.localizedTitle length] > 0 ? self.assetCollection.localizedTitle : @"";
-            self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)self.fetchResult.count];
+            self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)self.assetSource.count];
         }
         if (changeDetail.hasIncrementalChanges) {
             UICollectionView * collection = self.collectionView;
@@ -459,29 +478,8 @@
                     [self.collectionView reloadData];
                 } else {
                     [self.collectionView reloadData];
-//                    [collection performBatchUpdates:^{
-//                        NSIndexSet * removedIndexes = changeDetail.removedIndexes;
-//                        if (removedIndexes.count > 0) {
-//                            NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:removedIndexes AtSection:0];
-//                            [collection deleteItemsAtIndexPaths:indexPaths];
-//                        }
-//                        NSIndexSet * insertIndexes = changeDetail.insertedIndexes;
-//                        if (insertIndexes.count > 0) {
-//                            NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:insertIndexes AtSection:0];
-//                            [collection insertItemsAtIndexPaths:indexPaths];
-//                        }
-//                        NSIndexSet * changedIndexes = changeDetail.changedIndexes;
-//                        if (changedIndexes.count > 0) {
-//                            NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:changedIndexes AtSection:0];
-//                            [collection reloadItemsAtIndexPaths:indexPaths];
-//                        }
-//                        [changeDetail enumerateMovesWithBlock:^(NSUInteger fromIndex, NSUInteger toIndex) {
-//                            [collection moveItemAtIndexPath:[NSIndexPath indexPathForItem:fromIndex inSection:0] toIndexPath:[NSIndexPath indexPathForItem:toIndex inSection:0]];
-//                        }];
-//                    } completion:nil];
                 }
             } else {
-                //
             }
         } else {
             [self.collectionView reloadData];
@@ -497,9 +495,9 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (_showShot) {
-        return [_fetchResult count] + 1;
+        return [self.assetSource count] + 1;
     }
-    return [_fetchResult count];
+    return [self.assetSource count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -515,7 +513,7 @@
             }
         }
         if (_sortOrder == LSSortOrderAscending) {
-            if (indexPath.row == [_fetchResult count]) {
+            if (indexPath.row == [self.assetSource count]) {
                 EJImagePickerShotCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"EJImagePickerShotCell" forIndexPath:indexPath];
                 cell.delegate = self;
                 return cell;
@@ -528,16 +526,16 @@
     }
     LSAssetItemCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ls_assetItem_Cell" forIndexPath:indexPath];
     [cell setIsSelectable:(_maxSelectedCount == 1 ? NO : YES)];
-    if (index < _fetchResult.count) {
-        PHAsset * asset = [_fetchResult objectAtIndex:index];
-        if (asset.mediaType == PHAssetMediaTypeVideo) {
+    if (index < self.assetSource.count) {
+        EJAssetLinkLocal * link = [self.assetSource objectAtIndex:index];
+        if (link.asset.mediaType == PHAssetMediaTypeVideo) {
             cell.videoLabel.hidden = NO;
-            cell.videoLabel.text = [NSString shortedSecond:asset.duration];
+            cell.videoLabel.text = [NSString shortedSecond:link.asset.duration];
         } else {
             cell.videoLabel.hidden = YES;
         }
         if (@available(iOS 9.1, *)) {
-            if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
+            if (link.asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
                 cell.livePhotoIcon.image = [PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent];
             } else {
                 cell.livePhotoIcon.image = nil;
@@ -545,16 +543,26 @@
         } else {
             cell.livePhotoIcon.image = nil;
         }
-        cell.localIdentifier = asset.localIdentifier;
-        [_manager requestImageForAsset:asset targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:_options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-            if ([cell.localIdentifier isEqualToString:asset.localIdentifier]) {
-                cell.coverImageView.image = result;
-            }
-        }];
+        if ([self.editSource containsObject:link.asset.localIdentifier]) {
+            cell.editImage.hidden = NO;
+        } else {
+            cell.editImage.hidden = YES;
+        }
+        
+        cell.localIdentifier = link.asset.localIdentifier;
+        if ([link.localPath length] > 0) {
+            cell.coverImageView.image = link.coverImage;
+        } else {
+            [_manager requestImageForAsset:link.asset targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:_options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                if ([cell.localIdentifier isEqualToString:link.asset.localIdentifier]) {
+                    cell.coverImageView.image = result;
+                }
+            }];
+        }
 //        if (_maxSelectedCount > 0) {
             cell.sourceSelected = NO;
-            [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([obj.localIdentifier isEqualToString:asset.localIdentifier]) {
+            [self.selectedSource enumerateObjectsUsingBlock:^(EJAssetLinkLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([obj.asset.localIdentifier isEqualToString:link.asset.localIdentifier]) {
                     cell.sourceSelected = YES;
                     * stop = YES;
                 }
@@ -564,7 +572,7 @@
             [cell setUpSelectSourceBlock:^(NSString *clickLocalIdentifier) {
                 @strongify(cell);
                 if ([self.selectedSource count] == 0) {
-                    if (asset.mediaType == PHAssetMediaTypeVideo && asset.duration > _maxVideoDuration) {
+                    if (link.asset.mediaType == PHAssetMediaTypeVideo && link.asset.duration > _maxVideoDuration) {
                         NSString * secondString;
                         if (_maxVideoDuration < 60) {
                             secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
@@ -578,7 +586,7 @@
                         }
                         UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                             // 跳转到裁剪页面
-                            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:_maxVideoDuration];
+                            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:link.asset defaultDuration:_maxVideoDuration];
                             vc.delegate = self;
                             [self ej_presentViewController:vc animated:YES completion:nil];
                         }];
@@ -591,12 +599,12 @@
                         return ;
                     }
                     cell.sourceSelected = YES;
-                    [self.selectedSource addObject:asset];
+                    [self.selectedSource addObject:link];
                     [self.toolBar configSourceCount:self.selectedSource.count];
                 } else {
                     __block BOOL containSource = NO;
-                    [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        if ([obj.localIdentifier isEqualToString:clickLocalIdentifier]) {
+                    [self.selectedSource enumerateObjectsUsingBlock:^(EJAssetLinkLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        if ([obj.asset.localIdentifier isEqualToString:clickLocalIdentifier]) {
                             cell.sourceSelected = NO;
                             containSource = YES;
                             *stop = YES;
@@ -604,12 +612,12 @@
                     }];
                     if (containSource) {
                         // 从 数组中移除
-                        [self.selectedSource removeObject:asset];
+                        [self.selectedSource removeObject:link];
                         [self.toolBar configSourceCount:self.selectedSource.count];
                     } else {
                         // 判断 最大 数量
                         if (self.maxSelectedCount == 0 || [self.selectedSource count] < self.maxSelectedCount) {
-                            if (asset.mediaType == PHAssetMediaTypeVideo && asset.duration > _maxVideoDuration) {
+                            if (link.asset.mediaType == PHAssetMediaTypeVideo && link.asset.duration > _maxVideoDuration) {
                                 NSString * secondString;
                                 if (_maxVideoDuration < 60) {
                                     secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
@@ -623,7 +631,7 @@
                                 }
                                 UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                                     // 跳转到裁剪页面
-                                    LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:_maxVideoDuration];
+                                    LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:link.asset defaultDuration:_maxVideoDuration];
                                     vc.delegate = self;
                                     [self ej_presentViewController:vc animated:YES completion:nil];
                                 }];
@@ -637,7 +645,7 @@
                             }
                             cell.sourceSelected = YES;
                             // 添加 到 数组
-                            [self.selectedSource addObject:asset];
+                            [self.selectedSource addObject:link];
                             [self.toolBar configSourceCount:self.selectedSource.count];
                         } else {
                             NSLog(@"已经最大");
@@ -675,7 +683,7 @@
     }
     if (_maxSelectedCount == 1 && _allowCrop) {
         [self.selectedSource removeAllObjects];
-        [self.selectedSource addObject:[_fetchResult objectAtIndex:currentIndex]];
+        [self.selectedSource addObject:[self.assetSource objectAtIndex:currentIndex]];
         if (_directEdit) {
             [self jumpToCrop];
             return;
@@ -692,13 +700,13 @@
     // 跳转到 图片浏览
     NSUInteger currentIndex = 0;
     // 图片浏览
-    UIScreen *screen = [UIScreen mainScreen];
-    CGFloat scale = screen.scale;
-    CGFloat imageSize = MAX(screen.bounds.size.width, screen.bounds.size.height) * 1.5;
-    CGSize imageTargetSize = CGSizeMake(imageSize * scale, imageSize * scale);
+//    UIScreen *screen = [UIScreen mainScreen];
+//    CGFloat scale = screen.scale;
+//    CGFloat imageSize = MAX(screen.bounds.size.width, screen.bounds.size.height) * 1.5;
+//    CGSize imageTargetSize = CGSizeMake(imageSize * scale, imageSize * scale);
     [self.browserSource removeAllObjects];
-    for (PHAsset *asset in self.selectedSource) {
-        [self.browserSource addObject:[EJPhoto photoWithAsset:asset targetSize:imageTargetSize]];
+    for (EJAssetLinkLocal *obj in self.selectedSource) {
+        [self.browserSource addObject:[EJPhoto photoWithAssetLink:obj]];
     }
     EJPhotoBrowser * brower = [[EJPhotoBrowser alloc] initWithDelegate:self];
     brower.maxVideoDuration = _maxVideoDuration;
@@ -718,12 +726,70 @@
 //    }
 }
 
+- (void)saveAllSourceAtIndex:(NSUInteger)index resultSource:(NSMutableArray *)resultSource {
+    if (index >= [self.selectedSource count]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
+                [self.delegate ej_imagePickerDidSelected:resultSource];
+            }
+            [self dismissViewControllerAnimated:YES completion:nil];
+        });
+        return;
+    }
+    EJAssetLinkLocal * obj = [self.selectedSource objectAtIndex:index];
+    if ([obj.localPath length] > 0) {
+        NSString * filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:obj.localPath];
+        if (obj.asset.mediaType == PHAssetMediaTypeImage) {
+            [[LSSaveToAlbum mainSave] saveImageWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
+                [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+                if ([assetLocalId length] > 0) {
+                    PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
+                    [resultSource addObject:asset];
+                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+                } else {
+                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+                }
+            }];
+        } else if (obj.asset.mediaType == PHAssetMediaTypeVideo) {
+            [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL URLWithString:filePath] successBlock:^(NSString *assetLocalId) {
+                [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+                if ([assetLocalId length] > 0) {
+                    PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
+                    [resultSource addObject:asset];
+                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+                } else {
+                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+                }
+            }];
+        } else {
+            [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+        }
+    } else {
+        [resultSource addObject:obj.asset];
+        [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+    }
+}
+
 - (void)ls_assetCollectionToolBarDidClickDoneButton {
     // 选择完毕 返回
-    if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-        [self.delegate ej_imagePickerDidSelected:self.selectedSource];
-    }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
+    [self saveAllSourceAtIndex:0 resultSource:resultSource];
+//    for (EJAssetLinkLocal * obj in self.selectedSource) {
+//        if ([obj.localPath length] > 0) {
+//            NSString * filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:obj.localPath];
+//            if (obj.asset.mediaType == PHAssetMediaTypeImage) {
+//                [[LSSaveToAlbum mainSave] saveImageWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
+//                    //
+//                }];
+//            } else if (obj.asset.mediaType == PHAssetMediaTypeVideo) {
+//                [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL URLWithString:filePath] successBlock:^(NSString *assetLocalId) {
+//                    //
+//                }];
+//            }
+//        }
+//    }
+    
+    
 }
 
 #pragma mark - EJImagePickerShotCellDelegate
@@ -747,12 +813,7 @@
     if (_sourceType == E_SourceType_All) {
         shotType = EJ_ShotType_Both;
     }
-    AVCaptureVideoOrientation orientation;
-//    if (_maxSelectedCount == 1 && _allowCrop) {
-        orientation = AVCaptureVideoOrientationPortrait;
-//    } else {
-//        orientation = AVCaptureVideoOrientationLandscapeLeft;
-//    }
+
     EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:shotType delegate:self suggestOrientation:E_VideoOrientationAll /*allowPreview:YES*/ maxCount:1];
     vc.forcedCrop = _forcedCrop;
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -764,21 +825,12 @@
     PHFetchResult <PHAsset *> * assetSource = [PHAsset fetchAssetsWithLocalIdentifiers:assets options:nil];
     [assetSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([self.selectedSource count] < 9) {
-            [self.selectedSource addObject:obj];
+            EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
+            link.asset = obj;
+            [self.selectedSource addObject:link];
         }
     }];
     [self.toolBar configSourceCount:self.selectedSource.count];
-//    if (_maxSelectedCount == 1 && _allowCrop) {
-//        _isLocalSelected = NO;
-//        PHAsset * first = [assetSource firstObject];
-//        [self.manager requestImageDataForAsset:first options:self.options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-//            UIImage * image = [UIImage imageWithData:imageData];
-//            EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
-//            vc.cropScale = _cropScale;
-//            vc.delegate = self;
-//            [self.navigationController pushViewController:vc animated:YES];
-//        }];
-//    }
     [self getAllAssets];
     if (_browserAfterShot) {
         [self jumpToBrowser:0];
@@ -802,33 +854,23 @@
     }
 }
 
-- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
-    if (image) {
-        if (isCrop) {
-            [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([assetLocalId length] > 0) {
-                        PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
-                        [self.selectedSource removeAllObjects];
-                        [self.selectedSource addObject:asset];
-                        if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-                            [self.delegate ej_imagePickerDidSelected:self.selectedSource];
-                        }
-                        [self dismissViewControllerAnimated:YES completion:nil];
-                    } else {
-                        [EJProgressHUD showAlert:@"保存失败" forView:self.view];
-                    }
-                });
-            }];
-        } else {
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image {
+
+    [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
+        if ([assetLocalId length] > 0) {
+            PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.selectedSource removeAllObjects];
+                EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
+                link.asset = asset;
+                [self.selectedSource addObject:link];
                 if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
                     [self.delegate ej_imagePickerDidSelected:self.selectedSource];
                 }
                 [self dismissViewControllerAnimated:YES completion:nil];
             });
         }
-    }
+    }];
 }
 
 #pragma mark - LSInterceptVideoDelegate
@@ -866,28 +908,53 @@
     }
     PHAsset * indexAsset = photo.asset;
     if (indexAsset == nil) {
-        return NO;
-    }
-    for (PHAsset * asset in self.selectedSource) {
-        if ([asset.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
-            return YES;
+        if (photo.photoURL) {
+            NSString * localPath = [[[photo.photoURL lastPathComponent] componentsSeparatedByString:@"."] firstObject];
+            for (EJAssetLinkLocal * link in self.selectedSource) {
+                if ([link.localPath rangeOfString:localPath].location != NSNotFound) {
+                    return YES;
+                }
+            }
+        }
+    } else {
+        NSLog(@"%@", indexAsset.localIdentifier);
+        for (EJAssetLinkLocal * link in self.selectedSource) {
+            NSLog(@"%@", link.asset.localIdentifier);
+            if ([link.asset.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
+                return YES;
+            }
         }
     }
+    
     return NO;
 }
 
 - (void)photoBrowser:(EJPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
-    EJPhoto * photo = [self.browserSource objectAtIndex:index];
-    PHAsset * indexAsset = photo.asset;
-    if (indexAsset == nil) {
+    EJPhoto * photo = [self.browserSource objectOrNilAtIndex:index];
+    if (photo == nil) {
+        return;
+    }
+//    PHAsset * indexAsset = photo.asset;
+    NSString * localId;
+    if (photo.asset) {
+        localId = photo.asset.localIdentifier;
+    } else if (photo.photoURL) {
+        localId = [[photo.photoURL lastPathComponent] stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
+    }
+    if ([localId length] == 0) {
         return;
     }
     if (selected) {
-        [self.selectedSource addObject:indexAsset];
+        for (EJAssetLinkLocal * obj in self.assetSource) {
+            if ([obj.asset.localIdentifier isEqualToString:localId]) {
+                [self.selectedSource addObject:obj];
+                break;
+            }
+        }
     } else {
-        for (PHAsset * asset in self.selectedSource.reverseObjectEnumerator) {
-            if ([asset.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
-                [self.selectedSource removeObject:asset];
+        for (EJAssetLinkLocal * obj in self.selectedSource.reverseObjectEnumerator) {
+            if ([obj.asset.localIdentifier isEqualToString:localId]) {
+                [self.selectedSource removeObject:obj];
                 break;
             }
         }
@@ -908,17 +975,12 @@
 - (void)photoBrowserDidFinish:(EJPhotoBrowser *)photoBrowser {
     [self.collectionView reloadData];
     [_toolBar configSourceCount:self.selectedSource.count];
-//    if (_maxSelectedCount == 1) {
-        [self ls_assetCollectionToolBarDidClickDoneButton];
-//    }
+    [self ls_assetCollectionToolBarDidClickDoneButton];
 }
 
 - (void)photoBrowserDidCancel:(EJPhotoBrowser *)photoBrowser {
     [self.collectionView reloadData];
     [_toolBar configSourceCount:self.selectedSource.count];
-//    if (_maxSelectedCount == 1) {
-//    [self ls_assetCollectionToolBarDidClickDoneButton];
-//    }
 }
 
 - (NSUInteger)photoBrowserSelectedPhotoCount:(EJPhotoBrowser *)photoBrowser {
@@ -933,7 +995,7 @@
     return _cropScale;
 }
 
-- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index assetId:(NSString *)assetId {
+- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index localPath:(NSString *)localPath {
     EJPhoto * photo = [self.browserSource objectAtIndex:index];
     PHAsset * indexAsset = photo.asset;
     if (indexAsset == nil) {
@@ -941,31 +1003,89 @@
         return;
     }
     
-    PHAsset * currentAsset;
-    for (PHAsset * item in self.selectedSource) {
-        if ([item.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
-            currentAsset = item;
+    EJAssetLinkLocal * currentLink;
+    for (EJAssetLinkLocal * item in self.selectedSource) {
+        if ([item.asset.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
+            currentLink = item;
             break;
         }
     }
-    PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil] firstObject];
-    UIScreen *screen = [UIScreen mainScreen];
-    CGFloat scale = screen.scale;
-    CGFloat imageSize = MAX(screen.bounds.size.width, screen.bounds.size.height) * 1.5;
-    CGSize imageTargetSize = CGSizeMake(imageSize * scale, imageSize * scale);
-    EJPhoto * currPhoto = [EJPhoto photoWithAsset:asset targetSize:imageTargetSize];
-    if (currentAsset) {
-        NSUInteger currentIndex = [self.selectedSource indexOfObject:currentAsset];
-        [self.selectedSource replaceObjectAtIndex:currentIndex withObject:asset];
-//        if (photoBrowser.isPreview) {
-            [self.browserSource replaceObjectAtIndex:index withObject:currPhoto];
-//        } else {
-//            [self.browserSource insertObject:currPhoto atIndex:0];
-//        }
+    if (currentLink) {
+        currentLink.localPath = localPath;
+        if (![self.assetSource containsObject:currentLink]) {
+            
+            for (EJAssetLinkLocal * obj in self.assetSource) {
+                if ([obj.asset.localIdentifier isEqualToString:currentLink.asset.localIdentifier]) {
+                    NSUInteger totalIndex = [self.assetSource indexOfObject:obj];
+                    [self.assetSource replaceObjectAtIndex:totalIndex withObject:currentLink];
+                    break;
+                }
+            }
+        }
     } else {
-        [self.selectedSource addObject:asset];
-        [self.browserSource insertObject:currPhoto atIndex:0];
+        for (EJAssetLinkLocal * obj in self.assetSource) {
+            if ([obj.asset.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
+                currentLink = obj;
+                break;
+            }
+        }
+        
+        if (currentLink) {
+            currentLink.localPath = localPath;
+            [self.selectedSource addObject:currentLink];
+        }
     }
+    NSString * assetId = [currentLink.asset.localIdentifier stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
+    [self.editSource addObject:assetId];
+    EJPhoto * currPhoto = [EJPhoto photoWithAssetLink:currentLink];
+    [self.browserSource replaceObjectAtIndex:index withObject:currPhoto];
+    [photoBrowser reloadData];
+}
+
+- (BOOL)photoBrowser:(EJPhotoBrowser *)photoBrowser isPhotoEditedAtIndex:(NSUInteger)index {
+    EJPhoto * photo = [self.browserSource objectOrNilAtIndex:index];
+    if (photo == nil) {
+        return NO;
+    }
+    if (photo.photoURL) {
+        return YES;
+    } else {
+        return NO;
+    }
+    return NO;
+}
+
+- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser photoReductionAtIndex:(NSUInteger)index {
+    EJPhoto * photo = [self.browserSource objectOrNilAtIndex:index];
+    if (photo == nil) {
+        return;
+    }
+    if (photo.photoURL == nil) {
+        return;
+    }
+    NSString * localPath = [photo.photoURL lastPathComponent];
+//    localPath = [localPath stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
+    EJAssetLinkLocal * link;
+    for (EJAssetLinkLocal * obj in self.assetSource) {
+        if ([obj.localPath isEqualToString:localPath]) {
+            link = obj;
+            break;
+        }
+    }
+    if (link) {
+        link.localPath = nil;
+        EJPhoto * currPhoto = [EJPhoto photoWithAssetLink:link];
+        [self.browserSource replaceObjectAtIndex:index withObject:currPhoto];
+    } else {
+        [self.browserSource removeObjectAtIndex:index];
+    }
+    localPath = [[[localPath stringByReplacingOccurrencesOfString:@"*" withString:@"/"] componentsSeparatedByString:@"."] firstObject];
+    if ([self.editSource containsObject:localPath]) {
+        [self.editSource removeObject:localPath];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView reloadData];
+    });
     [photoBrowser reloadData];
 }
 
@@ -1003,7 +1123,21 @@
     return _toolBar;
 }
 
-- (NSMutableArray *)selectedSource {
+- (NSMutableArray<EJAssetLinkLocal *> *)assetSource {
+    if (!_assetSource) {
+        _assetSource = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _assetSource;
+}
+
+- (NSMutableSet<NSString *> *)editSource {
+    if (!_editSource) {
+        _editSource = [NSMutableSet setWithCapacity:1];
+    }
+    return _editSource;
+}
+
+- (NSMutableArray<EJAssetLinkLocal *> *)selectedSource {
     if (!_selectedSource) {
         _selectedSource = [NSMutableArray arrayWithCapacity:1];
     }

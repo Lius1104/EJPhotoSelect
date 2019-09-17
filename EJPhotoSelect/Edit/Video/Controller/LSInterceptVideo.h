@@ -11,7 +11,9 @@
 
 @protocol LSInterceptVideoDelegate <NSObject>
 
-- (void)ls_interceptVideoDidCropVideo:(NSString *)assetLocalId;
+/// 获取视频裁剪后的沙盒路径 相对路径
+/// @param localPath <#localPath description#>
+- (void)ls_interceptVideoDidCropVideo:(NSString *)localPath;
 
 @end
 

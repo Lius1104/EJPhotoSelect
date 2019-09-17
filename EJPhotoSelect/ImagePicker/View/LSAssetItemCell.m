@@ -46,14 +46,18 @@
         [_normalButton addTarget:self action:@selector(handleClickNormalButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_normalButton];
         
-//        _playImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"more_icon_play"]];
-//        _playImage.hidden = YES;
-//        [self addSubview:_playImage];
         _videoLabel = [[UILabel alloc] init];
         _videoLabel.font = [UIFont systemFontOfSize:13];
         _videoLabel.textColor = UIColorHex(ffffff);
         _videoLabel.hidden = YES;
         [self addSubview:_videoLabel];
+        
+        _editImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ejtools_imageEdit"]];
+        [self addSubview:_editImage];
+        [_editImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.bottom.equalTo(self);
+            make.size.mas_equalTo(CGSizeMake(25, 25));
+        }];
         
         [self configConstrains];
     }

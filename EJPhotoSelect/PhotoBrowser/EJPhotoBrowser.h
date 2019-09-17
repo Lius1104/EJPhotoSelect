@@ -116,7 +116,23 @@
  @param photoBrowser <#photoBrowser description#>
  @param index <#index description#>
  */
-- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index assetId:(NSString *)assetId;
+//- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index assetId:(NSString *)assetId;
+
+/// 裁剪结果
+/// @param photoBrowser <#photoBrowser description#>
+/// @param index 索引
+/// @param localPath 沙盒路径 相对路径
+- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index localPath:(NSString *)localPath;
+
+/// 当前资源是否编辑过
+/// @param photoBrowser 图片浏览器
+/// @param index 当前索引
+- (BOOL)photoBrowser:(EJPhotoBrowser *)photoBrowser isPhotoEditedAtIndex:(NSUInteger)index;
+
+/// 当前资源还原
+/// @param photoBrowser 图片浏览器
+/// @param index 当前索引
+- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser photoReductionAtIndex:(NSUInteger)index;
 
 @end
 

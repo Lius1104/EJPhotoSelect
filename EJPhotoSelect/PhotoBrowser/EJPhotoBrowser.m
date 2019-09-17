@@ -23,6 +23,8 @@
 #import "LSInterceptVideo.h"
 #import "EJPhotoConfig.h"
 
+#import "EJAssetLinkLocal.h"
+
 #define PADDING                  0//10
 
 static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
@@ -268,11 +270,17 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     if (_showCropButton) {
         _cropButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_cropButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [_cropButton setTitle:@"还原" forState:UIControlStateSelected];
         _cropButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_cropButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _cropButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_cropButton addTarget:self action:@selector(handleClickCropButton) forControlEvents:UIControlEventTouchUpInside];
         [_bottomBar addSubview:_cropButton];
+        
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoEditedAtIndex:)]) {
+            _cropButton.selected = [self.delegate photoBrowser:self isPhotoEditedAtIndex:_currentPageIndex];
+        }
+        
     }
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -349,10 +357,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 - (void)configSubviews {
     _titleLabel.text = [NSString stringWithFormat:@"%d/%d", (int)_currentPageIndex + 1, (int)[self numberOfPhotos]];
-//    _indexLabel.text = [NSString stringWithFormat:@"%d/%d", (int)_currentPageIndex + 1, (int)[self numberOfPhotos]];
-//    CGSize indexSize = [_indexLabel sizeThatFits:CGSizeZero];
-//    CGFloat width = ceil(indexSize.width);
-//    _indexLabel.width = width;
     _cropButton.left = 14;
     _selectButton.selected = [self photoIsSelectedAtIndex:_currentPageIndex];
     if (_showCropButton == YES) {
@@ -361,6 +365,13 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
             _cropButton.hidden = YES;
         } else {
             _cropButton.hidden = NO;
+        }
+    }
+    if (_showCropButton) {
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoEditedAtIndex:)]) {
+            _cropButton.selected = [self.delegate photoBrowser:self isPhotoEditedAtIndex:_currentPageIndex];
+        } else {
+            _cropButton.selected = NO;
         }
     }
 }
@@ -427,6 +438,15 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     // and the index changed, make sure we show the right one now
     if (_currentPageIndex != _pageIndexBeforeRotation) {
         [self jumpToPageAtIndex:_pageIndexBeforeRotation animated:NO];
+    }
+    
+    // 配置 裁剪 按钮状态
+    if (_showCropButton) {
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoEditedAtIndex:)]) {
+            _cropButton.selected = [self.delegate photoBrowser:self isPhotoEditedAtIndex:_currentPageIndex];
+        } else {
+            _cropButton.selected = NO;
+        }
     }
     
     // Layout
@@ -524,12 +544,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 	for (EJZoomingScrollView *page in _visiblePages) {
         NSUInteger index = page.index;
 		page.frame = [self frameForPageAtIndex:index];
-//        if (page.captionView) {
-//            page.captionView.frame = [self frameForCaptionView:page.captionView atIndex:index];
-//        }
-//        if (page.selectedButton) {
-//            page.selectedButton.frame = [self frameForSelectedButton:page.selectedButton atIndex:index];
-//        }
+
         if (page.playButton) {
             page.playButton.frame = [self frameForPlayButton:page.playButton atIndex:index];
         }
@@ -782,14 +797,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 			[_pagingScrollView addSubview:page];
 			EJLog(@"Added page at index %lu", (unsigned long)index);
-            
-            // Add caption
-//            EJCaptionView *captionView = [self captionViewForPhotoAtIndex:index];
-//            if (captionView) {
-//                captionView.frame = [self frameForCaptionView:captionView atIndex:index];
-//                [_pagingScrollView addSubview:captionView];
-//                page.captionView = captionView;
-//            }
             
             // Add play button if needed
             if (page.displayingVideo) {
@@ -1119,13 +1126,53 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 }
 
 #pragma mark - LSInterceptVideoDelegate
-- (void)ls_interceptVideoDidCropVideo:(NSString *)assetLocalId {
-    if ([assetLocalId length] == 0) {
+- (void)ls_interceptVideoDidCropVideo:(NSString *)localPath {
+    if ([localPath length] == 0) {
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
-        [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:assetLocalId];
-    }
+
+//    if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:localPath:)]) {
+//        [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex localPath:localPath];
+//    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+            if (maxCount == 1) {
+                if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
+                    BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                    if (!isSelected) {
+                        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                            [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
+                        }
+                    }
+                } else {
+                    NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
+                }
+            } else {
+                // 获取当前的预选状态
+                BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                    [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
+                }
+            }
+        }
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:localPath:)]) {
+            [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex localPath:localPath];
+        }
+        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+            if (maxCount == 1) {
+                if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
+                    [self.delegate photoBrowserDidFinish:self];
+                }
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        }
+        if (_showCropButton) {
+            _cropButton.selected = YES;
+        }
+    });
+    
 }
 
 #pragma mark - Video
@@ -1348,6 +1395,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                 }
                 if (_forcedCrop) {
                     if (needCrop) {
+                        _cropButton.selected = NO;
                         [self handleClickCropButton];
                         return;
                     } else {
@@ -1368,6 +1416,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                             [cancelAction setValue:[EJPhotoConfig sharedPhotoConfig].alertCancelColor forKey:@"titleTextColor"];
                         }
                         UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"编辑" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                            _cropButton.selected = NO;
                             [self handleClickCropButton];
                         }];
                         if ([EJPhotoConfig sharedPhotoConfig].alertDefaultColor) {
@@ -1393,54 +1442,107 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 }
 
 - (void)handleClickCropButton {
-    EJPhoto * photo = (EJPhoto *)[self photoAtIndex:_currentPageIndex];
-    if (photo.asset) {// 本地资源
-        PHAsset * asset = photo.asset;
-        if (asset.mediaType == PHAssetMediaTypeVideo) {
-            // 视频裁剪
-            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:_maxVideoDuration];
-            vc.delegate = self;
-            [self ej_presentViewController:vc animated:YES completion:nil];
-            return;
+    
+    if (_cropButton.isSelected) {
+        [self.progressHUD showAnimated:YES];
+        // 删除 沙盒文件
+        [self deleteLocalFile];
+        // 还原
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoReductionAtIndex:)]) {
+            [self.delegate photoBrowser:self photoReductionAtIndex:_currentPageIndex];
+        } else {
+            NSAssert(0, @"未实现 photoBrowser:photoReductionAtIndex: 代理方法");
         }
-        if (asset.mediaType == PHAssetMediaTypeImage) {
-            // 图片裁剪
-            PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
-            options.networkAccessAllowed = YES;
-            options.synchronous = YES;
-            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UIImage * image = [UIImage imageWithData:imageData];
-                    EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
+        [_progressHUD hideAnimated:YES];
+        
+        // 选中状态是否需要改变
+        BOOL isSelect = NO;
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
+            isSelect = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+        }
+        if (isSelect) {
+            EJPhoto * photo = [self photoAtIndex:_currentPageIndex];
+            // 判断视频的时长
+            if (photo.asset) {
+                if (photo.asset.mediaType == PHAssetMediaTypeVideo) {
+                    if (photo.asset.duration > _maxVideoDuration) {
+                        _selectButton.selected = NO;
+                    }
+                } else if (photo.asset.mediaType == PHAssetMediaTypeImage) {
                     CGFloat cropScale = 0;
                     if ([self.delegate respondsToSelector:@selector(photoBrowser:crapScaleAtIndex:)]) {
                         cropScale = [self.delegate photoBrowser:self crapScaleAtIndex:_currentPageIndex];
                     }
-                    vc.cropScale = cropScale;
-                    vc.delegate = self;
-                    [self.navigationController pushViewController:vc animated:YES];
-                });
-            }];
-            return;
+                    BOOL needCrop = NO;
+                    if (cropScale != 0) {
+                        double result = fabs(photo.asset.pixelWidth * 1.0 / photo.asset.pixelHeight - cropScale);
+                        needCrop = result > 0.1;
+                    }
+                    if (needCrop) {
+                        _selectButton.selected = NO;
+                    }
+                }
+            }
+            if (_selectButton.isSelected == NO) {
+                if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                    [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:NO];
+                }
+                [self configDoneButton];
+            }
         }
-        return;
-    }
-    // 网络资源
-    if (photo.isVideo) {
-        // 网络视频不裁剪
+        _cropButton.selected = !_cropButton.isSelected;
         return;
     } else {
-        UIImage * image = [UIImage imageWithUrlString:photo.photoURL.absoluteString];
-        EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
-        CGFloat cropScale = 0;
-        if ([self.delegate respondsToSelector:@selector(photoBrowser:crapScaleAtIndex:)]) {
-            cropScale = [self.delegate photoBrowser:self crapScaleAtIndex:_currentPageIndex];
+        _cropButton.selected = !_cropButton.isSelected;
+        EJPhoto * photo = (EJPhoto *)[self photoAtIndex:_currentPageIndex];
+        if (photo.asset) {// 本地资源
+            PHAsset * asset = photo.asset;
+            if (asset.mediaType == PHAssetMediaTypeVideo) {
+                // 视频裁剪
+                LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:_maxVideoDuration];
+                vc.delegate = self;
+                [self ej_presentViewController:vc animated:YES completion:nil];
+                return;
+            }
+            if (asset.mediaType == PHAssetMediaTypeImage) {
+                // 图片裁剪
+                PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
+                options.networkAccessAllowed = YES;
+                options.synchronous = YES;
+                [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIImage * image = [UIImage imageWithData:imageData];
+                        EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
+                        CGFloat cropScale = 0;
+                        if ([self.delegate respondsToSelector:@selector(photoBrowser:crapScaleAtIndex:)]) {
+                            cropScale = [self.delegate photoBrowser:self crapScaleAtIndex:_currentPageIndex];
+                        }
+                        vc.cropScale = cropScale;
+                        vc.delegate = self;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    });
+                }];
+                return;
+            }
+            return;
         }
-        vc.cropScale = cropScale;
-        vc.delegate = self;
-//        vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:vc animated:YES];
-        return;
+        // 网络资源
+        if (photo.isVideo) {
+            // 网络视频不裁剪
+            return;
+        } else {
+            UIImage * image = [UIImage imageWithUrlString:photo.photoURL.absoluteString];
+            EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
+            CGFloat cropScale = 0;
+            if ([self.delegate respondsToSelector:@selector(photoBrowser:crapScaleAtIndex:)]) {
+                cropScale = [self.delegate photoBrowser:self crapScaleAtIndex:_currentPageIndex];
+            }
+            vc.cropScale = cropScale;
+            vc.delegate = self;
+            //        vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+            return;
+        }
     }
 }
 
@@ -1459,7 +1561,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         EJPhoto * photo = (EJPhoto *)[self photoAtIndex:_currentPageIndex];
         if (photo.isVideo && photo.asset) {// 本地视频
             if (photo.asset.duration > _maxVideoDuration) {
-//                [EJProgressHUD showAlert:[NSString stringWithFormat:@"只能选择%d秒以内的视频", (int)_maxVideoDuration] forView:self.view];
                 NSString * secondString;
                 if (_maxVideoDuration < 60) {
                     secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
@@ -1502,65 +1603,64 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     
 }
 
-- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
-    if (image) {
-        if (isCrop) {
-            [self.progressHUD showAnimated:YES];
-            [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_progressHUD hideAnimated:YES];
-                    if ([assetLocalId length] > 0) {
-                        PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-                        [self configCroppedImage:asset];
-                    } else {
-                        [EJProgressHUD showAlert:@"保存失败" forView:self.view];
-                    }
-                });
-            }];
-        } else {
-            EJPhoto * photo = [self photoAtIndex:_currentPageIndex];
-            PHAsset * asset = photo.asset;
-            [self configCroppedImage:asset];
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image {
+    [self.progressHUD showAnimated:YES];
+    EJPhoto * current = [self photoAtIndex:_currentPageIndex];
+    NSString * localPath;
+    if (current.asset) {
+        NSString * assetId = [current.asset.localIdentifier stringByReplacingOccurrencesOfString:@"/" withString:@"*"];
+        localPath = [assetId stringByAppendingString:@".jpg"];
+    } else {
+        if (current.photoURL) {
+            localPath = [current.photoURL lastPathComponent];
         }
     }
-}
-
-- (void)configCroppedImage:(PHAsset *)asset {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
-            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
-            if (maxCount == 1) {
-                if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
-                    BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
-                    if (!isSelected) {
-                        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
-                            [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
+    NSString * filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:localPath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+    BOOL result = [UIImageJPEGRepresentation(image, 1.f) writeToFile:filePath atomically:YES];
+    [_progressHUD hideAnimated:YES];
+    if (result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+                NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+                if (maxCount == 1) {
+                    if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
+                        BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                        if (!isSelected) {
+                            if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                                [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
+                            }
                         }
+                    } else {
+                        NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
                     }
                 } else {
-                    NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
-                }
-            } else {
-                // 获取当前的预选状态
-                BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
-                if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
-                    [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
+                    // 获取当前的预选状态
+                    BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                    if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                        [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
+                    }
                 }
             }
-        }
-        if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
-            [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
-        }
-        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
-            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
-            if (maxCount == 1) {
-                if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
-                    [self.delegate photoBrowserDidFinish:self];
-                }
-                [self.navigationController popViewControllerAnimated:YES];
+            if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:localPath:)]) {
+                [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex localPath:localPath];
             }
-        }
-    });
+            if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+                NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+                if (maxCount == 1) {
+                    if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
+                        [self.delegate photoBrowserDidFinish:self];
+                    }
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            }
+            if (_showCropButton) {
+                _cropButton.selected = YES;
+            }
+        });
+    }
 }
 
 #pragma mark - Action Progress
@@ -1573,6 +1673,32 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         [self.view addSubview:_progressHUD];
     }
     return _progressHUD;
+}
+
+#pragma mark - private
+- (NSUInteger)durationWithVideo:(NSURL *)videoUrl {
+    
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:@(NO) forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:videoUrl options:opts]; // 初始化视频媒体文件
+    NSUInteger second = 0;
+    second = urlAsset.duration.value / urlAsset.duration.timescale; // 获取视频总时长,单位秒
+    
+    return second;
+}
+
+- (void)deleteLocalFile {
+    EJPhoto * photo = [self photoAtIndex:_currentPageIndex];
+    if (photo.photoURL == nil) {
+        return;
+    }
+    NSString * fileName = [[[photo.photoURL lastPathComponent] componentsSeparatedByString:@"."] firstObject];
+    NSDirectoryEnumerator *rootPath = [[NSFileManager defaultManager] enumeratorAtPath:[EJAssetLinkLocal rootPath]];
+    for (NSString * path in rootPath.allObjects) {
+        NSLog(@"%@", path);
+        if ([path containsString:fileName]) {
+            [[NSFileManager defaultManager] removeItemAtPath:[[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:path] error:nil];
+        }
+    }
 }
 
 @end

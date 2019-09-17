@@ -50,6 +50,31 @@
     return [[EJPhoto alloc] initWithVideoURL:url];
 }
 
++ (EJPhoto *)photoWithAssetLink:(EJAssetLinkLocal *)link {
+    UIScreen *screen = [UIScreen mainScreen];
+    CGFloat scale = screen.scale;
+    CGFloat imageSize = MAX(screen.bounds.size.width, screen.bounds.size.height) * 1.5;
+    CGSize imageTargetSize = CGSizeMake(imageSize * scale, imageSize * scale);
+    if ([link.localPath length] > 0) {
+        NSString * filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:link.localPath];
+        if (link.asset.mediaType == PHAssetMediaTypeImage) {
+            return [EJPhoto photoWithURL:[NSURL fileURLWithPath:filePath]];
+        } else if (link.asset.mediaType == PHAssetMediaTypeVideo) {
+            UIImage * coverImage = [UIImage thumbnailImageForVideo:[NSURL fileURLWithPath:filePath] atTime:0.f];
+            NSString * localPath = [[[filePath componentsSeparatedByString:@"."] firstObject] stringByAppendingString:@".jpg"];
+            [UIImageJPEGRepresentation(coverImage, 1.f) writeToFile:localPath atomically:YES];
+            EJPhoto * photo = [EJPhoto photoWithURL:[NSURL fileURLWithPath:localPath]];
+            photo.isVideo = YES;
+            photo.assetTargetSize = imageTargetSize;
+            return photo;
+        }
+        return nil;
+    } else {
+        
+        return [EJPhoto photoWithAsset:link.asset targetSize:imageTargetSize];
+    }
+}
+
 #pragma mark - Init
 
 - (id)init {
@@ -92,6 +117,17 @@
         self.isVideo = YES;
         self.emptyImage = YES;
         [self setup];
+    }
+    return self;
+}
+
+- (id)initWithAssetLink:(EJAssetLinkLocal *)link {
+    self = [super init];
+    if (self) {
+        if ([link.localPath length] > 0) {
+            
+            
+        }
     }
     return self;
 }

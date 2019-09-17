@@ -27,6 +27,9 @@ typedef void(^LSSelectSourceBlock)(NSString * clickLocalIdentifier);
 
 @property (nonatomic, strong) UIImage * selectedImage;
 
+@property (nonatomic, strong) UIImageView * editImage;
+
+
 @property (nonatomic, assign) BOOL sourceSelected;
 
 

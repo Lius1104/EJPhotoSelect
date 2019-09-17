@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Photos/Photos.h>
 #import "EJPhotoProtocol.h"
+#import "EJAssetLinkLocal.h"
 
 // This class models a photo/image and it's caption
 // If you want to handle photos, caching, decompression
@@ -28,6 +29,8 @@
 + (EJPhoto *)photoWithURL:(NSURL *)url;
 + (EJPhoto *)photoWithAsset:(PHAsset *)asset targetSize:(CGSize)targetSize;
 + (EJPhoto *)videoWithURL:(NSURL *)url; // Initialise video with no poster image
+
++ (EJPhoto *)photoWithAssetLink:(EJAssetLinkLocal *)link;
 
 - (id)init;
 - (id)initWithImage:(UIImage *)image;

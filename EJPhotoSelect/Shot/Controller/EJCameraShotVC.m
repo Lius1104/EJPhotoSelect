@@ -495,7 +495,8 @@
         if (!_orientationLabel.superview) {
             return ;
         }
-        if (_suggestOrientation == orientation || (_suggestOrientation <= 2 && orientation <= 2) || (_suggestOrientation > 2 && orientation > 2)) {
+        E_VideoOrientation target = (E_VideoOrientation)orientation;
+        if (_suggestOrientation == target || (_suggestOrientation <= 2 && target <= 2) || (_suggestOrientation > 2 && target > 2)) {
             _orientationLabel.hidden = YES;
             return;
         }
@@ -582,19 +583,6 @@
                             }
                         }
                     }
-//                    if (self.maxCount == 1) {
-//                        [self ej_cameraShotViewDidClickDone];
-//                    } else {
-//                        self.shotView.img = coverImage;
-//                        self.shotView.previewCount = self.assetIds.count;
-//                        if ([[NSFileManager defaultManager] fileExistsAtPath:_localFilePath]) {
-//                            NSError * fileError = nil;
-//                            [[NSFileManager defaultManager] removeItemAtPath:_localFilePath error:&fileError];
-//                            if (fileError) {
-//                                NSLog(@"%@", fileError);
-//                            }
-//                        }
-//                    }
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
