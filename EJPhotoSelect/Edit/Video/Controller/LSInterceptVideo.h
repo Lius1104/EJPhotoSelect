@@ -11,8 +11,11 @@
 
 @protocol LSInterceptVideoDelegate <NSObject>
 
-/// 获取视频裁剪后的沙盒路径 相对路径
-/// @param localPath <#localPath description#>
+/**
+ 获取视频裁剪后的沙盒路径 相对路径
+
+ @param localPath 相对路径，文件名.mp4（文件名为phasset 的 localId，/ 替换成 *）
+ */
 - (void)ls_interceptVideoDidCropVideo:(NSString *)localPath;
 
 @end

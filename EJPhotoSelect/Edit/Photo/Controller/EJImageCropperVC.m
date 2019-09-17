@@ -176,24 +176,14 @@
         }
         
         if (needSave) {
-//            [[LSSaveToAlbum mainSave] saveImage:resizeImage successBlock:^(NSString *assetLocalId) {
-//                PHAsset * asset;
-//                if (assetLocalId) {
-//                    asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-//                }
-                if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:isCrop:)]) {
-                    [self.delegate ej_imageCropperVCDidCrop:resizeImage isCrop:YES];
-                }
-//            }];
+            if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:isCrop:)]) {
+                [self.delegate ej_imageCropperVCDidCrop:resizeImage isCrop:YES];
+            }
         } else {
             if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:isCrop:)]) {
                 [self.delegate ej_imageCropperVCDidCrop:_image isCrop:NO];
             }
         }
-        
-//        if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:)]) {
-//            [self.delegate ej_imageCropperVCDidCrop:resizeImage];
-//        }
         
         self.doneBtn.enabled = YES;
         [self.navigationController popViewControllerAnimated:YES];

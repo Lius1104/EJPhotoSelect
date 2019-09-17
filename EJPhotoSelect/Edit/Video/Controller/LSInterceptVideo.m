@@ -201,26 +201,6 @@
                 case AVAssetExportSessionStatusExporting:
                     break;
                 case AVAssetExportSessionStatusCompleted: {
-//                    [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
-//                        if ([assetLocalId length] > 0) {
-//                            dispatch_async(dispatch_get_main_queue(), ^{
-//                                [self->_hud hideAnimated:YES];
-//                                if (self.presentingViewController) {
-//                                    [self dismissViewControllerAnimated:YES completion:nil];
-//                                } else {
-//                                    [self.navigationController popViewControllerAnimated:YES];
-//                                }
-//                                if ([self.delegate respondsToSelector:@selector(ls_interceptVideoDidCropVideo:)]) {
-//                                    [self.delegate ls_interceptVideoDidCropVideo:assetLocalId];
-//                                }
-//                            });
-//                        } else {
-//                            dispatch_async(dispatch_get_main_queue(), ^{
-//                                self->_hud.label.text = @"保存到本地相册失败";
-//                                [self->_hud hideAnimated:YES afterDelay:1.5];
-//                            });
-//                        }
-//                    }];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self->_hud hideAnimated:YES];
                         if (self.presentingViewController) {
@@ -272,7 +252,7 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
         if ([self.delegate respondsToSelector:@selector(ls_interceptVideoDidCropVideo:)]) {
-            [self.delegate ls_interceptVideoDidCropVideo:_asset.localIdentifier];
+            [self.delegate ls_interceptVideoDidCropVideo:nil];
         }
     } else {
         //裁剪当前视频

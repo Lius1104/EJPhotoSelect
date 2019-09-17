@@ -1130,10 +1130,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     if ([localPath length] == 0) {
         return;
     }
-
-//    if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:localPath:)]) {
-//        [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex localPath:localPath];
-//    }
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
             NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
@@ -1603,64 +1599,78 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     
 }
 
-- (void)ej_imageCropperVCDidCrop:(UIImage *)image {
-    [self.progressHUD showAnimated:YES];
-    EJPhoto * current = [self photoAtIndex:_currentPageIndex];
-    NSString * localPath;
-    if (current.asset) {
-        NSString * assetId = [current.asset.localIdentifier stringByReplacingOccurrencesOfString:@"/" withString:@"*"];
-        localPath = [assetId stringByAppendingString:@".jpg"];
-    } else {
-        if (current.photoURL) {
-            localPath = [current.photoURL lastPathComponent];
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
+    if (image == nil) {
+        return;
+    }
+    if (isCrop) {
+        [self.progressHUD showAnimated:YES];
+        EJPhoto * current = [self photoAtIndex:_currentPageIndex];
+        NSString * localPath;
+        if (current.asset) {
+            NSString * assetId = [current.asset.localIdentifier stringByReplacingOccurrencesOfString:@"/" withString:@"*"];
+            localPath = [assetId stringByAppendingString:@".jpg"];
+        } else {
+            if (current.photoURL) {
+                localPath = [current.photoURL lastPathComponent];
+            }
         }
+        NSString * filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:localPath];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        }
+        BOOL result = [UIImageJPEGRepresentation(image, 1.f) writeToFile:filePath atomically:YES];
+        [_progressHUD hideAnimated:YES];
+        if (result) {
+            [self configAfterCropLocalPath:localPath];
+        }
+    } else {
+        [self configAfterCropLocalPath:nil];
     }
-    NSString * filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:localPath];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-    }
-    BOOL result = [UIImageJPEGRepresentation(image, 1.f) writeToFile:filePath atomically:YES];
-    [_progressHUD hideAnimated:YES];
-    if (result) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
-                NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
-                if (maxCount == 1) {
-                    if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
-                        BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
-                        if (!isSelected) {
-                            if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
-                                [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
-                            }
+    
+}
+
+- (void)configAfterCropLocalPath:(NSString *)localPath {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+            if (maxCount == 1) {
+                if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
+                    BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                    if (!isSelected) {
+                        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                            [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
                         }
-                    } else {
-                        NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
                     }
                 } else {
-                    // 获取当前的预选状态
-                    BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
-                    if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
-                        [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
-                    }
+                    NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
+                }
+            } else {
+                // 获取当前的预选状态
+                BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
+                if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                    [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
                 }
             }
+        }
+        if ([localPath length] > 0) {
             if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:localPath:)]) {
                 [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex localPath:localPath];
             }
-            if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
-                NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
-                if (maxCount == 1) {
-                    if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
-                        [self.delegate photoBrowserDidFinish:self];
-                    }
-                    [self.navigationController popViewControllerAnimated:YES];
+        }
+        if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+            NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+            if (maxCount == 1) {
+                if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
+                    [self.delegate photoBrowserDidFinish:self];
                 }
+                [self.navigationController popViewControllerAnimated:YES];
             }
-            if (_showCropButton) {
-                _cropButton.selected = YES;
-            }
-        });
-    }
+        }
+        if (_showCropButton) {
+            _cropButton.selected = YES;
+        }
+    });
 }
 
 #pragma mark - Action Progress

@@ -854,38 +854,67 @@
     }
 }
 
-- (void)ej_imageCropperVCDidCrop:(UIImage *)image {
-
-    [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-        if ([assetLocalId length] > 0) {
-            PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-            dispatch_async(dispatch_get_main_queue(), ^{
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
+    if (image == nil) {
+        return;
+    }
+    if (isCrop) {
+        [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
+            if ([assetLocalId length] > 0) {
+                PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
                 [self.selectedSource removeAllObjects];
                 EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
                 link.asset = asset;
                 [self.selectedSource addObject:link];
-                if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-                    [self.delegate ej_imagePickerDidSelected:self.selectedSource];
-                }
-                [self dismissViewControllerAnimated:YES completion:nil];
-            });
-        }
-    }];
+                NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
+                [self saveAllSourceAtIndex:0 resultSource:resultSource];
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [EJProgressHUD showAlert:@"保存失败！" forView:self.view];
+                });
+            }
+        }];
+    } else {
+        NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
+        [self saveAllSourceAtIndex:0 resultSource:resultSource];
+    }
 }
 
 #pragma mark - LSInterceptVideoDelegate
-- (void)ls_interceptVideoDidCropVideo:(NSString *)assetLocalId {
-    if ([assetLocalId length] > 0) {
-        PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
-        [self.selectedSource removeAllObjects];
-        [self.selectedSource addObject:asset];
-        if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-            [self.delegate ej_imagePickerDidSelected:self.selectedSource];
+- (void)ls_interceptVideoDidCropVideo:(NSString *)localPath {
+    if ([localPath length] == 0) {
+        if (_maxSelectedCount == 1) {
+            NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
+            [self saveAllSourceAtIndex:0 resultSource:resultSource];
         }
-        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
+    if (_maxSelectedCount == 1) {
+        EJAssetLinkLocal * link = [self.selectedSource firstObject];
+        link.localPath = localPath;
+        NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
+        [self saveAllSourceAtIndex:0 resultSource:resultSource];
     } else {
+        BOOL isContains = NO;
+        NSString * localId = [[localPath componentsSeparatedByString:@"."] firstObject];
+        for (EJAssetLinkLocal * item in self.selectedSource) {
+            if ([item.asset.localIdentifier isEqualToString:localId]) {
+                item.localPath = localPath;
+                NSString * assetId = [item.asset.localIdentifier stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
+                [self.editSource addObject:assetId];
+                isContains = YES;
+            }
+        }
+        if (isContains == NO) {
+            EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
+            link.asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[localId] options:nil] lastObject];
+            link.localPath = localPath;
+            NSString * assetId = [link.asset.localIdentifier stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
+            [self.editSource addObject:assetId];
+            [self.selectedSource addObject:link];
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [EJProgressHUD showAlert:@"保存失败" forView:self.view];
+            [self.collectionView reloadData];
         });
     }
 }
