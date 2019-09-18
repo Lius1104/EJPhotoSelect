@@ -89,6 +89,20 @@
  @param allowCrop <#allowCrop description#>
  @return <#return value description#>
  */
+- (instancetype)initWithSourceType:(E_SourceType)sourceType MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray <PHAsset *>*)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop;
+
+/**
+ <#Description#>
+
+ @param sourceType <#sourceType description#>
+ @param singleSelect <#singleSelect description#>
+ @param maxCount <#maxCount description#>
+ @param selectedSource <#selectedSource description#>
+ @param increaseOrder <#increaseOrder description#>
+ @param showShot <#showShot description#>
+ @param allowCrop <#allowCrop description#>
+ @return <#return value description#>
+ */
 - (instancetype)initWithSourceType:(E_SourceType)sourceType singleSelect:(BOOL)singleSelect MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray <PHAsset *>*)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop;
 
 @end

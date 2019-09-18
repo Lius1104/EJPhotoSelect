@@ -21,6 +21,11 @@
     NSLog(@"EJImagePickerNVC dealloc.");
 }
 
+- (instancetype)initWithSourceType:(E_SourceType)sourceType MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray<PHAsset *> *)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop {
+    EJImagePickerNVC * nvc = [[EJImagePickerNVC alloc] initWithSourceType:sourceType singleSelect:NO MaxCount:maxCount SelectedSource:selectedSource increaseOrder:increaseOrder showShot:showShot allowCrop:allowCrop];
+    return nvc;
+}
+
 - (instancetype)initWithSourceType:(E_SourceType)sourceType singleSelect:(BOOL)singleSelect MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray <PHAsset *>*)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop {
     EJImagePickerVC * imagePicker = [[EJImagePickerVC alloc] initWithSourceType:sourceType singleSelect:singleSelect MaxCount:maxCount SelectedSource:selectedSource increaseOrder:increaseOrder showShot:showShot allowCrop:allowCrop];
     imagePicker.delegate = self;
