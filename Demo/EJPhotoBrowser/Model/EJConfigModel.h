@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSUInteger sourceType;
 
+@property (nonatomic, assign) BOOL singleSelect;
+
 @property (nonatomic, assign) BOOL allowCrop;
 @property (nonatomic, assign) CGFloat cropScale;
 @property (nonatomic, assign) NSUInteger videoDefaultDuration;

@@ -118,7 +118,7 @@
             }
             NSUInteger maxCount = (_config.maxSelectCount == 0 ? NSUIntegerMax : _config.maxSelectCount);
 //            NSUInteger maxCount = 9;
-            EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait maxCount:maxCount];
+            EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:E_VideoOrientationAll maxCount:maxCount];
             vc.forcedCrop = _config.forcedCrop;
             vc.cropScale = 0.5;
             vc.allowBoth = NO;
@@ -132,7 +132,7 @@
             if (_config.maxSelectCount == 1) {
                 [self.dataSource removeAllObjects];
             }
-            EJImagePickerNVC * vc = [[EJImagePickerNVC alloc] initWithSourceType:sourceType MaxCount:_config.maxSelectCount SelectedSource:self.dataSource increaseOrder:_config.increaseOrder showShot:_config.allowShot allowCrop:_config.allowCrop];
+            EJImagePickerNVC * vc = [[EJImagePickerNVC alloc] initWithSourceType:sourceType singleSelect:NO MaxCount:_config.maxSelectCount SelectedSource:self.dataSource increaseOrder:_config.increaseOrder showShot:_config.allowShot allowCrop:_config.allowCrop];
             if (_config.allowCrop) {
                 vc.directEdit = _config.directEdit;
                 vc.cropScale = _config.cropScale;

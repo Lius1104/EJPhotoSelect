@@ -64,6 +64,9 @@
 
 @property (nonatomic, assign) E_SourceType sourceType;
 
+@property (nonatomic, assign) BOOL singleSelect;
+@property (nonatomic, assign) E_SourceType selectedType;//仅在sourceType = .ALL && singleSelect = YES 时有效
+
 @property (nonatomic, assign, readonly) LSSortOrder sortOrder;
 
 @property (nonatomic, assign) NSUInteger maxSelectedCount;
@@ -80,11 +83,12 @@
 
 @implementation EJImagePickerVC
 
-- (instancetype)initWithSourceType:(E_SourceType)sourceType MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray<PHAsset *> *)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop {
+- (instancetype)initWithSourceType:(E_SourceType)sourceType singleSelect:(BOOL)singleSelect MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray<PHAsset *> *)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop {
     self = [super init];
     if (self) {
         _cropScale = 0;
         self.sourceType = sourceType;
+        self.singleSelect = singleSelect;
         self.showShot = showShot;
         self.allowCrop = allowCrop;
         self.maxSelectedCount = maxCount;
@@ -113,18 +117,16 @@
             link.asset = asset;
             [self.selectedSource addObject:link];
         }
-        
-        _manager = [[PHCachingImageManager alloc] init];
-        _options = [[PHImageRequestOptions alloc] init];
-        _options.resizeMode = PHImageRequestOptionsResizeModeFast;
-        _options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     }
     return self;
 }
 
 - (void)dealloc {
     [self resetCachedAssets];
-    [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusAuthorized) {
+        [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+    }
     NSLog(@"EJImagePickerVC dealloc.");
 }
 
@@ -185,7 +187,6 @@
         self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     
-    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
     [self judgeAppPhotoLibraryUsageAuth:^(PHAuthorizationStatus status) {
         switch (status) {
             case PHAuthorizationStatusRestricted: {
@@ -198,6 +199,7 @@
                 break;
             case PHAuthorizationStatusAuthorized: {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
                     UIButton * albumBtn = [UIButton buttonWithType:UIButtonTypeCustom];
                     albumBtn.frame = CGRectMake(0, 0, 50, 34);
                     [albumBtn setTitle:@"相册" forState:UIControlStateNormal];
@@ -306,7 +308,10 @@
 }
 
 - (void)resetCachedAssets {
-    [_manager stopCachingImagesForAllAssets];
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusAuthorized) {
+        [_manager stopCachingImagesForAllAssets];
+    }
 //    previousPreheatRect = CGRectZero;
 }
 
@@ -531,15 +536,15 @@
         } else {
             cell.videoLabel.hidden = YES;
         }
-        if (@available(iOS 9.1, *)) {
-            if (link.asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
-                cell.livePhotoIcon.image = [PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent];
-            } else {
-                cell.livePhotoIcon.image = nil;
-            }
-        } else {
-            cell.livePhotoIcon.image = nil;
-        }
+//        if (@available(iOS 9.1, *)) {
+//            if (link.asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
+//                cell.livePhotoIcon.image = [PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent];
+//            } else {
+//                cell.livePhotoIcon.image = nil;
+//            }
+//        } else {
+//            cell.livePhotoIcon.image = nil;
+//        }
         if ([self.editSource containsObject:link.asset.localIdentifier]) {
             cell.editImage.hidden = NO;
             if (cell.videoLabel.isHidden == NO) {
@@ -553,7 +558,7 @@
         if ([link.localPath length] > 0) {
             cell.coverImageView.image = link.coverImage;
         } else {
-            [_manager requestImageForAsset:link.asset targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:_options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+            [self.manager requestImageForAsset:link.asset targetSize:_imageSize contentMode:PHImageContentModeAspectFill options:self.options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 if ([cell.localIdentifier isEqualToString:link.asset.localIdentifier]) {
                     cell.coverImageView.image = result;
                 }
@@ -746,9 +751,11 @@
                 [resultSource addObject:asset];
                 [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
             } failureBlock:^(NSError *error) {
-                if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
-                    [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                        [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
+                    }
+                });
             }];
         } else if (obj.asset.mediaType == PHAssetMediaTypeVideo) {
             [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
@@ -757,9 +764,11 @@
                 [resultSource addObject:asset];
                 [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
             } failureBlock:^(NSError *error) {
-                if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
-                    [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                        [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
+                    }
+                });
             }];
         } else {
             [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
@@ -852,13 +861,13 @@
             NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
             [self saveAllSourceAtIndex:0 resultSource:resultSource];
         } failureBlock:^(NSError *error) {
-            if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
-                [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                    [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
+                } else {
                     [EJProgressHUD showAlert:@"保存失败！" forView:self.view];
-                });
-            }
+                }
+            });
         }];
     } else {
         NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
@@ -1101,6 +1110,22 @@
 }
 
 #pragma mark - getter or setter
+- (PHCachingImageManager *)manager {
+    if (!_manager) {
+        _manager = [[PHCachingImageManager alloc] init];
+    }
+    return _manager;
+}
+
+- (PHImageRequestOptions *)options {
+    if (!_options) {
+        _options = [[PHImageRequestOptions alloc] init];
+        _options.resizeMode = PHImageRequestOptionsResizeModeFast;
+        _options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+    }
+    return _options;
+}
+
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];

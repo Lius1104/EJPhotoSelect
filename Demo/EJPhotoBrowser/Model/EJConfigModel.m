@@ -16,6 +16,7 @@
         _allowShot = YES;
         _increaseOrder = NO;
         _sourceType = 2;
+        _singleSelect = NO;
         _allowCrop = YES;
         _cropScale = 0;
         _videoDefaultDuration = 180;

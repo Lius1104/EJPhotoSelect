@@ -568,6 +568,14 @@
     }
 }
 
+- (void)resetSubviews {
+    _selectScroll.hidden = NO;
+    _selectedDot.hidden = NO;
+    [_swipeGestures enumerateObjectsUsingBlock:^(UISwipeGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.enabled = YES;
+    }];
+}
+
 #pragma mark - action
 - (void)handleCloseAction:(UIButton *)sender {
     if ([_delegate respondsToSelector:@selector(ej_cameraShotViewDidClickToClose)]) {

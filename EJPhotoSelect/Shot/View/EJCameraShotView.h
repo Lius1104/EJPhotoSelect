@@ -72,4 +72,6 @@ typedef enum : NSUInteger {
 
 - (void)stopRecordVideo;
 
+- (void)resetSubviews;
+
 @end

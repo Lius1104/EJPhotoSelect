@@ -35,6 +35,11 @@
  */
 @property (nonatomic, assign) E_SourceType sourceType;
 
+/**
+ 是否只能选择一种，sourceType = E_SourceType_All 时有效
+ */
+@property (nonatomic, assign) BOOL singleSelect;
+
 @property (nonatomic, strong) NSMutableArray <PHAsset *>* selectedSource;
 
 @property (nonatomic, assign) BOOL showShot;
@@ -84,7 +89,7 @@
  @param allowCrop <#allowCrop description#>
  @return <#return value description#>
  */
-- (instancetype)initWithSourceType:(E_SourceType)sourceType MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray <PHAsset *>*)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop;
+- (instancetype)initWithSourceType:(E_SourceType)sourceType singleSelect:(BOOL)singleSelect MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray <PHAsset *>*)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop;
 
 @end
 

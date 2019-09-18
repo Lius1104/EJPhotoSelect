@@ -391,13 +391,14 @@
                 }
             });
         } failureBlock:^(NSError *error) {
-            if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
-                [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                    [self deniedAuthAlertTitle:@"您拒绝app访问相册导致保存失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
+                    [_shotView resetSubviews];
+                } else {
                     [EJProgressHUD showAlert:@"保存到系统相册失败" forView:self.view];
-                });
-            }
+                }
+            });
         }];
     }];
 }
@@ -586,13 +587,14 @@
                 }
             });
         } failureBlock:^(NSError *error) {
-            if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
-                [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                    [self deniedAuthAlertTitle:@"您拒绝app访问相册导致保存失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
+                    [_shotView resetSubviews];
+                } else {
                     [EJProgressHUD showAlert:@"保存到系统相册失败" forView:self.view];
-                });
-            }
+                }
+            });
         }];
     } else {
         [EJProgressHUD showConfirmAlert:@"保存失败,请重新录制!"];

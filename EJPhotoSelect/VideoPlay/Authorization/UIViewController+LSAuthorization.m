@@ -44,7 +44,9 @@
     UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         //  用户 拒绝打开相册权限
-        authBlock(PHAuthorizationStatusDenied);
+        if (authBlock) {
+            authBlock([PHPhotoLibrary authorizationStatus]);
+        }
     }];
     UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"前往" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         // 跳转到设置

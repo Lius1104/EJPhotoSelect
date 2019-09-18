@@ -18,9 +18,8 @@ typedef void(^LSSelectSourceBlock)(NSString * clickLocalIdentifier);
 
 @property (nonatomic, strong) UIImageView * coverImageView;
 
-@property (nonatomic, strong) UIImageView * livePhotoIcon;
+//@property (nonatomic, strong) UIImageView * livePhotoIcon;
 
-//@property (nonatomic, strong) UIImageView * playImage;
 @property (nonatomic, strong) UILabel * videoLabel;
 
 @property (nonatomic, strong) UIImage * normalImage;
@@ -28,6 +27,8 @@ typedef void(^LSSelectSourceBlock)(NSString * clickLocalIdentifier);
 @property (nonatomic, strong) UIImage * selectedImage;
 
 @property (nonatomic, strong) UIImageView * editImage;
+
+@property (nonatomic, assign, getter=isHideNoEditor) BOOL hideNoEditorLayer;
 
 
 @property (nonatomic, assign) BOOL sourceSelected;

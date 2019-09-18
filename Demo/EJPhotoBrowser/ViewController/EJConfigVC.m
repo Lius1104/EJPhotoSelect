@@ -72,6 +72,11 @@
     }
 }
 
+- (IBAction)handleClickSingleSelect:(UISwitch *)sender {
+    _config.singleSelect = sender.isOn;
+}
+
+
 - (IBAction)handleEditSwitchChanged:(UISwitch *)sender {
     _config.directEdit = sender.isOn;
 }

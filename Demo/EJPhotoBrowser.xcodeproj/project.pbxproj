@@ -274,6 +274,7 @@
 		53E032F822FA767600AB3B04 /* VideoPlay */ = {
 			isa = PBXGroup;
 			children = (
+				53E0331622FA767600AB3B04 /* Authorization */,
 				53E032F922FA767600AB3B04 /* Controller */,
 				53E032FC22FA767600AB3B04 /* View */,
 			);
@@ -301,7 +302,6 @@
 		53E032FF22FA767600AB3B04 /* ImagePicker */ = {
 			isa = PBXGroup;
 			children = (
-				53E0331622FA767600AB3B04 /* Authorization */,
 				53E0330122FA767600AB3B04 /* Controller */,
 				53E0330922FA767600AB3B04 /* Model */,
 				53E0330C22FA767600AB3B04 /* View */,
