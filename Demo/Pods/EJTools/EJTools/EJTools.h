@@ -25,6 +25,16 @@
 #import "EJFileResponseModel.h"
 #import "EJResponseModel.h"
 
+//#pragma mark - API Config
+//
+//#define kAppId          [API sharedApi].appId
+//#define kSecretKey      [API sharedApi].secretKey
+//
+//#define kGapTime        [API sharedApi].gapTime
+//
+//#define kApiUrl         [API sharedApi].apiUrl
+//#define kFileUrl        [API sharedApi].fileUrl
+
 
 #pragma mark - Categray
 

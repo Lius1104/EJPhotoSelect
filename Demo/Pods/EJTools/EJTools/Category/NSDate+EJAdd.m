@@ -77,7 +77,7 @@
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSDate *date = [gregorian dateFromComponents:components]; //今天 0点时间
     
-    NSInteger hour = [self hoursAfterDate:date];
+    NSInteger hour = [self ej_hoursAfterDate:date];
     NSDateFormatter *dateFormatter = nil;
     NSString *ret = @"";
     
@@ -115,7 +115,7 @@
     return ret;
 }
 
-- (NSInteger) hoursAfterDate: (NSDate *) aDate {
+- (NSInteger)ej_hoursAfterDate: (NSDate *) aDate {
     NSTimeInterval ti = [self timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_HOUR);
 }
@@ -145,7 +145,7 @@
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSDate *date = [gregorian dateFromComponents:components]; //今天 0点时间
     
-    NSInteger hour = [self hoursAfterDate:date];
+    NSInteger hour = [self ej_hoursAfterDate:date];
     NSDateFormatter *dateFormatter = nil;
     
     //hasAMPM==TURE为12小时制，否则为24小时制
@@ -180,7 +180,7 @@
             dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"yyyy-MM-dd"];
         }
     }
-    if (self.isYesterday) {
+    if (self.ej_isYesterday) {
         strDate = [@"昨天" stringByAppendingString:strDate];
     } else {
         strDate = [strDate stringByAppendingString:[dateFormatter stringFromDate:self]];
@@ -189,28 +189,28 @@
     return strDate;
 }
 
-- (NSDate *)dateByAddingDays:(NSInteger)days {
+- (NSDate *)ej_dateByAddingDays:(NSInteger)days {
     NSTimeInterval aTimeInterval = [self timeIntervalSinceReferenceDate] + 86400 * days;
     NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
     return newDate;
 }
 
-- (NSInteger)day {
+- (NSInteger)ej_day {
     return [[[NSCalendar currentCalendar] components:NSCalendarUnitDay fromDate:self] day];
 }
 
-- (NSInteger)year {
+- (NSInteger)ej_year {
     return [[[NSCalendar currentCalendar] components:NSCalendarUnitDay fromDate:self] year];
 }
 
-- (BOOL)isToday {
+- (BOOL)ej_isToday {
     if (fabs(self.timeIntervalSinceNow) >= 60 * 60 * 24) return NO;
-    return [NSDate new].day == self.day;
+    return [NSDate new].ej_day == self.ej_day;
 }
 
-- (BOOL)isYesterday {
-    NSDate *added = [self dateByAddingDays:1];
-    return [added isToday];
+- (BOOL)ej_isYesterday {
+    NSDate *added = [self ej_dateByAddingDays:1];
+    return [added ej_isToday];
 }
 
 - (BOOL)ej_isSameYearWithDate:(NSDate *)aDate {
@@ -330,11 +330,11 @@
         return @"刚刚";
     } else if (delta < 60 * 60) { // 1小时内
         return [NSString stringWithFormat:@"%d分钟前", (int)(delta / 60.0)];
-    } else if (self.isToday) {
+    } else if (self.ej_isToday) {
         return [NSString stringWithFormat:@"%d小时前", (int)(delta / 60.0 / 60.0)];
-    } else if (self.isYesterday) {
+    } else if (self.ej_isYesterday) {
         return [formatterYesterday stringFromDate:self];
-    } else if (self.year == now.year) {
+    } else if (self.ej_year == now.ej_year) {
         return [formatterSameYear stringFromDate:self];
     } else {
         return [formatterFullDate stringFromDate:self];

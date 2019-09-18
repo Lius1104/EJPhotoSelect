@@ -11,16 +11,18 @@
 
 typedef void(^SuccessBlock)(NSString * assetLocalId);
 
+typedef void(^FailureBlock)(NSError * error);
+
 @interface LSSaveToAlbum : NSObject
 
 + (LSSaveToAlbum *)mainSave;
 
 - (void)configCustomAlbumName:(NSString *)customName;
 
-- (void)saveImage:(UIImage *)image successBlock:(SuccessBlock)block;
+- (void)saveImage:(UIImage *)image successBlock:(SuccessBlock)block failureBlock:(FailureBlock)failure;
 
-- (void)saveImageWithUrl:(NSURL *)imgUrl successBlock:(SuccessBlock)block;
+- (void)saveImageWithUrl:(NSURL *)imgUrl successBlock:(SuccessBlock)block failureBlock:(FailureBlock)failure;
 
-- (void)saveVideoWithUrl:(NSURL *)videoUrl successBlock:(SuccessBlock)block;
+- (void)saveVideoWithUrl:(NSURL *)videoUrl successBlock:(SuccessBlock)block failureBlock:(FailureBlock)failure;
 
 @end

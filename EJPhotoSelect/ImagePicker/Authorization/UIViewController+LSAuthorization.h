@@ -16,4 +16,6 @@ typedef void(^PhotoLibraryUsageAuthBlock)(PHAuthorizationStatus status);
 
 - (void)judgeAppPhotoLibraryUsageAuth:(PhotoLibraryUsageAuthBlock)authBlock;
 
+- (void)deniedAuthAlertTitle:(NSString *)title authBlock:(PhotoLibraryUsageAuthBlock)authBlock;
+
 @end

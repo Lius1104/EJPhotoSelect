@@ -29,27 +29,7 @@
             }
                 break;
             case PHAuthorizationStatusDenied: {
-                UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"当前您拒绝app访问相册，如需访问请点击\"前往\"打开权限" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    //  用户 拒绝打开相册权限
-                    authBlock(PHAuthorizationStatusDenied);
-                }];
-                UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"前往" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    // 跳转到设置
-                    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                    if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                        if (@available(iOS 10.0, *)) {
-                            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
-
-                            }];
-                        } else {
-                            [[UIApplication sharedApplication] openURL:url];
-                        }
-                    }
-                }];
-                [alertC addAction:doneAction];
-                [alertC addAction:cancelAction];
-                [self presentViewController:alertC animated:YES completion:nil];
+                [self deniedAuthAlertTitle:@"当前您拒绝app访问相册，如需访问请点击\"前往\"打开权限" authBlock:authBlock];
             }
                 break;
             case PHAuthorizationStatusAuthorized: {
@@ -58,6 +38,30 @@
                 break;
         }
     }];
+}
+
+- (void)deniedAuthAlertTitle:(NSString *)title authBlock:(PhotoLibraryUsageAuthBlock)authBlock {
+    UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        //  用户 拒绝打开相册权限
+        authBlock(PHAuthorizationStatusDenied);
+    }];
+    UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"前往" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        // 跳转到设置
+        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            if (@available(iOS 10.0, *)) {
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                    
+                }];
+            } else {
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        }
+    }];
+    [alertC addAction:doneAction];
+    [alertC addAction:cancelAction];
+    [self presentViewController:alertC animated:YES completion:nil];
 }
 
 @end

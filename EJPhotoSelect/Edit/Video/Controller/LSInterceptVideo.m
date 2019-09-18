@@ -8,7 +8,6 @@
 
 #import "LSInterceptVideo.h"
 #import "LSInterceptView.h"
-#import "LSSaveToAlbum.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <YYKit/YYKit.h>
 #import <Masonry/Masonry.h>

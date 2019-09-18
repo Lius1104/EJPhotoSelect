@@ -540,7 +540,6 @@
         } else {
             cell.livePhotoIcon.image = nil;
         }
-        NSLog(@"%@", link.asset.localIdentifier);
         if ([self.editSource containsObject:link.asset.localIdentifier]) {
             cell.editImage.hidden = NO;
             if (cell.videoLabel.isHidden == NO) {
@@ -743,23 +742,23 @@
         if (obj.asset.mediaType == PHAssetMediaTypeImage) {
             [[LSSaveToAlbum mainSave] saveImageWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
                 [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-                if ([assetLocalId length] > 0) {
-                    PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-                    [resultSource addObject:asset];
-                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
-                } else {
-                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+                PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
+                [resultSource addObject:asset];
+                [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+            } failureBlock:^(NSError *error) {
+                if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                    [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
                 }
             }];
         } else if (obj.asset.mediaType == PHAssetMediaTypeVideo) {
-            [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL URLWithString:filePath] successBlock:^(NSString *assetLocalId) {
+            [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
                 [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-                if ([assetLocalId length] > 0) {
-                    PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-                    [resultSource addObject:asset];
-                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
-                } else {
-                    [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+                PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
+                [resultSource addObject:asset];
+                [self saveAllSourceAtIndex:(index + 1) resultSource:resultSource];
+            } failureBlock:^(NSError *error) {
+                if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                    [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
                 }
             }];
         } else {
@@ -775,22 +774,6 @@
     // 选择完毕 返回
     NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
     [self saveAllSourceAtIndex:0 resultSource:resultSource];
-//    for (EJAssetLinkLocal * obj in self.selectedSource) {
-//        if ([obj.localPath length] > 0) {
-//            NSString * filePath = [[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:obj.localPath];
-//            if (obj.asset.mediaType == PHAssetMediaTypeImage) {
-//                [[LSSaveToAlbum mainSave] saveImageWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
-//                    //
-//                }];
-//            } else if (obj.asset.mediaType == PHAssetMediaTypeVideo) {
-//                [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL URLWithString:filePath] successBlock:^(NSString *assetLocalId) {
-//                    //
-//                }];
-//            }
-//        }
-//    }
-    
-    
 }
 
 #pragma mark - EJImagePickerShotCellDelegate
@@ -861,14 +844,16 @@
     }
     if (isCrop) {
         [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-            if ([assetLocalId length] > 0) {
-                PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-                [self.selectedSource removeAllObjects];
-                EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
-                link.asset = asset;
-                [self.selectedSource addObject:link];
-                NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
-                [self saveAllSourceAtIndex:0 resultSource:resultSource];
+            PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
+            [self.selectedSource removeAllObjects];
+            EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
+            link.asset = asset;
+            [self.selectedSource addObject:link];
+            NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
+            [self saveAllSourceAtIndex:0 resultSource:resultSource];
+        } failureBlock:^(NSError *error) {
+            if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [EJProgressHUD showAlert:@"保存失败！" forView:self.view];

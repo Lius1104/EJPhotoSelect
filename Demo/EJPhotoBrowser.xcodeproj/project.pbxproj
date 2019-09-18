@@ -357,9 +357,9 @@
 			isa = PBXGroup;
 			children = (
 				53E0331722FA767600AB3B04 /* NSObject+LSAuthorization.h */,
-				53E0331822FA767600AB3B04 /* UIViewController+LSAuthorization.m */,
 				53E0331922FA767600AB3B04 /* NSObject+LSAuthorization.m */,
 				53E0331A22FA767600AB3B04 /* UIViewController+LSAuthorization.h */,
+				53E0331822FA767600AB3B04 /* UIViewController+LSAuthorization.m */,
 			);
 			path = Authorization;
 			sourceTree = "<group>";

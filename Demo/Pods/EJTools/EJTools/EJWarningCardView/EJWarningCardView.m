@@ -24,7 +24,7 @@
     return self;
 }
 
-- (void)setType:(WarningCardCellType)type Img:(UIImage *)image cellSize:(CGSize)size contentLeft:(CGFloat)contentLeft {
+- (void)setType:(WarningCardCellType)type Img:(UIImage *)image cellSize:(CGSize)size contentLeft:(CGFloat)contentLeft contentRight:(CGFloat)contentRight selectedImageSpace:(CGFloat)selectedImageSpace {
     _type = type;
     switch (type) {
         case WarningCardCellTypeOnlyTitle: {
@@ -40,8 +40,8 @@
             _img.frame = imgRect;
 
             CGRect titleRect = _titleLab.frame;
-            titleRect.origin.x = CGRectGetMaxX(_img.frame) + 8;
-            titleRect.size.width = size.width - CGRectGetHeight(_img.frame) - 24;
+            titleRect.origin.x = CGRectGetMaxX(imgRect) + selectedImageSpace;
+            titleRect.size.width = size.width - titleRect.origin.x - contentRight;
             titleRect.size.height = size.height;
             _titleLab.frame = titleRect;
         }
@@ -51,13 +51,13 @@
             [self addSubview:_img];
 
             CGRect imgRect = _img.frame;
-            imgRect.origin.x = size.width - contentLeft;
+            imgRect.origin.x = size.width - contentRight - CGRectGetWidth(imgRect);
             imgRect.origin.y = (size.height - imgRect.size.height) / 2.f;
             _img.frame = imgRect;
             
             CGRect titleRect = _titleLab.frame;
             titleRect.origin.x = contentLeft;
-            titleRect.size.width = CGRectGetMinX(_img.frame) - 8 - CGRectGetMinX(titleRect);
+            titleRect.size.width = CGRectGetMinX(imgRect) - selectedImageSpace - CGRectGetMinX(titleRect);
             titleRect.size.height = size.height;
             _titleLab.frame = titleRect;
         }
@@ -79,8 +79,6 @@
 
 @property (nonatomic, strong) NSArray *imageArray;
 
-@property (nonatomic, assign) CGFloat cellHeight;
-
 @property (nonatomic, assign) CGPoint point;
 
 @property (nonatomic, assign) CGSize size;
@@ -101,6 +99,8 @@
         
         _autoHidden = YES;
         _contentLeft = 16;
+        _contentRight = 16;
+        _selectedImageSpace = 8;
         
         _titleArray = [titleArray mutableCopy];
         _imageArray = [imageArray mutableCopy];
@@ -133,6 +133,8 @@
         
         _autoHidden = YES;
         _contentLeft = 16;
+        _contentRight = 16;
+        _selectedImageSpace = 8;
         
         _titleArray = [titleArray mutableCopy];
         _imageArray = [imageArray mutableCopy];
@@ -278,7 +280,16 @@
 }
 
 - (void)setContentLeft:(CGFloat)contentLeft {
+    if (_contentLeft == _contentRight) {
+        _contentRight = contentLeft;
+    }
     _contentLeft = contentLeft;
+    
+    [_tableView reloadData];
+}
+
+- (void)setSelectedImageSpace:(CGFloat)selectedImageSpace {
+    _selectedImageSpace = selectedImageSpace;
     [_tableView reloadData];
 }
 
@@ -351,8 +362,8 @@
         cell = [[EJWarningCardCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EJIgnoreCardCell"];
         cell.selectionStyle = _selectionStyle;
         cell.backgroundColor = [UIColor clearColor];
+        [cell setType:_type Img:_selectedImg cellSize:CGSizeMake(CGRectGetWidth(tableView.frame), _cellHeight) contentLeft:_contentLeft contentRight:_contentRight selectedImageSpace:_selectedImageSpace];
     }
-    [cell setType:_type Img:_selectedImg cellSize:CGSizeMake(CGRectGetWidth(tableView.frame), _cellHeight) contentLeft:_contentLeft];
     
     if (_separatorStyle == UITableViewCellSeparatorStyleNone) {
         cell.bottomLine.hidden = YES;
@@ -366,11 +377,10 @@
     }
     
     
+    cell.img.hidden = YES;
     if (_selectedImg) {
         if (_selectedIndex == indexPath.row) {
             cell.img.hidden = NO;
-        } else {
-            cell.img.hidden = YES;
         }
     }
     

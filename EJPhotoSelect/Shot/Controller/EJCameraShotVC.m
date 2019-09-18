@@ -381,16 +381,18 @@
         UIImage *image = [self flipImage:[UIImage imageWithData:imageData]];
         UIImage *resultImg = [image fixOrientation];
         [[LSSaveToAlbum mainSave] saveImage:resultImg successBlock:^(NSString *assetLocalId) {
-            if ([assetLocalId length] > 0) {
-                [self.assetIds addObject:assetLocalId];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self.maxCount == 1) {
-                        [self ej_cameraShotViewDidClickPreviews];
-                    } else {
-                        _shotView.img = resultImg;
-                        _shotView.previewCount = self.assetIds.count;
-                    }
-                });
+            [self.assetIds addObject:assetLocalId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.maxCount == 1) {
+                    [self ej_cameraShotViewDidClickPreviews];
+                } else {
+                    _shotView.img = resultImg;
+                    _shotView.previewCount = self.assetIds.count;
+                }
+            });
+        } failureBlock:^(NSError *error) {
+            if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [EJProgressHUD showAlert:@"保存到系统相册失败" forView:self.view];
@@ -566,24 +568,26 @@
 
         _hud = [EJProgressHUD ej_showHUDAddToView:self.view animated:YES];
         [[LSSaveToAlbum mainSave] saveVideoWithUrl:_outPutURL successBlock:^(NSString *assetLocalId) {
-            if ([assetLocalId length] > 0) {
-                [self.assetIds addObject:assetLocalId];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_hud hideAnimated:YES];
-                    if ((_allowBoth == NO && _videoShotCount == 1) || (_allowBoth && self.maxCount == 1)) {
-                        [self ej_cameraShotViewDidClickDone];
-                    } else {
-                        self.shotView.img = coverImage;
-                        self.shotView.previewCount = self.assetIds.count;
-                        if ([[NSFileManager defaultManager] fileExistsAtPath:_localFilePath]) {
-                            NSError * fileError = nil;
-                            [[NSFileManager defaultManager] removeItemAtPath:_localFilePath error:&fileError];
-                            if (fileError) {
-                                NSLog(@"%@", fileError);
-                            }
+            [self.assetIds addObject:assetLocalId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_hud hideAnimated:YES];
+                if ((_allowBoth == NO && _videoShotCount == 1) || (_allowBoth && self.maxCount == 1)) {
+                    [self ej_cameraShotViewDidClickDone];
+                } else {
+                    self.shotView.img = coverImage;
+                    self.shotView.previewCount = self.assetIds.count;
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:_localFilePath]) {
+                        NSError * fileError = nil;
+                        [[NSFileManager defaultManager] removeItemAtPath:_localFilePath error:&fileError];
+                        if (fileError) {
+                            NSLog(@"%@", fileError);
                         }
                     }
-                });
+                }
+            });
+        } failureBlock:^(NSError *error) {
+            if (error.domain == NSCocoaErrorDomain && error.code == 2047) {
+                [self deniedAuthAlertTitle:@"您拒绝app访问相册导致操作失败，如需访问请点击\"前往\"打开权限" authBlock:nil];
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [EJProgressHUD showAlert:@"保存到系统相册失败" forView:self.view];
