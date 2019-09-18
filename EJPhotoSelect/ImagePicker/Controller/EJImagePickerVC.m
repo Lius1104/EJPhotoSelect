@@ -108,9 +108,6 @@
         
         _sortOrder = increaseOrder ? LSSortOrderAscending : LSSortOrderDescending;
         
-//        [self configSelectSource:selectedSource];
-//        _selectedSource = selectedSource;
-        
         for (PHAsset * asset in selectedSource) {
             EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
             link.asset = asset;
@@ -543,8 +540,12 @@
         } else {
             cell.livePhotoIcon.image = nil;
         }
+        NSLog(@"%@", link.asset.localIdentifier);
         if ([self.editSource containsObject:link.asset.localIdentifier]) {
             cell.editImage.hidden = NO;
+            if (cell.videoLabel.isHidden == NO) {
+                cell.videoLabel.hidden = YES;
+            }
         } else {
             cell.editImage.hidden = YES;
         }
@@ -896,12 +897,11 @@
         [self saveAllSourceAtIndex:0 resultSource:resultSource];
     } else {
         BOOL isContains = NO;
-        NSString * localId = [[localPath componentsSeparatedByString:@"."] firstObject];
+        NSString * localId = [[[localPath componentsSeparatedByString:@"."] firstObject] stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
         for (EJAssetLinkLocal * item in self.selectedSource) {
             if ([item.asset.localIdentifier isEqualToString:localId]) {
                 item.localPath = localPath;
-                NSString * assetId = [item.asset.localIdentifier stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
-                [self.editSource addObject:assetId];
+                [self.editSource addObject:item.asset.localIdentifier];
                 isContains = YES;
             }
         }
@@ -909,10 +909,10 @@
             EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
             link.asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[localId] options:nil] lastObject];
             link.localPath = localPath;
-            NSString * assetId = [link.asset.localIdentifier stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
-            [self.editSource addObject:assetId];
+            [self.editSource addObject:link.asset.localIdentifier];
             [self.selectedSource addObject:link];
         }
+        [_toolBar configSourceCount:self.selectedSource.count];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.collectionView reloadData];
         });
@@ -1064,8 +1064,7 @@
             [self.selectedSource addObject:currentLink];
         }
     }
-    NSString * assetId = [currentLink.asset.localIdentifier stringByReplacingOccurrencesOfString:@"*" withString:@"/"];
-    [self.editSource addObject:assetId];
+    [self.editSource addObject:currentLink.asset.localIdentifier];
     EJPhoto * currPhoto = [EJPhoto photoWithAssetLink:currentLink];
     [self.browserSource replaceObjectAtIndex:index withObject:currPhoto];
     [photoBrowser reloadData];
@@ -1142,9 +1141,6 @@
 - (LSAssetCollectionToolBar *)toolBar {
     if (!_toolBar) {
         BOOL isShowOriginal = NO;
-//        if (_assetType == LSAssetTypeVideos) {
-//            isShowOriginal = NO;
-//        }
         _toolBar = [LSAssetCollectionToolBar ls_assetCollectionToolBarWithShowCount:YES showOriginal:isShowOriginal maxCount:_maxSelectedCount showPercentage:YES];
         _toolBar.delegate = self;
         [self.view addSubview:_toolBar];
