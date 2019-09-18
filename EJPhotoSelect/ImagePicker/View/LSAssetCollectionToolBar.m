@@ -39,6 +39,7 @@
         _isShowOriginal = YES;
         _showPercentage = NO;
         _maxCount = 0;
+        _currentCount = 0;
         [self setupSubviews];
     }
     return self;
@@ -52,6 +53,7 @@
         _isShowOriginal = isShowOriginal;
         _isShowCount = isShowCount;
         _maxCount = maxCount;
+        _currentCount = 0;
         if (_maxCount == NSUIntegerMax) {
             _showPercentage = NO;
         } else {
@@ -140,6 +142,7 @@
 }
 
 - (void)configSourceCount:(NSUInteger)count {
+    _currentCount = count;
     if (_isShowCount) {
         NSMutableAttributedString * attStr = [[NSMutableAttributedString alloc] initWithString:@"确定" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor whiteColor]}];
         if (count == 0) {

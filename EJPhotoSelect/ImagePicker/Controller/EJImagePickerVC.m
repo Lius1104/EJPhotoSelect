@@ -87,8 +87,6 @@
 
 @implementation EJImagePickerVC
 
-#define kSelectedSource [self mutableArrayValueForKeyPath:@"selectedSource"]
-
 - (instancetype)initWithSourceType:(E_SourceType)sourceType MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray<PHAsset *> *)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop {
     EJImagePickerVC * vc = [[EJImagePickerVC alloc] initWithSourceType:sourceType singleSelect:NO MaxCount:maxCount SelectedSource:selectedSource increaseOrder:increaseOrder showShot:showShot allowCrop:allowCrop];
     
@@ -102,6 +100,7 @@
         _cropScale = 0;
         self.sourceType = sourceType;
         self.singleSelect = singleSelect;
+        self.selectedType = E_SourceType_All;
         self.showShot = showShot;
         self.allowCrop = allowCrop;
         self.maxSelectedCount = maxCount;
@@ -128,7 +127,7 @@
         for (PHAsset * asset in selectedSource) {
             EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
             link.asset = asset;
-            [kSelectedSource addObject:link];
+            [self.selectedSource addObject:link];
         }
     }
     return self;
@@ -140,10 +139,6 @@
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
     if (status == PHAuthorizationStatusAuthorized) {
         [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
-    }
-    
-    if (_selectedSource != nil) {
-        [self removeObserver:self forKeyPath:@"selectedSource"];
     }
 }
 
@@ -194,7 +189,7 @@
             }
         }];
         _toolBar.hidden = NO;
-        [_toolBar configSourceCount:self.selectedSource.count];
+        [self configSourceCount];
     } else {
         self.toolBar.hidden = YES;
     }
@@ -281,7 +276,13 @@
 
 - (void)reloadCollectionData {
     if (self.viewAppear) {
-        [self.collectionView reloadData];
+        if ([NSThread isMainThread]) {
+            [self.collectionView reloadData];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
+        }
     } else {
         _needReload = YES;
     }
@@ -435,11 +436,11 @@
 //}
 
 //- (void)addSource:(PHAsset *)asset {
-//    [kSelectedSource addObject:asset];
+//    [self.selectedSource addObject:asset];
 //}
 
 //- (void)removeSource:(PHAsset *)asset {
-//    [kSelectedSource removeObject:asset];
+//    [self.selectedSource removeObject:asset];
 //}
 
 - (void)setCropScale:(CGFloat)cropScale {
@@ -484,6 +485,30 @@
     [self.navigationController pushViewController:brower animated:YES];
 }
 
+- (void)configSourceCount {
+    NSUInteger count = self.selectedSource.count;
+    NSUInteger oldCount = self.toolBar.currentCount;
+    [self.toolBar configSourceCount:count];
+    
+    if (oldCount >= 1) {// 减
+        if (count == 0) {
+            _selectedType = E_SourceType_All;
+            [self reloadCollectionData];
+        }
+    } else {//old count = 0 加
+        if (count == 1) {
+            _selectedType = [self.selectedSource firstObject].asset.mediaType == PHAssetMediaTypeImage ? E_SourceType_Image : E_SourceType_Video;
+            [self reloadCollectionData];
+        } else if (count == 0) {
+            _selectedType = E_SourceType_All;
+        } else {// new count > 1
+            _selectedType = E_SourceType_All;
+            _singleSelect = NO;
+            [self reloadCollectionData];
+        }
+    }
+}
+
 #pragma mark - action
 - (void)handleClickLeftItem {
     [[NSFileManager defaultManager] removeItemAtPath:[EJAssetLinkLocal rootPath] error:nil];
@@ -516,46 +541,17 @@
             UICollectionView * collection = self.collectionView;
             if (collection) {
                 if (_showShot && _sortOrder == LSSortOrderDescending) {
-                    [self.collectionView reloadData];
+                    [self reloadCollectionData];
                 } else {
-                    [self.collectionView reloadData];
+                    [self reloadCollectionData];
                 }
             } else {
             }
         } else {
-            [self.collectionView reloadData];
+            [self reloadCollectionData];
         }
         [self resetCachedAssets];
     });
-}
-
-#pragma mark - KVO
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"selectedSource"]) {
-        NSMutableArray * newSource = change[NSKeyValueChangeNewKey];
-        NSMutableArray * oldSource = change[NSKeyValueChangeOldKey];
-        if (oldSource.count >= 1) {// 减
-            if (newSource.count == 0) {
-                _selectedType = E_SourceType_All;
-                [self reloadCollectionData];
-            }
-        } else {//old count = 0 加
-            if (newSource.count == 1) {
-                _selectedType = [self.selectedSource firstObject].asset.mediaType == PHAssetMediaTypeImage ? E_SourceType_Image : E_SourceType_Video;
-            } else if (newSource.count == 0) {
-                _selectedType = E_SourceType_All;
-            } else {// new count > 1
-                _selectedType = E_SourceType_All;
-                _singleSelect = NO;
-            }
-            [self reloadCollectionData];
-        }
-//        if (newSource.count == 0 && oldSource.count >= 1) {
-//            _selectedType = E_SourceType_All;
-//        } else if (newSource.count == 1 && oldSource.count == 0) {
-//
-//        }
-    }
 }
 
 #pragma mark - UICollectionViewDelegate, UICollectionViewDataSource
@@ -672,8 +668,8 @@
                         return ;
                     }
                     cell.sourceSelected = YES;
-                    [kSelectedSource addObject:link];
-                    [self.toolBar configSourceCount:self.selectedSource.count];
+                    [self.selectedSource addObject:link];
+                    [self configSourceCount];
                 } else {
                     __block BOOL containSource = NO;
                     [self.selectedSource enumerateObjectsUsingBlock:^(EJAssetLinkLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -685,8 +681,8 @@
                     }];
                     if (containSource) {
                         // 从 数组中移除
-                        [kSelectedSource removeObject:link];
-                        [self.toolBar configSourceCount:self.selectedSource.count];
+                        [self.selectedSource removeObject:link];
+                        [self configSourceCount];
                     } else {
                         // 判断 最大 数量
                         if (self.maxSelectedCount == 0 || [self.selectedSource count] < self.maxSelectedCount) {
@@ -718,8 +714,8 @@
                             }
                             cell.sourceSelected = YES;
                             // 添加 到 数组
-                            [kSelectedSource addObject:link];
-                            [self.toolBar configSourceCount:self.selectedSource.count];
+                            [self.selectedSource addObject:link];
+                            [self configSourceCount];
                         } else {
                             NSLog(@"已经最大");
                             NSString * string;
@@ -755,8 +751,8 @@
         currentIndex -= 1;
     }
     if (_maxSelectedCount == 1 && _allowCrop) {
-        [kSelectedSource removeAllObjects];
-        [kSelectedSource addObject:[self.assetSource objectAtIndex:currentIndex]];
+        [self.selectedSource removeAllObjects];
+        [self.selectedSource addObject:[self.assetSource objectAtIndex:currentIndex]];
         if (_directEdit) {
             [self jumpToCrop];
             return;
@@ -888,17 +884,15 @@
         if ([self.selectedSource count] < 9) {
             EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
             link.asset = obj;
-            [kSelectedSource addObject:link];
+            [self.selectedSource addObject:link];
         }
     }];
-    [self.toolBar configSourceCount:self.selectedSource.count];
+    [self configSourceCount];
     [self getAllAssets];
     if (_browserAfterShot) {
         [self jumpToBrowser:0];
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView reloadData];
-        });
+        [self reloadCollectionData];
     }
 }
 
@@ -922,10 +916,10 @@
     if (isCrop) {
         [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
             PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-            [kSelectedSource removeAllObjects];
+            [self.selectedSource removeAllObjects];
             EJAssetLinkLocal * link = [[EJAssetLinkLocal alloc] init];
             link.asset = asset;
-            [kSelectedSource addObject:link];
+            [self.selectedSource addObject:link];
             NSMutableArray * resultSource = [NSMutableArray arrayWithCapacity:1];
             [self saveAllSourceAtIndex:0 resultSource:resultSource];
         } failureBlock:^(NSError *error) {
@@ -972,12 +966,10 @@
             link.asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[localId] options:nil] lastObject];
             link.localPath = localPath;
             [self.editSource addObject:link.asset.localIdentifier];
-            [kSelectedSource addObject:link];
+            [self.selectedSource addObject:link];
         }
-        [_toolBar configSourceCount:self.selectedSource.count];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView reloadData];
-        });
+        [self configSourceCount];
+        [self reloadCollectionData];
     }
 }
 
@@ -1036,14 +1028,14 @@
     if (selected) {
         for (EJAssetLinkLocal * obj in self.assetSource) {
             if ([obj.asset.localIdentifier isEqualToString:localId]) {
-                [kSelectedSource addObject:obj];
+                [self.selectedSource addObject:obj];
                 break;
             }
         }
     } else {
         for (EJAssetLinkLocal * obj in self.selectedSource.reverseObjectEnumerator) {
             if ([obj.asset.localIdentifier isEqualToString:localId]) {
-                [kSelectedSource removeObject:obj];
+                [self.selectedSource removeObject:obj];
                 break;
             }
         }
@@ -1062,14 +1054,14 @@
 }
 
 - (void)photoBrowserDidFinish:(EJPhotoBrowser *)photoBrowser {
-    [self.collectionView reloadData];
-    [_toolBar configSourceCount:self.selectedSource.count];
+    [self reloadCollectionData];
+    [self configSourceCount];
     [self ls_assetCollectionToolBarDidClickDoneButton];
 }
 
 - (void)photoBrowserDidCancel:(EJPhotoBrowser *)photoBrowser {
-    [self.collectionView reloadData];
-    [_toolBar configSourceCount:self.selectedSource.count];
+    [self reloadCollectionData];
+    [self configSourceCount];
 }
 
 - (NSUInteger)photoBrowserSelectedPhotoCount:(EJPhotoBrowser *)photoBrowser {
@@ -1121,7 +1113,7 @@
         
         if (currentLink) {
             currentLink.localPath = localPath;
-            [kSelectedSource addObject:currentLink];
+            [self.selectedSource addObject:currentLink];
         }
     }
     [self.editSource addObject:currentLink.asset.localIdentifier];
@@ -1171,9 +1163,7 @@
     if ([self.editSource containsObject:localPath]) {
         [self.editSource removeObject:localPath];
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.collectionView reloadData];
-    });
+    [self reloadCollectionData];
     [photoBrowser reloadData];
 }
 
@@ -1241,8 +1231,6 @@
 - (NSMutableArray<EJAssetLinkLocal *> *)selectedSource {
     if (!_selectedSource) {
         _selectedSource = [NSMutableArray arrayWithCapacity:1];
-        
-        [self addObserver:self forKeyPath:@"selectedSource" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     }
     return _selectedSource;
 }

@@ -22,6 +22,8 @@
 
 @property (nonatomic, weak) id <LSAssetCollectionToolBarDelegate> delegate;
 
+@property (nonatomic, assign, readonly) NSUInteger currentCount;
+
 
 - (instancetype)initWithShowCount:(BOOL)isShowCount isShowOriginal:(BOOL)isShowOriginal maxCount:(NSUInteger)maxCount showPercentage:(BOOL)showPercentage;
 
