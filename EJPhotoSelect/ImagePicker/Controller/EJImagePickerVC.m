@@ -490,21 +490,23 @@
     NSUInteger oldCount = self.toolBar.currentCount;
     [self.toolBar configSourceCount:count];
     
-    if (oldCount >= 1) {// 减
-        if (count == 0) {
-            _selectedType = E_SourceType_All;
-            [self reloadCollectionData];
-        }
-    } else {//old count = 0 加
-        if (count == 1) {
-            _selectedType = [self.selectedSource firstObject].asset.mediaType == PHAssetMediaTypeImage ? E_SourceType_Image : E_SourceType_Video;
-            [self reloadCollectionData];
-        } else if (count == 0) {
-            _selectedType = E_SourceType_All;
-        } else {// new count > 1
-            _selectedType = E_SourceType_All;
-            _singleSelect = NO;
-            [self reloadCollectionData];
+    if (_sourceType == E_SourceType_All && _singleSelect == YES) {
+        if (oldCount >= 1) {// 减
+            if (count == 0) {
+                _selectedType = E_SourceType_All;
+                [self reloadCollectionData];
+            }
+        } else {//old count = 0 加
+            if (count == 1) {
+                _selectedType = [self.selectedSource firstObject].asset.mediaType == PHAssetMediaTypeImage ? E_SourceType_Image : E_SourceType_Video;
+                [self reloadCollectionData];
+            } else if (count == 0) {
+                _selectedType = E_SourceType_All;
+            } else {// new count > 1
+                _selectedType = E_SourceType_All;
+                _singleSelect = NO;
+                [self reloadCollectionData];
+            }
         }
     }
 }
@@ -600,15 +602,6 @@
         } else {
             cell.videoLabel.hidden = YES;
         }
-//        if (@available(iOS 9.1, *)) {
-//            if (link.asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
-//                cell.livePhotoIcon.image = [PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent];
-//            } else {
-//                cell.livePhotoIcon.image = nil;
-//            }
-//        } else {
-//            cell.livePhotoIcon.image = nil;
-//        }
         if ([self.editSource containsObject:link.asset.localIdentifier]) {
             cell.editImage.hidden = NO;
             if (cell.videoLabel.isHidden == NO) {
@@ -628,119 +621,132 @@
                 }
             }];
         }
-//        if (_maxSelectedCount > 0) {
-            cell.sourceSelected = NO;
-            [self.selectedSource enumerateObjectsUsingBlock:^(EJAssetLinkLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([obj.asset.localIdentifier isEqualToString:link.asset.localIdentifier]) {
-                    cell.sourceSelected = YES;
-                    * stop = YES;
-                }
-            }];
-            
-            @weakify(cell);
-            [cell setUpSelectSourceBlock:^(NSString *clickLocalIdentifier) {
-                @strongify(cell);
-                if ([self.selectedSource count] == 0) {
-                    if (link.asset.mediaType == PHAssetMediaTypeVideo && link.asset.duration > _maxVideoDuration) {
-                        NSString * secondString;
-                        if (_maxVideoDuration < 60) {
-                            secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
-                        } else {
-                            secondString = [NSString stringWithFormat:@"%d分%d秒", (int )_maxVideoDuration / 60, (int)_maxVideoDuration % 60];
-                        }
-                        UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"仅支持%@以内的视频，是否前往裁剪？", secondString] preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-                        if ([EJPhotoConfig sharedPhotoConfig].alertCancelColor) {
-                            [cancelAction setValue:[EJPhotoConfig sharedPhotoConfig].alertCancelColor forKey:@"titleTextColor"];
-                        }
-                        UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                            // 跳转到裁剪页面
-                            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:link.asset defaultDuration:_maxVideoDuration];
-                            vc.delegate = self;
-                            [self ej_presentViewController:vc animated:YES completion:nil];
-                        }];
-                        if ([EJPhotoConfig sharedPhotoConfig].alertDefaultColor) {
-                            [doneAction setValue:[EJPhotoConfig sharedPhotoConfig].alertDefaultColor forKey:@"titleTextColor"];
-                        }
-                        [alertC addAction:cancelAction];
-                        [alertC addAction:doneAction];
-                        [self presentViewController:alertC animated:YES completion:nil];
-                        return ;
+        cell.sourceSelected = NO;
+        [self.selectedSource enumerateObjectsUsingBlock:^(EJAssetLinkLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.asset.localIdentifier isEqualToString:link.asset.localIdentifier]) {
+                cell.sourceSelected = YES;
+                * stop = YES;
+            }
+        }];
+        
+        @weakify(cell);
+        [cell setUpSelectSourceBlock:^(NSString *clickLocalIdentifier) {
+            @strongify(cell);
+            if ([self.selectedSource count] == 0) {
+                if (link.asset.mediaType == PHAssetMediaTypeVideo && link.asset.duration > _maxVideoDuration) {
+                    NSString * secondString;
+                    if (_maxVideoDuration < 60) {
+                        secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
+                    } else {
+                        secondString = [NSString stringWithFormat:@"%d分%d秒", (int )_maxVideoDuration / 60, (int)_maxVideoDuration % 60];
                     }
-                    cell.sourceSelected = YES;
-                    [self.selectedSource addObject:link];
+                    UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"仅支持%@以内的视频，是否前往裁剪？", secondString] preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+                    if ([EJPhotoConfig sharedPhotoConfig].alertCancelColor) {
+                        [cancelAction setValue:[EJPhotoConfig sharedPhotoConfig].alertCancelColor forKey:@"titleTextColor"];
+                    }
+                    UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        // 跳转到裁剪页面
+                        LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:link.asset defaultDuration:_maxVideoDuration];
+                        vc.delegate = self;
+                        [self ej_presentViewController:vc animated:YES completion:nil];
+                    }];
+                    if ([EJPhotoConfig sharedPhotoConfig].alertDefaultColor) {
+                        [doneAction setValue:[EJPhotoConfig sharedPhotoConfig].alertDefaultColor forKey:@"titleTextColor"];
+                    }
+                    [alertC addAction:cancelAction];
+                    [alertC addAction:doneAction];
+                    [self presentViewController:alertC animated:YES completion:nil];
+                    return ;
+                }
+                cell.sourceSelected = YES;
+                [self.selectedSource addObject:link];
+                [self configSourceCount];
+            } else {
+                __block BOOL containSource = NO;
+                [self.selectedSource enumerateObjectsUsingBlock:^(EJAssetLinkLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj.asset.localIdentifier isEqualToString:clickLocalIdentifier]) {
+                        cell.sourceSelected = NO;
+                        containSource = YES;
+                        *stop = YES;
+                    }
+                }];
+                if (containSource) {
+                    // 从 数组中移除
+                    [self.selectedSource removeObject:link];
                     [self configSourceCount];
                 } else {
-                    __block BOOL containSource = NO;
-                    [self.selectedSource enumerateObjectsUsingBlock:^(EJAssetLinkLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        if ([obj.asset.localIdentifier isEqualToString:clickLocalIdentifier]) {
-                            cell.sourceSelected = NO;
-                            containSource = YES;
-                            *stop = YES;
+                    // 判断 最大 数量
+                    if (self.maxSelectedCount == 0 || [self.selectedSource count] < self.maxSelectedCount) {
+                        if (link.asset.mediaType == PHAssetMediaTypeVideo && link.asset.duration > _maxVideoDuration) {
+                            NSString * secondString;
+                            if (_maxVideoDuration < 60) {
+                                secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
+                            } else {
+                                secondString = [NSString stringWithFormat:@"%d分%d秒", (int )_maxVideoDuration / 60, (int)_maxVideoDuration % 60];
+                            }
+                            UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"仅支持%@以内的视频，是否前往裁剪？", secondString] preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+                            if ([EJPhotoConfig sharedPhotoConfig].alertCancelColor) {
+                                [cancelAction setValue:[EJPhotoConfig sharedPhotoConfig].alertCancelColor forKey:@"titleTextColor"];
+                            }
+                            UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                                // 跳转到裁剪页面
+                                LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:link.asset defaultDuration:_maxVideoDuration];
+                                vc.delegate = self;
+                                [self ej_presentViewController:vc animated:YES completion:nil];
+                            }];
+                            if ([EJPhotoConfig sharedPhotoConfig].alertDefaultColor) {
+                                [doneAction setValue:[EJPhotoConfig sharedPhotoConfig].alertDefaultColor forKey:@"titleTextColor"];
+                            }
+                            [alertC addAction:cancelAction];
+                            [alertC addAction:doneAction];
+                            [self presentViewController:alertC animated:YES completion:nil];
+                            return ;
                         }
-                    }];
-                    if (containSource) {
-                        // 从 数组中移除
-                        [self.selectedSource removeObject:link];
+                        cell.sourceSelected = YES;
+                        // 添加 到 数组
+                        [self.selectedSource addObject:link];
                         [self configSourceCount];
                     } else {
-                        // 判断 最大 数量
-                        if (self.maxSelectedCount == 0 || [self.selectedSource count] < self.maxSelectedCount) {
-                            if (link.asset.mediaType == PHAssetMediaTypeVideo && link.asset.duration > _maxVideoDuration) {
-                                NSString * secondString;
-                                if (_maxVideoDuration < 60) {
-                                    secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
-                                } else {
-                                    secondString = [NSString stringWithFormat:@"%d分%d秒", (int )_maxVideoDuration / 60, (int)_maxVideoDuration % 60];
-                                }
-                                UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"仅支持%@以内的视频，是否前往裁剪？", secondString] preferredStyle:UIAlertControllerStyleAlert];
-                                UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-                                if ([EJPhotoConfig sharedPhotoConfig].alertCancelColor) {
-                                    [cancelAction setValue:[EJPhotoConfig sharedPhotoConfig].alertCancelColor forKey:@"titleTextColor"];
-                                }
-                                UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                                    // 跳转到裁剪页面
-                                    LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:link.asset defaultDuration:_maxVideoDuration];
-                                    vc.delegate = self;
-                                    [self ej_presentViewController:vc animated:YES completion:nil];
-                                }];
-                                if ([EJPhotoConfig sharedPhotoConfig].alertDefaultColor) {
-                                    [doneAction setValue:[EJPhotoConfig sharedPhotoConfig].alertDefaultColor forKey:@"titleTextColor"];
-                                }
-                                [alertC addAction:cancelAction];
-                                [alertC addAction:doneAction];
-                                [self presentViewController:alertC animated:YES completion:nil];
-                                return ;
+                        NSLog(@"已经最大");
+                        NSString * string;
+                        switch (_sourceType) {
+                            case E_SourceType_Image: {
+                                string = [NSString stringWithFormat:@"最多选取%d张照片", (int)self.maxSelectedCount];
                             }
-                            cell.sourceSelected = YES;
-                            // 添加 到 数组
-                            [self.selectedSource addObject:link];
-                            [self configSourceCount];
-                        } else {
-                            NSLog(@"已经最大");
-                            NSString * string;
-                            switch (_sourceType) {
-                                case E_SourceType_Image: {
-                                    string = [NSString stringWithFormat:@"最多选取%d张照片", (int)self.maxSelectedCount];
-                                }
-                                    break;
-                                case E_SourceType_Video: {
-                                    string = [NSString stringWithFormat:@"最多选取%d个视频", (int)self.maxSelectedCount];
-                                }
-                                    break;
-                                case E_SourceType_All: {
-                                    string = [NSString stringWithFormat:@"最多选取%d个照片或视频", (int)self.maxSelectedCount];
-                                }
-                                    break;
+                                break;
+                            case E_SourceType_Video: {
+                                string = [NSString stringWithFormat:@"最多选取%d个视频", (int)self.maxSelectedCount];
                             }
-                            [EJProgressHUD showAlert:string forView:self.view];
-                            cell.sourceSelected = NO;
+                                break;
+                            case E_SourceType_All: {
+                                string = [NSString stringWithFormat:@"最多选取%d个照片或视频", (int)self.maxSelectedCount];
+                            }
+                                break;
                         }
+                        [EJProgressHUD showAlert:string forView:self.view];
+                        cell.sourceSelected = NO;
                     }
                 }
-            }];
-//        }
+            }
+        }];
+        
+        if (_sourceType == E_SourceType_All && _singleSelect == YES && _selectedType != E_SourceType_All) {
+            if (_selectedType == E_SourceType_Image && link.asset.mediaType != PHAssetMediaTypeImage) {
+                cell.hideNoEditorLayer = NO;
+            } else if (_selectedType == E_SourceType_Video && link.asset.mediaType != PHAssetMediaTypeVideo) {
+                cell.hideNoEditorLayer = NO;
+            } else {
+                cell.hideNoEditorLayer = YES;
+            }
+        } else {
+            cell.hideNoEditorLayer = YES;
+        }
     }
+    
+    
+    
     return cell;
 }
 
@@ -758,7 +764,10 @@
             return;
         }
     }
-    [self jumpToBrowser:currentIndex];
+    LSAssetItemCell * cell = (LSAssetItemCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    if (cell.isHideNoEditor) {
+        [self jumpToBrowser:currentIndex];
+    }
 }
 
 #pragma mark - LSAssetCollectionToolBarDelegate

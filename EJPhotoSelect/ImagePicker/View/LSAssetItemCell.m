@@ -60,7 +60,7 @@
         [self addSubview:_editImage];
         
         _noEditorView = [[UIView alloc] init];
-        _noEditorView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
+        _noEditorView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.65];
         _noEditorView.hidden = self.isHideNoEditor;
         [self addSubview:_noEditorView];
         
@@ -74,8 +74,6 @@
         _hideNoEditorLayer = hideNoEditorLayer;
         _noEditorView.hidden = self.isHideNoEditor;
         _normalButton.hidden = !self.isHideNoEditor;
-        _videoLabel.hidden = !self.isHideNoEditor;
-        _editImage.hidden = !self.isHideNoEditor;
     }
 }
 

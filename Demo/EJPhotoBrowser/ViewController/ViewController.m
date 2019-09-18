@@ -132,7 +132,7 @@
             if (_config.maxSelectCount == 1) {
                 [self.dataSource removeAllObjects];
             }
-            EJImagePickerNVC * vc = [[EJImagePickerNVC alloc] initWithSourceType:sourceType singleSelect:NO MaxCount:_config.maxSelectCount SelectedSource:self.dataSource increaseOrder:_config.increaseOrder showShot:_config.allowShot allowCrop:_config.allowCrop];
+            EJImagePickerNVC * vc = [[EJImagePickerNVC alloc] initWithSourceType:sourceType singleSelect:YES MaxCount:_config.maxSelectCount SelectedSource:self.dataSource increaseOrder:_config.increaseOrder showShot:_config.allowShot allowCrop:_config.allowCrop];
             if (_config.allowCrop) {
                 vc.directEdit = _config.directEdit;
                 vc.cropScale = _config.cropScale;
