@@ -271,7 +271,6 @@ typedef NS_ENUM(NSInteger, PanDirection) {
             // 如果点击了暂停按钮
             [self.loading stopAnimating];
             if (self.isPauseByUser) {
-                //NSLog(@"已暂停");
                 self.isDragSlider = NO;
                 return ;
             }

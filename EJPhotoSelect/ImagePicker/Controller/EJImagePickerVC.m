@@ -931,9 +931,7 @@
             }
         }
     } else {
-        NSLog(@"%@", indexAsset.localIdentifier);
         for (EJAssetLinkLocal * link in self.selectedSource) {
-            NSLog(@"%@", link.asset.localIdentifier);
             if ([link.asset.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
                 return YES;
             }

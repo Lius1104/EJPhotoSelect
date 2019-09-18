@@ -1704,7 +1704,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     NSString * fileName = [[[photo.photoURL lastPathComponent] componentsSeparatedByString:@"."] firstObject];
     NSDirectoryEnumerator *rootPath = [[NSFileManager defaultManager] enumeratorAtPath:[EJAssetLinkLocal rootPath]];
     for (NSString * path in rootPath.allObjects) {
-        NSLog(@"%@", path);
         if ([path containsString:fileName]) {
             [[NSFileManager defaultManager] removeItemAtPath:[[EJAssetLinkLocal rootPath] stringByAppendingPathComponent:path] error:nil];
         }

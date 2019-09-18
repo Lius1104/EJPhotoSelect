@@ -115,12 +115,10 @@
         _timeUnit = _maximumDuration / 10.0;
         imageCount = _duration / _timeUnit;
     }
-    NSLog(@"before : %@", [NSDate date]);
     for (int i = 0; i < imageCount; i++) {
         CMTime item = CMTimeMake(_timeUnit * i * self->_asset.duration.timescale, self->_asset.duration.timescale);
         [self.timeSource addObject:[NSValue valueWithCMTime:item]];
     }
-    NSLog(@"after : %@", [NSDate date]);
     [self.collection reloadData];
 }
 
