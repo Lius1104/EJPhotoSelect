@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EJPhoto.h"
 #import "EJPhotoProtocol.h"
-//#import "EJCaptionView.h"
+#import "ImagePickerEnums.h"
 
 // Debug Logging
 #if 0 // Set to 1 to enable debug logging
@@ -28,98 +28,78 @@
 @optional
 
 - (id <EJPhoto>)photoBrowser:(EJPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index;
-//- (EJCaptionView *)photoBrowser:(EJPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index;
-- (NSString *)photoBrowser:(EJPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index;
-- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index;
-//- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index;
-
-/**
- 当前资源是否选中
-
- @param photoBrowser <#photoBrowser description#>
- @param index <#index description#>
- @return <#return value description#>
- */
-- (BOOL)photoBrowser:(EJPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index;
-
-/**
- 当前资源选中状态改变
-
- @param photoBrowser <#photoBrowser description#>
- @param index <#index description#>
- @param selected <#selected description#>
- */
-- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected;
-
-/**
- 是否可以继续选择
-
- @param photoBrowser <#photoBrowser description#>
- @return <#return value description#>
- */
-- (BOOL)photoBrowserCanPhotoSelectedAtIndex:(EJPhotoBrowser *)photoBrowser;
-
-
-/**
- 编辑过图片/视频后调用该方法
-
- @param photoBrowser 图片浏览器
- @param index 当前被编辑的索引
- @param asset 编辑后的新资源
- */
-//- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didEditSourceAtIndex:(NSUInteger)index currentAsset:(PHAsset *)asset;
 
 - (void)photoBrowserDidFinishModalPresentation:(EJPhotoBrowser *)photoBrowser;
 
 /**
  点击返回
 
- @param photoBrowser <#photoBrowser description#>
+ @param photoBrowser EJPhotoBrowser
  */
 - (void)photoBrowserDidCancel:(EJPhotoBrowser *)photoBrowser;
 
 /**
- <#Description#>
+ 点击完成
 
- @param photoBrowser <#photoBrowser description#>
+ @param photoBrowser EJPhotoBrowser
  */
 - (void)photoBrowserDidFinish:(EJPhotoBrowser *)photoBrowser;
 
+#pragma mark - select
 /**
  已经选中的数量
 
- @param photoBrowser <#photoBrowser description#>
- @return <#return value description#>
+ @param photoBrowser EJPhotoBrowser
+ @return NSUInteger
  */
 - (NSUInteger)photoBrowserSelectedPhotoCount:(EJPhotoBrowser *)photoBrowser;
 
 /**
  总共需要选中的数量
 
- @param photoBrowser <#photoBrowser description#>
- @return <#return value description#>
+ @param photoBrowser EJPhotoBrowser
+ @return NSUInteger
  */
 - (NSUInteger)photoBrowserMaxSelectePhotoCount:(EJPhotoBrowser *)photoBrowser;
 
 /**
+ 当前资源是否选中
+ 
+ @param photoBrowser EJPhotoBrowser
+ @param index NSUInteger
+ @return BOOL
+ */
+- (BOOL)photoBrowser:(EJPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index;
+
+/**
+ 当前资源选中状态改变
+ 
+ @param photoBrowser EJPhotoBrowser
+ @param index NSUInteger
+ @param selected BOOL
+ */
+- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected;
+
+/**
+ 是否可以继续选择
+ 
+ @param photoBrowser EJPhotoBrowser
+ @return BOOL
+ */
+- (BOOL)photoBrowserCanPhotoSelectedAtIndex:(EJPhotoBrowser *)photoBrowser;
+
+#pragma mark - edit
+/**
  当前图片允许的裁剪比例
 
- @param photoBrowser <#photoBrowser description#>
- @param index <#index description#>
- @return <#return value description#>
+ @param photoBrowser EJPhotoBrowser
+ @param index NSUInteger
+ @return CGFloat
  */
 - (CGFloat)photoBrowser:(EJPhotoBrowser *)photoBrowser crapScaleAtIndex:(NSUInteger)index;
 
-/**
- 裁剪
-
- @param photoBrowser <#photoBrowser description#>
- @param index <#index description#>
- */
-//- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index assetId:(NSString *)assetId;
-
 /// 裁剪结果
-/// @param photoBrowser <#photoBrowser description#>
+/// @param photoBrowser EJPhotoBrowser
 /// @param index 索引
 /// @param localPath 沙盒路径 相对路径
 - (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didCropPhotoAtIndex:(NSUInteger)index localPath:(NSString *)localPath;
@@ -133,6 +113,23 @@
 /// @param photoBrowser 图片浏览器
 /// @param index 当前索引
 - (void)photoBrowser:(EJPhotoBrowser *)photoBrowser photoReductionAtIndex:(NSUInteger)index;
+
+#pragma mark - single select
+/**
+ 是否只能选择一种类型
+
+ @param photoBrowser EJPhotoBrowser
+ @param singleSelect BOOL
+ */
+- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser canSingleSelect:(BOOL)singleSelect;
+
+/**
+ 单选类型
+
+ @param photoBrowser EJPhotoBrowser
+ @param selectedType E_SourceType
+ */
+- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser selectedType:(E_SourceType)selectedType;
 
 @end
 

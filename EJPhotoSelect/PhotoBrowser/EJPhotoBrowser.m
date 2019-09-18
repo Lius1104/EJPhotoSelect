@@ -907,8 +907,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     
     // Notify delegate
     if (index != _previousPageIndex) {
-        if ([_delegate respondsToSelector:@selector(photoBrowser:didDisplayPhotoAtIndex:)])
-            [_delegate photoBrowser:self didDisplayPhotoAtIndex:index];
+//        if ([_delegate respondsToSelector:@selector(photoBrowser:didDisplayPhotoAtIndex:)])
+//            [_delegate photoBrowser:self didDisplayPhotoAtIndex:index];
         _previousPageIndex = index;
     }
     
@@ -1023,37 +1023,6 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 }
 
 #pragma mark - Navigation
-
-//- (void)updateNavigation {
-//
-//    // Title
-//    NSUInteger numberOfPhotos = [self numberOfPhotos];
-//    if (numberOfPhotos > 1) {
-//        if ([_delegate respondsToSelector:@selector(photoBrowser:titleForPhotoAtIndex:)]) {
-//            self.title = [_delegate photoBrowser:self titleForPhotoAtIndex:_currentPageIndex];
-//        } else {
-//            self.title = [NSString stringWithFormat:@"%lu %@ %lu", (unsigned long)(_currentPageIndex+1), NSLocalizedString(@"of", @"Used in the context: 'Showing 1 of 3 items'"), (unsigned long)numberOfPhotos];
-//        }
-//    } else {
-//        self.title = nil;
-//    }
-
-	// Buttons
-//    _previousButton.enabled = (_currentPageIndex > 0);
-//    _nextButton.enabled = (_currentPageIndex < numberOfPhotos - 1);
-    
-    // Disable action button if there is no image or it's a video
-//    id<EJPhoto> photo = [self photoAtIndex:_currentPageIndex];
-//    if ([photo underlyingImage] == nil || ([photo respondsToSelector:@selector(isVideo)] && photo.isVideo)) {
-//        _actionButton.enabled = NO;
-//        _actionButton.tintColor = [UIColor clearColor]; // Tint to hide button
-//    } else {
-//        _actionButton.enabled = YES;
-//        _actionButton.tintColor = nil;
-//    }
-	
-//}
-
 - (void)jumpToPageAtIndex:(NSUInteger)index animated:(BOOL)animated {
 	
 	// Change page
