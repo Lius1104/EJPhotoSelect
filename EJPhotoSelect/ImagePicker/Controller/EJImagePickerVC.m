@@ -499,6 +499,7 @@
         } else {//old count = 0 加
             if (count == 1) {
                 _selectedType = [self.selectedSource firstObject].asset.mediaType == PHAssetMediaTypeImage ? E_SourceType_Image : E_SourceType_Video;
+                
                 [self reloadCollectionData];
             } else if (count == 0) {
                 _selectedType = E_SourceType_All;
