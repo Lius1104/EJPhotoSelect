@@ -141,7 +141,7 @@ Pod::Spec.new do |spec|
   spec.dependency 'JPImageresizerView'
   spec.dependency 'FDFullscreenPopGesture'
   spec.dependency 'Masonry'
-  spec.dependency 'LSToolsKit'
+  spec.dependency 'LSToolsKit', '~> 1.0.8.3'
   
 
  #  spec.subspec 'VideoPlay' do |ss|
