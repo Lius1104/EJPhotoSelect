@@ -18,6 +18,7 @@
 #import "UIViewController+LSAuthorization.h"
 
 #import "NSString+EJShot.h"
+#import "UIImage+EJClicpShotImage.h"
 
 @interface EJCameraShotVC ()<EJCameraShotDelegate, AVCaptureFileOutputRecordingDelegate, EJPhotoBrowserDelegate> {
     NSUInteger _shotCount;
@@ -233,8 +234,10 @@
 
 - (void)initCamera {
     _captureSession = [[AVCaptureSession alloc] init];
-    if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset640x480]) {//设置分辨率
-        _captureSession.sessionPreset = AVCaptureSessionPreset640x480;
+    if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {//设置分辨率
+        _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+    } else {
+        _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
     }
 
     //获得输入设备
@@ -278,7 +281,12 @@
 
     //将设备输出添加到会话中
     self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-    NSDictionary *outputSettings = @{AVVideoCodecKey: AVVideoCodecJPEG};
+    NSDictionary *outputSettings = @{
+        AVVideoCodecKey: AVVideoCodecJPEG,
+//        AVVideoWidthKey: @(kScreenWidth * kScreenScale),
+//        AVVideoHeightKey : @(kScreenWidth / 3 * 4 * kScreenScale),
+//        AVVideoScalingModeKey : AVVideoScalingModeResizeAspectFill
+    };
     [self.stillImageOutput setOutputSettings:outputSettings];
     if ([self.captureSession canAddOutput:self.stillImageOutput]) {
         [self.captureSession addOutput:self.stillImageOutput];
@@ -310,16 +318,16 @@
     [layer addSublayer:_captureVideoPreviewLayer];
 }
 
-- (void)setupCameraPreset:(AVCaptureSessionPreset)preset {
+- (void)setupCameraPreset:(AVCaptureSessionPreset)preset isImage:(BOOL)isImage {
     if ([_captureSession canSetSessionPreset:preset]) {//设置分辨率
         _captureSession.sessionPreset = preset;
     } else {
-        _captureSession.sessionPreset = AVCaptureSessionPreset1280x720;
+        _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
     }
     CALayer *layer = self.view.layer;
     layer.masksToBounds = YES;
-    if (preset == AVCaptureSessionPreset640x480) {
-        
+    if (isImage) {
+
         CGFloat height = kScreenWidth / 3.f * 4.f;
         CGFloat bottomSpace = 96 + kToolsBottomSafeHeight;
         CGFloat top = kScreenHeight - bottomSpace - height;
@@ -331,6 +339,24 @@
         _captureVideoPreviewLayer.frame = layer.bounds;
     }
 }
+
+//- (void)setupCameraPresetWithImage:(BOOL)isImage {
+//    _captureSession.sessionPreset = AVCaptureSessionPreset1280x720;
+//    CALayer *layer = self.view.layer;
+//    layer.masksToBounds = YES;
+//    if (isImage) {
+//
+//        CGFloat height = kScreenWidth / 3.f * 4.f;
+//        CGFloat bottomSpace = 96 + kToolsBottomSafeHeight;
+//        CGFloat top = kScreenHeight - bottomSpace - height;
+//        if (top < 0) {
+//            top = 0;
+//        }
+//        _captureVideoPreviewLayer.frame = CGRectMake(0, top, kScreenWidth, height);
+//    } else {
+//        _captureVideoPreviewLayer.frame = layer.bounds;
+//    }
+//}
 
 - (void)handleChangeDevice {
     NSArray *inputs = self.captureSession.inputs;
@@ -379,6 +405,13 @@
             return;
         }
         UIImage *image = [self flipImage:[UIImage imageWithData:imageData]];
+        NSLog(@"%@", NSStringFromCGSize(image.size));
+        if (image.size.height > image.size.width) {
+            image = [image clipImage:CGSizeMake(kScreenWidth * kScreenScale, kScreenWidth / 3 * 4 * kScreenScale)];
+        } else {
+            image = [image clipImage:CGSizeMake(kScreenWidth / 3 * 4 * kScreenScale, kScreenWidth * kScreenScale)];
+        }
+        NSLog(@"%@", NSStringFromCGSize(image.size));
         UIImage *resultImg = [image fixOrientation];
         [[LSSaveToAlbum mainSave] saveImage:resultImg successBlock:^(NSString *assetLocalId) {
             if ([assetLocalId length] > 0) {
@@ -766,13 +799,22 @@
     [self.navigationController pushViewController:brower animated:YES];
 }
 
+//- (void)ej_cameraShotViewDidChangeToShotPhoto:(BOOL)isShotPhoto {
+//    if (isShotPhoto == YES) {
+//        // 拍照
+//        [self setupCameraPreset:AVCaptureSessionPreset640x480];
+//    } else {
+//        // 视频
+//        [self setupCameraPreset:AVCaptureSessionPreset1280x720];
+//    }
+//}
 - (void)ej_cameraShotViewDidChangeToShotPhoto:(BOOL)isShotPhoto {
     if (isShotPhoto == YES) {
         // 拍照
-        [self setupCameraPreset:AVCaptureSessionPreset640x480];
+        [self setupCameraPreset:AVCaptureSessionPreset1920x1080 isImage:YES];
     } else {
         // 视频
-        [self setupCameraPreset:AVCaptureSessionPreset1280x720];
+        [self setupCameraPreset:AVCaptureSessionPreset1280x720 isImage:NO];
     }
 }
 
