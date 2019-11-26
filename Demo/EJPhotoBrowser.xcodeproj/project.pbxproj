@@ -10,7 +10,7 @@
 		096E7BA33486B00047BD3064 /* Pods_EJPhotoBrowserUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95292D840DE70ADEB9A2B1FA /* Pods_EJPhotoBrowserUITests.framework */; };
 		5312DF8A22C220E700A59718 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5312DF8922C220E700A59718 /* MediaPlayer.framework */; };
 		533FEAE722FD1645008373A1 /* EJPhotoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 533FEAE522FD1645008373A1 /* EJPhotoConfig.m */; };
-		534D0DB9238CD6890092F49A /* UIImage+EJClicpShotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 534D0DB8238CD6890092F49A /* UIImage+EJClicpShotImage.m */; };
+		534D0DC1238CF3BC0092F49A /* UIImage+EJClicpShotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 534D0DC0238CF3BC0092F49A /* UIImage+EJClicpShotImage.m */; };
 		5369123422FAB00F00D8B5F2 /* EJImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5369123322FAB00F00D8B5F2 /* EJImageManager.m */; };
 		53CB9EF822F7D95900A85A77 /* EJSelectedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */; };
 		53CB9EF922F7D95900A85A77 /* EJSelectedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */; };
@@ -83,8 +83,8 @@
 		533FEAE522FD1645008373A1 /* EJPhotoConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJPhotoConfig.m; sourceTree = "<group>"; };
 		533FEAE622FD1645008373A1 /* EJPhotoConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJPhotoConfig.h; sourceTree = "<group>"; };
 		534AB7F622FBF7DF0047B20D /* EJPhotoSelectDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJPhotoSelectDefine.h; sourceTree = "<group>"; };
-		534D0DB7238CD6890092F49A /* UIImage+EJClicpShotImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+EJClicpShotImage.h"; sourceTree = "<group>"; };
-		534D0DB8238CD6890092F49A /* UIImage+EJClicpShotImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+EJClicpShotImage.m"; sourceTree = "<group>"; };
+		534D0DBF238CF3BC0092F49A /* UIImage+EJClicpShotImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EJClicpShotImage.h"; sourceTree = "<group>"; };
+		534D0DC0238CF3BC0092F49A /* UIImage+EJClicpShotImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+EJClicpShotImage.m"; sourceTree = "<group>"; };
 		5369123122FAB00F00D8B5F2 /* EJImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageManager.h; sourceTree = "<group>"; };
 		5369123222FAB00F00D8B5F2 /* ImagePickerEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerEnums.h; sourceTree = "<group>"; };
 		5369123322FAB00F00D8B5F2 /* EJImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageManager.m; sourceTree = "<group>"; };
@@ -214,11 +214,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		534D0DB6238CD64F0092F49A /* Category */ = {
+		534D0DBE238CF3BC0092F49A /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				534D0DB7238CD6890092F49A /* UIImage+EJClicpShotImage.h */,
-				534D0DB8238CD6890092F49A /* UIImage+EJClicpShotImage.m */,
+				534D0DBF238CF3BC0092F49A /* UIImage+EJClicpShotImage.h */,
+				534D0DC0238CF3BC0092F49A /* UIImage+EJClicpShotImage.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -268,6 +268,7 @@
 		53E032F722FA767600AB3B04 /* EJPhotoSelect */ = {
 			isa = PBXGroup;
 			children = (
+				534D0DBE238CF3BC0092F49A /* Category */,
 				53D2413622FC3C3600809E74 /* Resources */,
 				53E032F822FA767600AB3B04 /* VideoPlay */,
 				53E032FF22FA767600AB3B04 /* ImagePicker */,
@@ -519,7 +520,6 @@
 		53E2787622B87B0700B65C7E /* EJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				534D0DB6238CD64F0092F49A /* Category */,
 				53E032F722FA767600AB3B04 /* EJPhotoSelect */,
 				53CB9F0422F804CA00A85A77 /* Model */,
 				53CB9F0022F7DEF100A85A77 /* ViewController */,
@@ -837,7 +837,7 @@
 				53E0336C22FA767600AB3B04 /* NSString+EJShot.m in Sources */,
 				53E0336722FA767600AB3B04 /* EJZoomingScrollView.m in Sources */,
 				53E0335822FA767600AB3B04 /* EJImagePickerShotCell.m in Sources */,
-				534D0DB9238CD6890092F49A /* UIImage+EJClicpShotImage.m in Sources */,
+				534D0DC1238CF3BC0092F49A /* UIImage+EJClicpShotImage.m in Sources */,
 				53E0335E22FA767600AB3B04 /* LSInterceptVideo.m in Sources */,
 				53E0336B22FA767600AB3B04 /* EJCameraShotVC.m in Sources */,
 				53E0336922FA767600AB3B04 /* EJTapDetectingView.m in Sources */,
