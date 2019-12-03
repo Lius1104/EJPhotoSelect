@@ -18,7 +18,7 @@
 
 static NSString * EJCameraShotDismissedNotification = @"EJCameraShotDismissedNotification";//EJCameraShotVC dismiss
 
-typedef enum : NSUInteger {
+typedef enum : NSInteger {
     E_VideoOrientationAll           = 0,
     E_VideoOrientationPortrait      = 1,
     E_VideoOrientationUpsideDown    = 2,

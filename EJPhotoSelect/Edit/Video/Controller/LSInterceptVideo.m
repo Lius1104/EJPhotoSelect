@@ -212,12 +212,12 @@
                                     [self.delegate ls_interceptVideoDidCropVideo:assetLocalId];
                                 }
                             });
-                        } else {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                self->_hud.label.text = @"保存到本地相册失败";
-                                [self->_hud hideAnimated:YES afterDelay:1.5];
-                            });
                         }
+                    } failureBlock:^(NSError *error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            self->_hud.label.text = @"保存到本地相册失败";
+                            [self->_hud hideAnimated:YES afterDelay:1.5];
+                        });
                     }];
                 }
                     break;

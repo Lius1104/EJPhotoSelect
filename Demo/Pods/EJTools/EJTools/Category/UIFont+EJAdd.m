@@ -40,7 +40,7 @@
         font = [UIFont fontWithName:@"PingFang-SC-Bold" size:fontSize];
     }
     if (font == nil) {
-        font = [UIFont systemFontOfSize:fontSize];
+        font = [UIFont boldSystemFontOfSize:fontSize];
     }
     return font;
 }

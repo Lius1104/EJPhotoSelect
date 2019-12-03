@@ -819,6 +819,10 @@
                         [EJProgressHUD showAlert:@"保存失败" forView:self.view];
                     }
                 });
+            } failureBlock:^(NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [EJProgressHUD showAlert:error.localizedDescription forView:self.view];
+                });
             }];
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{

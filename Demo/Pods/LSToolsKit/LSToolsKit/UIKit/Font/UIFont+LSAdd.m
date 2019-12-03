@@ -43,4 +43,35 @@
     return [self fontWithSize:size];
 }
 
++ (UIFont *)ls_pingFang:(NSString *)pingFangName WithSize:(CGFloat)size {
+    UIFont * font = [UIFont fontWithName:pingFangName size:size];
+    if (font == nil) {
+        if (@available(iOS 8.2, *)) {
+            if ([pingFangName isEqualToString:PingFangSCMedium]) {
+                font = [UIFont systemFontOfSize:size weight:UIFontWeightMedium];
+            } else if ([pingFangName isEqualToString:PingFangSCBold]) {
+                font = [UIFont systemFontOfSize:size weight:UIFontWeightBold];
+            } else if ([pingFangName isEqualToString:PingFangSCRegular]) {
+                font = [UIFont systemFontOfSize:size weight:UIFontWeightRegular];
+            } else if ([pingFangName isEqualToString:PingFangSCThin]) {
+                font = [UIFont systemFontOfSize:size weight:UIFontWeightThin];
+            } else if ([pingFangName isEqualToString:PingFangSCLight]) {
+                font = [UIFont systemFontOfSize:size weight:UIFontWeightLight];
+            } else if ([pingFangName isEqualToString:PingFangeSCUltralight]) {
+                font = [UIFont systemFontOfSize:size weight:UIFontWeightUltraLight];
+            } else {
+                font = [UIFont systemFontOfSize:size weight:UIFontWeightRegular];
+            }
+        } else {
+            // Fallback on earlier versions
+            if ([pingFangName isEqualToString:PingFangSCBold]) {
+                font = [UIFont boldSystemFontOfSize:size];
+            } else {
+                font = [UIFont systemFontOfSize:size];
+            }
+        }
+    }
+    return font;
+}
+
 @end

@@ -10,6 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSString *const PingFangSCMedium = @"PingFangSC-Medium";
+static NSString *const PingFangSCBold = @"PingFangSC-Semibold";
+static NSString *const PingFangSCRegular = @"PingFangSC-Regular";
+static NSString *const PingFangSCLight = @"PingFangSC-Light";
+static NSString *const PingFangeSCUltralight = @"PingFangSC-Ultralight";
+static NSString *const PingFangSCThin = @"PingFangSC-Thin";
+
 /**
  *  适配不同设备尺寸的字体类
  *  主要是UIFont方法中常用的五个Font创建方法
@@ -21,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIFont *)ls_italicSystemFontOfSize:(CGFloat)fontSize;
 + (UIFont *)ls_fontWithName:(NSString *)fontName size:(CGFloat)fontSize;
 - (UIFont *)ls_fontWithSize:(CGFloat)fontSize;
+
++ (UIFont *)ls_pingFang:(NSString *)pingFangName WithSize:(CGFloat)size;
 
 @end
 

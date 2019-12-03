@@ -26,12 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-#define kAppId          [API sharedApi].appId
-#define kSecretKey      [API sharedApi].secretKey
-
-#define kGapTime        [API sharedApi].gapTime
-
-#define kApiUrl         [API sharedApi].apiUrl
-#define kFileUrl        [API sharedApi].fileUrl
+//#define kAppId          [API sharedApi].appId
+//#define kSecretKey      [API sharedApi].secretKey
+//
+//#define kGapTime        [API sharedApi].gapTime
+//
+//#define kApiUrl         [API sharedApi].apiUrl
+//#define kFileUrl        [API sharedApi].fileUrl
 
 NS_ASSUME_NONNULL_END

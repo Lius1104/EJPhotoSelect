@@ -117,8 +117,7 @@
                 shotType = EJ_ShotType_Video;
             }
             NSUInteger maxCount = (_config.maxSelectCount == 0 ? NSUIntegerMax : _config.maxSelectCount);
-//            NSUInteger maxCount = 9;
-            EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:AVCaptureVideoOrientationPortrait maxCount:maxCount];
+            EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:E_VideoOrientationPortrait maxCount:maxCount];
             vc.forcedCrop = _config.forcedCrop;
             vc.cropScale = 0.5;
             vc.allowBoth = NO;

@@ -89,28 +89,35 @@ EPDefaultImageMake(NSString * noContentImgName, NSString * editImgName) {
 
 @property (nonatomic, weak) UIScrollView * mainView;
 
+@property (nonatomic, strong) UIImage * image;
 @property (nonatomic, assign) CGSize imgSize;
 
-@property (nonatomic, strong) UIFont *titleFont;
+@property (nonatomic, copy) NSString * title;
+@property (nonatomic, strong) UIFont * titleFont;
+@property (nonatomic, strong) UIColor * titleColor;
 
-@property (nonatomic, strong) UIFont *desFont;
+@property (nonatomic, strong) NSAttributedString * titleAttString;
+
+
+//EmptyPageTypeOfCustom 状态下使用
+@property (nonatomic, copy) NSString * descriptionTitle;
+@property (nonatomic, strong) UIFont * desFont;
+@property (nonatomic, strong) UIColor * desColor;
+
+@property (nonatomic, strong) NSAttributedString * desAttString;
+
+
+@property (nonatomic, copy) NSString * buttonTitle;
+@property (nonatomic, strong) UIColor * buttonColor;
+@property (nonatomic, strong) UIFont * buttonFont;
+
+@property (nonatomic, strong) NSAttributedString * buttonAttString;
+
 
 @property (nonatomic, assign) CGFloat verticalOffset;
 
 @property (nonatomic, assign) CGFloat spaceHeight;
 
-//EmptyPageTypeOfCustom 状态下使用
-@property (nonatomic, strong) UIImage *image;
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString * descriptionTitle;
-
-@property (nonatomic, strong) UIColor *titleColor;
-
-@property (nonatomic, strong) UIColor * desColor;
-
-@property (nonatomic, strong) UIColor * buttonColor;
-@property (nonatomic, strong) UIFont * buttonFont;
-@property (nonatomic, copy) NSString * buttonTitle;
 
 /**
  全局配置 空页面的默认颜色

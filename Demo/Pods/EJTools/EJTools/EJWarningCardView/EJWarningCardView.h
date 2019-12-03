@@ -42,7 +42,7 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, assign) WarningCardCellType type;
 
-- (void)setType:(WarningCardCellType)type Img:(UIImage *)image cellSize:(CGSize)size;
+//- (void)setType:(WarningCardCellType)type Img:(UIImage *)image cellSize:(CGSize)size;
 
 @end
 
@@ -93,6 +93,8 @@ __deprecated_msg("Method deprecated. Use [initWithTitleArray: imageArray: AtPoin
 
 @property (nonatomic, assign) BOOL scrollEnable;
 
+@property (nonatomic, assign) CGFloat cellHeight;
+
 /**
  点击 cell 后 是否自动隐藏 WarningCardView. default is YES;
  */
@@ -102,5 +104,13 @@ __deprecated_msg("Method deprecated. Use [initWithTitleArray: imageArray: AtPoin
  cell 中的 内容 距左的 距离。默认是 16
  */
 @property (nonatomic, assign) CGFloat contentLeft;
+
+/// cell 中的内容 距右的 距离。默认与 contentLeft 相同
+@property (nonatomic, assign) CGFloat contentRight;
+
+/// title 和 selected image 的间距
+@property (nonatomic, assign) CGFloat selectedImageSpace;
+
+
 
 @end

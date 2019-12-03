@@ -429,6 +429,10 @@
                     [EJProgressHUD showAlert:@"保存到系统相册失败" forView:self.view];
                 });
             }
+        } failureBlock:^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [EJProgressHUD showAlert:error.localizedDescription forView:self.view];
+            });
         }];
     }];
 }
@@ -528,7 +532,9 @@
         if (!_orientationLabel.superview) {
             return ;
         }
-        if (_suggestOrientation == orientation || (_suggestOrientation <= 2 && orientation <= 2) || (_suggestOrientation > 2 && orientation > 2)) {
+        NSInteger suggest = (NSInteger)_suggestOrientation;
+        NSInteger current = (NSInteger)orientation;
+        if (suggest == current || (suggest <= 2 && current <= 2) || (suggest > 2 && current > 2)) {
             _orientationLabel.hidden = YES;
             return;
         }
@@ -615,25 +621,16 @@
                             }
                         }
                     }
-//                    if (self.maxCount == 1) {
-//                        [self ej_cameraShotViewDidClickDone];
-//                    } else {
-//                        self.shotView.img = coverImage;
-//                        self.shotView.previewCount = self.assetIds.count;
-//                        if ([[NSFileManager defaultManager] fileExistsAtPath:_localFilePath]) {
-//                            NSError * fileError = nil;
-//                            [[NSFileManager defaultManager] removeItemAtPath:_localFilePath error:&fileError];
-//                            if (fileError) {
-//                                NSLog(@"%@", fileError);
-//                            }
-//                        }
-//                    }
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [EJProgressHUD showAlert:@"保存到系统相册失败" forView:self.view];
                 });
             }
+        } failureBlock:^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [EJProgressHUD showAlert:error.localizedDescription forView:self.view];
+            });
         }];
     } else {
         [EJProgressHUD showConfirmAlert:@"保存失败,请重新录制!"];

@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "EJPhotoSelect"
-  spec.version      = "1.0.1.21"
+  spec.version      = "1.0.1.22"
   spec.summary      = "本地照片选择器"
 
   # This description is used to generate tags and improve search results.
@@ -141,7 +141,7 @@ Pod::Spec.new do |spec|
   spec.dependency 'JPImageresizerView'
   spec.dependency 'FDFullscreenPopGesture'
   spec.dependency 'Masonry'
-  spec.dependency 'LSToolsKit', '~> 1.0.8.3'
+  spec.dependency 'LSToolsKit'#, '~> 1.0.8.3'
   
 
  #  spec.subspec 'VideoPlay' do |ss|

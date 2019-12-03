@@ -101,6 +101,9 @@
 
 #pragma mark - DZNEmptyDataSetSource
 - (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
+    if (_titleAttString) {
+        return _titleAttString;
+    }
     NSString *text = nil;
     UIFont *font = [UIFont systemFontOfSize:16];
 
@@ -149,6 +152,9 @@
 }
 
 - (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {
+    if (_desAttString) {
+        return _desAttString;
+    }
     NSString *text = nil;
     UIFont *font = [UIFont systemFontOfSize:16];
     UIColor * textColor;
@@ -244,6 +250,9 @@
 }
 
 - (NSAttributedString *)buttonTitleForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state {
+    if (_buttonAttString) {
+        return _buttonAttString;
+    }
     if (_pageType == EmptyPageTypeOfNotShow) {
         return nil;
     }

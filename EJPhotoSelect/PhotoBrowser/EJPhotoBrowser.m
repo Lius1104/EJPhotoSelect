@@ -1512,9 +1512,12 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                     if ([assetLocalId length] > 0) {
                         PHAsset * asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
                         [self configCroppedImage:asset];
-                    } else {
-                        [EJProgressHUD showAlert:@"保存失败" forView:self.view];
                     }
+                });
+            } failureBlock:^(NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_progressHUD hideAnimated:YES];
+                    [EJProgressHUD showAlert:@"保存失败" forView:self.view];
                 });
             }];
         } else {

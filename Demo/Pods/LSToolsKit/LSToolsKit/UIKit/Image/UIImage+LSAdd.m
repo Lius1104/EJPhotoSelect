@@ -19,6 +19,16 @@ NSData * __nullable LSImageJPEGRepresentation(UIImage * __nonnull image, CGFloat
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         imageData = UIImageJPEGRepresentation(newImage, compressionQuality);
+        
+//        UIGraphicsBeginImageContextWithOptions(image.size, NO, 0.0); // 0.0 for scale means "correct scale for device's main screen".
+//        CGImageRef sourceImg = CGImageCreateWithImageInRect([image CGImage], CGRectMake(0, 0, image.size.width, image.size.height)); // cropping happens here.
+//        UIImage * newImage = [UIImage imageWithCGImage:sourceImg scale:0.0 orientation:image.imageOrientation]; // create cropped UIImage.
+//        [newImage drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)]; // the actual scaling happens here, and orientation is taken care of automatically.
+//        CGImageRelease(sourceImg);
+//        newImage = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//
+//        imageData = UIImageJPEGRepresentation(newImage, compressionQuality);
     }
     
     return imageData;
@@ -28,12 +38,30 @@ NSData * __nullable LSImageJPEGRepresentation(UIImage * __nonnull image, CGFloat
 
 - (UIImage *)fixOrientation {
     if (self.imageOrientation == UIImageOrientationUp) return self;
-
-    UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
-    [self drawInRect:(CGRect){0, 0, self.size}];
-    UIImage *normalizedImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return normalizedImage;
+    UIImage *normalizedImage;
+    @try {
+        UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
+        [self drawInRect:(CGRect){0, 0, self.size}];
+        normalizedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    } @catch (NSException *exception) {
+        return self;
+    }
+//    UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
+//    [self drawInRect:(CGRect){0, 0, self.size}];
+//    UIImage *normalizedImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+    return normalizedImage == nil ? self : normalizedImage;
+    
+//    UIImage *image;
+//    UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale); // 0.0 for scale means "correct scale for device's main screen".
+//    CGImageRef sourceImg = CGImageCreateWithImageInRect([self CGImage], (CGRect){0, 0, self.size}); // cropping happens here.
+//    image = [UIImage imageWithCGImage:sourceImg scale:0.0 orientation:self.imageOrientation]; // create cropped UIImage.
+//    [image drawInRect:(CGRect){0, 0, self.size}]; // the actual scaling happens here, and orientation is taken care of automatically.
+//    CGImageRelease(sourceImg);
+//    image = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    return image;
 }
 
 #pragma mark - [---压缩---]
@@ -91,12 +119,26 @@ NSData * __nullable LSImageJPEGRepresentation(UIImage * __nonnull image, CGFloat
         height = ceil(original.height / scale);
     }
     CGSize newSize = CGSizeMake(width, height);
-    UIGraphicsBeginImageContext(newSize);
     CGRect rect = CGRectMake(0, 0, newSize.width, newSize.height);
-    [image drawInRect:rect];
-    UIImage *newing = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsBeginImageContext(newSize);
+//    [image drawInRect:rect];
+//    UIImage *newing = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//
+//    return newing;
+    
+    UIImage *resultImage;
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0); // 0.0 for scale means "correct scale for device's main screen".
+//    CGImageRef sourceImg = CGImageCreateWithImageInRect([image CGImage], CGRectMake(0, 0, original.width, original.height)); // cropping happens here.
+    CGImageRef sourceImg = CGImageCreateWithImageInRect([image CGImage], CGRectMake(0, 0, image.size.width, image.size.height));
+//    image = [UIImage imageWithCGImage:sourceImg scale:0.0 orientation:image.imageOrientation]; // create cropped UIImage.
+    image = [UIImage imageWithCGImage:sourceImg];
+    [image drawInRect:rect]; // the actual scaling happens here, and orientation is taken care of automatically.
+    CGImageRelease(sourceImg);
+    resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return newing;
+
+    return resultImage;
 }
 
 - (UIImage *)imageByScalingToSize:(CGSize)targetSize {
@@ -143,24 +185,50 @@ NSData * __nullable LSImageJPEGRepresentation(UIImage * __nonnull image, CGFloat
 }
 
 - (NSData *)imageCompressToLimitBitSize:(CGFloat)limitBitSize {
-    CGFloat compression = 0.9;
-    NSData *imageData = LSImageJPEGRepresentation(self, compression);
-//    if (imageData == nil || imageData.length == 0) {
-//        imageData = LSImageJPEGRepresentation(self, compression);
+//    CGFloat compression = 0.9;
+//    NSData *imageData = LSImageJPEGRepresentation(self, compression);
+//    NSLog(@"%f", (double)[imageData length]);
+//    if (@available(iOS 10.0, *)) {
+//        CIImage *ciImage = [CIImage imageWithData:imageData];
+//        CIContext *context = [CIContext context];
+//        imageData = [context JPEGRepresentationOfImage:ciImage colorSpace:ciImage.colorSpace options:@{}];
 //    }
-    NSLog(@"%f", (double)[imageData length]);
+    
+//    NSLog(@"%f", (double)[imageData length]);
+//    while ([imageData length] > limitBitSize/* && compression > maxCompression*/) {
+//        compression *= 0.9;
+//        NSData * data = LSImageJPEGRepresentation(self, compression);
+//        if ([data length] == [imageData length]) {
+//            imageData = data;
+//            break;
+//        } else {
+//            imageData = data;
+//        }
+//        NSLog(@"%f", (double)[imageData length]);
+//    }
+//    return imageData;
+    
+    CGFloat compression = 1;
+    NSData * imageData = UIImageJPEGRepresentation(self, compression);
     if (@available(iOS 10.0, *)) {
         CIImage *ciImage = [CIImage imageWithData:imageData];
         CIContext *context = [CIContext context];
         imageData = [context JPEGRepresentationOfImage:ciImage colorSpace:ciImage.colorSpace options:@{}];
     }
-    
-    
-    NSLog(@"%f", (double)[imageData length]);
-    while ([imageData length] > limitBitSize/* && compression > maxCompression*/) {
-        compression *= 0.9;
-        imageData = LSImageJPEGRepresentation(self, compression);
-        NSLog(@"%f", (double)[imageData length]);
+    UIImage * newImage = [UIImage imageWithData:imageData];
+    if (imageData.length < limitBitSize) return imageData;
+    CGFloat max = 1;
+    CGFloat min = 0;
+    for (int i = 0; i < 6; ++i) {
+        compression = (max + min) / 2;
+        imageData = UIImageJPEGRepresentation(newImage, compression);
+        if (imageData.length < limitBitSize * 0.9) {
+            min = compression;
+        } else if (imageData.length > limitBitSize) {
+            max = compression;
+        } else {
+            break;
+        }
     }
     return imageData;
 }
@@ -206,7 +274,7 @@ NSData * __nullable LSImageJPEGRepresentation(UIImage * __nonnull image, CGFloat
         NSLog(@"thumbnailImageGenerationError %@", thumbnailImageGenerationError);
     
     UIImage *thumbnailImage = thumbnailImageRef ? [[UIImage alloc] initWithCGImage:thumbnailImageRef] : nil;
-    
+    CGImageRelease(thumbnailImageRef);
     return thumbnailImage;
 }
 
@@ -257,6 +325,7 @@ NSData * __nullable LSImageJPEGRepresentation(UIImage * __nonnull image, CGFloat
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextDrawImage(context, smallBounds, subImageRef);
     UIImage* smallImage = [UIImage imageWithCGImage:subImageRef];
+    CGImageRelease(subImageRef);
     UIGraphicsEndImageContext();
     
     return smallImage;

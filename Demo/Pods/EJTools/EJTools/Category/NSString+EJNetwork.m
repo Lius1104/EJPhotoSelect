@@ -10,8 +10,19 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <ifaddrs.h>
 #import <arpa/inet.h>
+#import "API.h"
 
 @implementation NSString (EJNetwork)
+
+#pragma mark - API Config
+
+#define kAppId          [API sharedApi].appId
+#define kSecretKey      [API sharedApi].secretKey
+
+#define kGapTime        [API sharedApi].gapTime
+
+#define kApiUrl         [API sharedApi].apiUrl
+#define kFileUrl        [API sharedApi].fileUrl
 
 + (NSString *)IP {
     return [[NSString getWifiIPAddress] isEqualToString:@"error"] ? [NSString getCellIPAddress] : [NSString getWifiIPAddress];
@@ -288,5 +299,30 @@
 //    }
 //    return [NSString ej_getURLWithServer:fileUrl Action:action Parameters:param isSign:YES];
 //}
+
+- (NSMutableURLRequest *)ej_urlRequestWithMethod:(EJ_RequestMethod)method httpBody:(NSData *)httpBody {
+    NSURL * url = [NSURL URLWithString:self];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    //设置请求类型
+    switch (method) {
+        case EJ_RequestMethod_GET: {
+            request.HTTPMethod = @"GET";
+        }
+            break;
+        case EJ_RequestMethod_POST: {
+            request.HTTPMethod = @"POST";
+        }
+            break;
+        case EJ_RequestMethod_DELETE: {
+            request.HTTPMethod = @"DELETE";
+        }
+            break;
+        default:
+            break;
+    }
+    //把参数放到请求体内
+    request.HTTPBody = httpBody;
+    return request;
+}
 
 @end

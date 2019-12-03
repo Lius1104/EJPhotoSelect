@@ -37,7 +37,7 @@
 }
 
 #pragma mark - create new
-- (void)saveImage:(UIImage *)image successBlock:(SuccessBlock)block {
+- (void)saveImage:(UIImage *)image successBlock:(SuccessBlock)block failureBlock:(FailureBlock)failure {
     __block NSString * Identify = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         if (@available(iOS 9.0, *)) {
@@ -48,7 +48,7 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
-            block(nil);
+            failure(error);
             return;
         }
         block(Identify);
@@ -57,7 +57,7 @@
     }];
 }
 
-- (void)saveImageWithUrl:(NSURL *)imgUrl successBlock:(SuccessBlock)block {
+- (void)saveImageWithUrl:(NSURL *)imgUrl successBlock:(SuccessBlock)block failureBlock:(FailureBlock)failure {
     __block NSString * Identify = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         if (@available(iOS 9.0, *)) {
@@ -68,7 +68,7 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
-            block(nil);
+            failure(error);
             return;
         }
         block(Identify);
@@ -76,7 +76,7 @@
     }];
 }
 
-- (void)saveVideoWithUrl:(NSURL *)videoUrl successBlock:(SuccessBlock)block {
+- (void)saveVideoWithUrl:(NSURL *)videoUrl successBlock:(SuccessBlock)block failureBlock:(FailureBlock)failure {
     __block NSString * Identify = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         if (@available(iOS 9.0, *)) {
@@ -87,22 +87,13 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
-            block(nil);
+            failure(error);
             return;
         }
         block(Identify);
         [self saveToCustomAlbum:Identify];
     }];
 }
-
-//#pragma mark - edit
-//- (void)editAsset:(PHAsset *)asset image:(UIImage *)image successBlock:(SuccessBlock)block {
-//    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//        asset requestContentEditingInputWithOptions:<#(nullable PHContentEditingInputRequestOptions *)#> completionHandler:<#^(PHContentEditingInput * _Nullable contentEditingInput, NSDictionary * _Nonnull info)completionHandler#>
-//    } completionHandler:^(BOOL success, NSError * _Nullable error) {
-//        //
-//    }];
-//}
 
 #pragma mark - private
 - (PHAssetCollection *)customAlbum {

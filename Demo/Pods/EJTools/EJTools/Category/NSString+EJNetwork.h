@@ -10,6 +10,12 @@
 
 //NS_ASSUME_NONNULL_BEGIN
 
+typedef enum : NSUInteger {
+    EJ_RequestMethod_GET,
+    EJ_RequestMethod_POST,
+    EJ_RequestMethod_DELETE,
+} EJ_RequestMethod;
+
 
 @interface NSString (EJNetwork)
 
@@ -36,6 +42,11 @@
  @return <#return value description#>
  */
 //+ (NSString *)ej_getFileUrlWithAction:(NSString *)action Parameters:(NSDictionary *)param;
+
+/// 组装 URLRequest
+/// @param method 方法类型，EJ_RequestMethod
+/// @param httpBody NSData
+- (NSMutableURLRequest *)ej_urlRequestWithMethod:(EJ_RequestMethod)method httpBody:(NSData *)httpBody;
 
 @end
 
