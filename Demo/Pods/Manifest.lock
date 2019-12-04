@@ -27,21 +27,21 @@ PODS:
     - YYKit
   - FDFullscreenPopGesture (1.1)
   - JPImageresizerView (1.1.4)
-  - LSToolsKit (1.1.1):
-    - LSToolsKit/DataSource (= 1.1.1)
-    - LSToolsKit/Foundation (= 1.1.1)
-    - LSToolsKit/UIKit (= 1.1.1)
-  - LSToolsKit/DataSource (1.1.1):
+  - LSToolsKit (1.1.2):
+    - LSToolsKit/DataSource (= 1.1.2)
+    - LSToolsKit/Foundation (= 1.1.2)
+    - LSToolsKit/UIKit (= 1.1.2)
+  - LSToolsKit/DataSource (1.1.2):
     - LSToolsKit/Foundation
-  - LSToolsKit/Foundation (1.1.1)
-  - LSToolsKit/UIKit (1.1.1):
+  - LSToolsKit/Foundation (1.1.2)
+  - LSToolsKit/UIKit (1.1.2):
     - SDWebImage
   - Masonry (1.1.0)
   - MBProgressHUD (1.1.0)
   - MJRefresh (3.2.3)
-  - SDWebImage (5.3.2):
-    - SDWebImage/Core (= 5.3.2)
-  - SDWebImage/Core (5.3.2)
+  - SDWebImage (5.3.3):
+    - SDWebImage/Core (= 5.3.3)
+  - SDWebImage/Core (5.3.3)
   - YYKit (1.0.9):
     - YYKit/no-arc (= 1.0.9)
   - YYKit/no-arc (1.0.9)
@@ -77,11 +77,11 @@ SPEC CHECKSUMS:
   EJTools: b6be2342aa4cdbd323b564eb741798304241a919
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   JPImageresizerView: 4ffb8f303fa051b2121ae080194c967312bde22a
-  LSToolsKit: 081ec41e2ea71ca8135a6d1341c77340dc5f6b44
+  LSToolsKit: 2f55ace2f7115b1d23d35fc9c9e4fe002bac44d9
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MJRefresh: 2b1214a2dc8f4df4c5dcb028ea2ad4e245425fb7
-  SDWebImage: 6ac2eb96571bff96ecde31a987172c5934a0eb7d
+  SDWebImage: 51ab1ce3ebd20dec6665ae8ba25c928da323db41
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
 PODFILE CHECKSUM: 0703948803360303dd7a0c11bbfe315487372d3d

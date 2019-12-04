@@ -283,9 +283,6 @@
     self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
     NSDictionary *outputSettings = @{
         AVVideoCodecKey: AVVideoCodecJPEG,
-//        AVVideoWidthKey: @(kScreenWidth * kScreenScale),
-//        AVVideoHeightKey : @(kScreenWidth / 3 * 4 * kScreenScale),
-//        AVVideoScalingModeKey : AVVideoScalingModeResizeAspectFill
     };
     [self.stillImageOutput setOutputSettings:outputSettings];
     if ([self.captureSession canAddOutput:self.stillImageOutput]) {
@@ -367,17 +364,31 @@
             AVCaptureDevice *newCamera = nil;
             AVCaptureDeviceInput *newInput = nil;
 
-            if (position == AVCaptureDevicePositionFront)
+            if (position == AVCaptureDevicePositionFront) {
                 newCamera = [self getCameraDeviceWithPosition:AVCaptureDevicePositionBack];
-            else
+                if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {//设置分辨率
+                    _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+                } else {
+                    _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
+                }
+            } else {
                 newCamera = [self getCameraDeviceWithPosition:AVCaptureDevicePositionFront];
+//                if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {//设置分辨率
+//                    _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+//                } else {
+                    _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
+//                }
+            }
             newInput = [AVCaptureDeviceInput deviceInputWithDevice:newCamera error:nil];
 
             // beginConfiguration ensures that pending changes are not applied immediately
             [self.captureSession beginConfiguration];
 
             [self.captureSession removeInput:input];
-            [self.captureSession addInput:newInput];
+            
+            if ([_captureSession canAddInput:newInput]) {
+                [self.captureSession addInput:newInput];
+            }
 
             // Changes take effect once the outermost commitConfiguration is invoked.
             [self.captureSession commitConfiguration];

@@ -48,10 +48,14 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
-            failure(error);
+            if (failure) {
+                failure(error);
+            }
             return;
         }
-        block(Identify);
+        if (block) {
+            block(Identify);
+        }
         // 添加索引到自定义相册
         [self saveToCustomAlbum:Identify];
     }];
@@ -68,10 +72,14 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
-            failure(error);
+            if (failure) {
+                failure(error);
+            }
             return;
         }
-        block(Identify);
+        if (block) {
+            block(Identify);
+        }
         [self saveToCustomAlbum:Identify];
     }];
 }
@@ -87,10 +95,14 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
-            failure(error);
+            if (failure) {
+                failure(error);
+            }
             return;
         }
-        block(Identify);
+        if (block) {
+            block(Identify);
+        }
         [self saveToCustomAlbum:Identify];
     }];
 }
