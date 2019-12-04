@@ -110,6 +110,10 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(50, 0, (56 + 24), 0);
     JPImageresizerConfigure *configure = [JPImageresizerConfigure defaultConfigureWithResizeImage:_image make:^(JPImageresizerConfigure *configure) {
         configure.jp_contentInsets(contentInsets);
+        if (weak_self.customCropBorder) {
+            configure.jp_borderImage(weak_self.customCropBorder);
+            configure.jp_borderImageRectInset(CGPointMake(-2, -2));
+        }
     }];
     JPImageresizerView *imageresizerView = [JPImageresizerView imageresizerViewWithConfigure:configure imageresizerIsCanRecovery:^(BOOL isCanRecovery) {
     } imageresizerIsPrepareToScale:^(BOOL isPrepareToScale) {
@@ -176,27 +180,23 @@
         }
         
         if (needSave) {
-//            [[LSSaveToAlbum mainSave] saveImage:resizeImage successBlock:^(NSString *assetLocalId) {
-//                PHAsset * asset;
-//                if (assetLocalId) {
-//                    asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil] lastObject];
-//                }
-                if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:isCrop:)]) {
-                    [self.delegate ej_imageCropperVCDidCrop:resizeImage isCrop:YES];
-                }
-//            }];
+            if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:isCrop:)]) {
+                [self.delegate ej_imageCropperVCDidCrop:resizeImage isCrop:YES];
+            }
         } else {
             if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:isCrop:)]) {
                 [self.delegate ej_imageCropperVCDidCrop:_image isCrop:NO];
             }
         }
         
-//        if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCDidCrop:)]) {
-//            [self.delegate ej_imageCropperVCDidCrop:resizeImage];
-//        }
-        
-        self.doneBtn.enabled = YES;
-        [self.navigationController popViewControllerAnimated:YES];
+        BOOL needPop = YES;
+        if ([self.delegate respondsToSelector:@selector(ej_imageCropperVCAutoPopAfterCrop)]) {
+            needPop = [self.delegate ej_imageCropperVCAutoPopAfterCrop];
+        }
+        if (needPop) {
+            self.doneBtn.enabled = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }];
 }
 

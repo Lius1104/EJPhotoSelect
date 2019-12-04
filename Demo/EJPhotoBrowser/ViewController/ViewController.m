@@ -26,6 +26,8 @@
 @property (nonatomic, strong) NSMutableArray * dataSource;
 @property (nonatomic, strong) NSMutableArray * browserSource;
 
+@property (nonatomic, strong) EJProgressHUD * hud;
+
 @end
 
 @implementation ViewController
@@ -119,9 +121,11 @@
             NSUInteger maxCount = (_config.maxSelectCount == 0 ? NSUIntegerMax : _config.maxSelectCount);
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:_config.videoDefaultDuration shotType:shotType delegate:self suggestOrientation:E_VideoOrientationPortrait maxCount:maxCount];
             vc.forcedCrop = _config.forcedCrop;
-            vc.cropScale = 0.5;
+            vc.cropScale = _config.cropScale;
             vc.allowBoth = NO;
             vc.videoShotCount = 1;
+            vc.directCrop = YES;
+            vc.customCropBorder = [UIImage imageNamed:@"touxiang"];
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self ej_presentViewController:nav animated:YES completion:nil];
         }];
@@ -139,6 +143,7 @@
             }
             vc.previewDelete = _config.previewDelete;
             vc.forcedCrop = _config.forcedCrop;
+            vc.autoPopAfterCrop = NO;
             // ui
             [vc configSectionInserts:_config.sectionInsets cellSpace:_config.cellSpace numOfLineCells:_config.numOfLineCells];
             
@@ -265,7 +270,6 @@
     CGFloat imageSize = MAX(screen.bounds.size.width, screen.bounds.size.height) * 1.5;
     CGSize imageTargetSize = CGSizeMake(imageSize * scale, imageSize * scale);
     EJPhoto * currPhoto = [EJPhoto photoWithAsset:asset targetSize:imageTargetSize];
-    //    [self.browserSource insertObject:currPhoto atIndex:0];
     if (currentAsset) {
         NSUInteger currentIndex = [self.dataSource indexOfObject:currentAsset];
         [self.dataSource replaceObjectAtIndex:currentIndex withObject:asset];
@@ -286,11 +290,19 @@
     PHFetchResult * result = [PHAsset fetchAssetsWithLocalIdentifiers:assets options:nil];
     [self.dataSource removeAllObjects];
     [result enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        if ([self.dataSource count] < _config.maxSelectCount) {
-            [self.dataSource addObject:obj];
-//        }
+        [self.dataSource addObject:obj];
     }];
     [self.collectionView reloadData];
+}
+
+- (void)ej_shotVC:(EJCameraShotVC *)shotVC didCropped:(UIImage *)image {
+    UIWindow * window = [UIApplication sharedApplication].delegate.window;
+    _hud = [EJProgressHUD ej_showHUDAddToView:window animated:YES];
+    _hud.label.text = @"头像上传中...";
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_hud hideAnimated:YES];
+        [shotVC dismissViewControllerAnimated:YES completion:nil];
+    });
 }
 
 #pragma mark - EJImagePickerVCDelegate
@@ -298,6 +310,19 @@
     self.dataSource = source;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
+    });
+}
+
+- (void)ej_imagePickerVC:(EJImagePickerNVC *)imagePicker didCroppedImage:(UIImage *)image {
+    UIWindow * window = [UIApplication sharedApplication].delegate.window;
+    _hud = [EJProgressHUD ej_showHUDAddToView:window animated:YES];
+    _hud.label.text = @"头像上传中...";
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_hud hideAnimated:YES];
+        
+        [imagePicker dismissViewControllerAnimated:NO completion:^{
+            [imagePicker dismissViewControllerAnimated:YES completion:nil];
+        }];
     });
 }
 

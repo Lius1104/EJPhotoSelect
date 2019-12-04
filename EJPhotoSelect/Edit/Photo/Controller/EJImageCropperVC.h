@@ -14,6 +14,8 @@
 - (void)ej_imageCropperVCDidCancel;
 
 - (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop;
+/// 主要用于 某些需要同步的操作上
+- (BOOL)ej_imageCropperVCAutoPopAfterCrop;
 
 @end
 
@@ -22,8 +24,11 @@
 @interface EJImageCropperVC : UIViewController
 
 @property (nonatomic, weak) id <EJImageCropperDelegate> delegate;
-
+/// 裁剪比例
 @property (nonatomic, assign) CGFloat cropScale;
+
+/// 自定义裁剪边框
+@property (nonatomic, strong) UIImage * customCropBorder;
 
 - (instancetype)initWithImage:(UIImage *)image;
 

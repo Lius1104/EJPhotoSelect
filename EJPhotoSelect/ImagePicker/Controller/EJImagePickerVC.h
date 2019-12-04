@@ -11,9 +11,13 @@
 #import <Photos/Photos.h>
 #import "ImagePickerEnums.h"
 
+@class EJImagePickerVC;
+
 @protocol EJImagePickerDelegate <NSObject>
 
 - (void)ej_imagePickerDidSelected:(NSMutableArray *)source;
+
+- (void)ej_imagePicker:(EJImagePickerVC *)pickerVC didCropped:(UIImage *)image;
 
 @end
 
@@ -50,6 +54,12 @@
 
 ///  拍摄完成之后 是否进入到 浏览全部本地资源页面
 @property (nonatomic, assign) BOOL browserAfterShot;
+
+/// 裁剪之后 是否 自动返回，默认为 YES
+@property (nonatomic, assign) BOOL autoPopAfterCrop;
+
+/// 自定义裁剪边框
+@property (nonatomic, strong) UIImage * customCropBorder;
 
 /**
  配置 UI

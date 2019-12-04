@@ -127,6 +127,28 @@
     }
 }
 
+- (void)setAutoPopAfterCrop:(BOOL)autoPopAfterCrop {
+    _autoPopAfterCrop = autoPopAfterCrop;
+    for (UIViewController * itemVC in self.viewControllers) {
+        if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
+            EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
+            picker.autoPopAfterCrop = _autoPopAfterCrop;
+            break;
+        }
+    }
+}
+
+- (void)setCustomCropBorder:(UIImage *)customCropBorder {
+    _customCropBorder = customCropBorder;
+    for (UIViewController * itemVC in self.viewControllers) {
+        if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
+            EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
+            picker.customCropBorder = _customCropBorder;
+            break;
+        }
+    }
+}
+
 - (void)configSectionInserts:(UIEdgeInsets)inserts cellSpace:(NSUInteger)cellSpace numOfLineCells:(NSUInteger)num {
     for (UIViewController * itemVC in self.viewControllers) {
         if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
@@ -141,6 +163,12 @@
 - (void)ej_imagePickerDidSelected:(NSMutableArray *)source {
     if ([self.pickerDelegate respondsToSelector:@selector(ej_imagePickerVC:didSelectedSource:)]) {
         [self.pickerDelegate ej_imagePickerVC:self didSelectedSource:source];
+    }
+}
+
+- (void)ej_imagePicker:(EJImagePickerVC *)pickerVC didCropped:(UIImage *)image {
+    if ([self.pickerDelegate respondsToSelector:@selector(ej_imagePickerVC:didCroppedImage:)]) {
+        [self.pickerDelegate ej_imagePickerVC:self didCroppedImage:image];
     }
 }
 

@@ -1418,6 +1418,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                     }
                     vc.cropScale = cropScale;
                     vc.delegate = self;
+                    vc.customCropBorder = _customCropBorder;
                     [self.navigationController pushViewController:vc animated:YES];
                 });
             }];
@@ -1438,7 +1439,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         }
         vc.cropScale = cropScale;
         vc.delegate = self;
-//        vc.hidesBottomBarWhenPushed = YES;
+        vc.customCropBorder = _customCropBorder;
         [self.navigationController pushViewController:vc animated:YES];
         return;
     }

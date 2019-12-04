@@ -153,6 +153,8 @@
  是否强制裁剪
  */
 @property (nonatomic, assign) BOOL forcedCrop;
+/// 自定义裁剪边框
+@property (nonatomic, strong) UIImage * customCropBorder;
 
 // Init
 - (id)initWithPhotos:(NSArray *)photosArray;

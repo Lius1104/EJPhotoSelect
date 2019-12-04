@@ -86,6 +86,7 @@
         self.maxVideoDuration = 180;
         self.previewDelete = YES;
         self.forcedCrop = YES;
+        self.autoPopAfterCrop = YES;
         
         _isNeedScroll = YES;
         _lineItemCount = 4;
@@ -417,6 +418,7 @@
     brower.maxVideoDuration = _maxVideoDuration;
     brower.showCropButton = _allowCrop;
     brower.forcedCrop = _forcedCrop;
+    brower.customCropBorder = _customCropBorder;
     if (_maxSelectedCount == 1) {
         brower.showSelectButton = NO;
     } else {
@@ -707,6 +709,7 @@
     brower.forcedCrop = _forcedCrop;
     [brower setCurrentPhotoIndex:currentIndex];
     brower.isPreview = YES;
+    brower.customCropBorder = _customCropBorder;
     [self.navigationController pushViewController:brower animated:YES];
 }
 
@@ -747,14 +750,11 @@
     if (_sourceType == E_SourceType_All) {
         shotType = EJ_ShotType_Both;
     }
-    AVCaptureVideoOrientation orientation;
-//    if (_maxSelectedCount == 1 && _allowCrop) {
-        orientation = AVCaptureVideoOrientationPortrait;
-//    } else {
-//        orientation = AVCaptureVideoOrientationLandscapeLeft;
-//    }
     EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:shotType delegate:self suggestOrientation:E_VideoOrientationAll /*allowPreview:YES*/ maxCount:1];
     vc.forcedCrop = _forcedCrop;
+    vc.directCrop = _directEdit;
+    vc.cropScale = _cropScale;
+    vc.customCropBorder = _customCropBorder;
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self ej_presentViewController:nav animated:YES completion:nil];
 }
@@ -768,17 +768,6 @@
         }
     }];
     [self.toolBar configSourceCount:self.selectedSource.count];
-//    if (_maxSelectedCount == 1 && _allowCrop) {
-//        _isLocalSelected = NO;
-//        PHAsset * first = [assetSource firstObject];
-//        [self.manager requestImageDataForAsset:first options:self.options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-//            UIImage * image = [UIImage imageWithData:imageData];
-//            EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
-//            vc.cropScale = _cropScale;
-//            vc.delegate = self;
-//            [self.navigationController pushViewController:vc animated:YES];
-//        }];
-//    }
     [self getAllAssets];
     if (_browserAfterShot) {
         [self jumpToBrowser:0];
@@ -789,12 +778,21 @@
     }
 }
 
+- (void)ej_shotVC:(EJCameraShotVC *)shotVC didCropped:(UIImage *)image {
+    if ([self.delegate respondsToSelector:@selector(ej_imagePicker:didCropped:)]) {
+        [self.delegate ej_imagePicker:self didCropped:image];
+    }
+}
+
 #pragma mark - EJImageCropperDelegate
 - (void)ej_imageCropperVCDidCancel {
     if (_isLocalSelected == NO) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:EJ_ShotType_Photo delegate:self suggestOrientation:E_VideoOrientationAll /*allowPreview:YES*/ maxCount:1];
             vc.forcedCrop = _forcedCrop;
+            vc.directCrop = _directEdit;
+            vc.cropScale = _cropScale;
+            vc.customCropBorder = _customCropBorder;
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self ej_presentViewController:nav animated:YES completion:nil];
         });
@@ -804,35 +802,48 @@
 
 - (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
     if (image) {
-        if (isCrop) {
-            [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([assetLocalId length] > 0) {
-                        PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
-                        [self.selectedSource removeAllObjects];
-                        [self.selectedSource addObject:asset];
-                        if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-                            [self.delegate ej_imagePickerDidSelected:self.selectedSource];
+        if (_autoPopAfterCrop) {
+            if (isCrop) {
+                [[LSSaveToAlbum mainSave] saveImage:image successBlock:^(NSString *assetLocalId) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if ([assetLocalId length] > 0) {
+                            PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalId] options:nil].firstObject;
+                            [self.selectedSource removeAllObjects];
+                            [self.selectedSource addObject:asset];
+                            if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
+                                [self.delegate ej_imagePickerDidSelected:self.selectedSource];
+                            }
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                        } else {
+                            [EJProgressHUD showAlert:@"保存失败" forView:self.view];
                         }
-                        [self dismissViewControllerAnimated:YES completion:nil];
-                    } else {
-                        [EJProgressHUD showAlert:@"保存失败" forView:self.view];
-                    }
-                });
-            } failureBlock:^(NSError *error) {
+                    });
+                } failureBlock:^(NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [EJProgressHUD showAlert:error.localizedDescription forView:self.view];
+                    });
+                }];
+            } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [EJProgressHUD showAlert:error.localizedDescription forView:self.view];
+                    if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
+                        [self.delegate ej_imagePickerDidSelected:self.selectedSource];
+                    }
+                    [self dismissViewControllerAnimated:YES completion:nil];
                 });
-            }];
+            }
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([self.delegate respondsToSelector:@selector(ej_imagePickerDidSelected:)]) {
-                    [self.delegate ej_imagePickerDidSelected:self.selectedSource];
-                }
-                [self dismissViewControllerAnimated:YES completion:nil];
-            });
+            if ([self.delegate respondsToSelector:@selector(ej_imagePicker:didCropped:)]) {
+                [self.delegate ej_imagePicker:self didCropped:image];
+            }
         }
+    } else {
+        UIWindow * window = [UIApplication sharedApplication].delegate.window;
+        [EJProgressHUD showAlert:@"裁剪失败" forView:window];
     }
+}
+
+- (BOOL)ej_imageCropperVCAutoPopAfterCrop {
+    return _autoPopAfterCrop;
 }
 
 #pragma mark - LSInterceptVideoDelegate

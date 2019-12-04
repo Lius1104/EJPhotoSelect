@@ -15,12 +15,13 @@
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import "EJPhotoSelectDefine.h"
 #import "EJPhotoBrowser.h"
-#import "UIViewController+LSAuthorization.h"
+#import "EJImageCropperVC.h"
 
+#import "UIViewController+LSAuthorization.h"
 #import "NSString+EJShot.h"
 #import "UIImage+EJClicpShotImage.h"
 
-@interface EJCameraShotVC ()<EJCameraShotDelegate, AVCaptureFileOutputRecordingDelegate, EJPhotoBrowserDelegate> {
+@interface EJCameraShotVC ()<EJCameraShotDelegate, AVCaptureFileOutputRecordingDelegate, EJPhotoBrowserDelegate, EJImageCropperDelegate> {
     NSUInteger _shotCount;
 }
 
@@ -34,7 +35,6 @@
 @property (strong,nonatomic) AVCaptureDeviceInput *captureDeviceInput;//负责从AVCaptureDevice获得输入数据
 @property (strong,nonatomic) AVCaptureMovieFileOutput *captureMovieFileOutput;//视频输出流
 @property (nonatomic, strong) AVCaptureConnection * captureCon;
-
 
 //照片输出流
 @property (nonatomic, strong) AVCaptureStillImageOutput *stillImageOutput;
@@ -64,6 +64,8 @@
 @property (nonatomic, strong) UILabel * orientationLabel;
 
 @property (nonatomic, weak) NSTimer * freeSizeTimer;
+
+@property (nonatomic, strong) PHImageRequestOptions * options;
 
 @end
 
@@ -100,6 +102,7 @@
         
         _forcedCrop = NO;
         _cropScale = 0;
+        _directCrop = NO;
         
         self.allowBoth = YES;
     }
@@ -429,7 +432,11 @@
                 [self.assetIds addObject:assetLocalId];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (self.maxCount == 1) {
-                        [self ej_cameraShotViewDidClickPreviews];
+                        if (_directCrop == YES) {
+                            [self handleJumpToCropper];
+                        } else {
+                            [self ej_cameraShotViewDidClickPreviews];
+                        }
                     } else {
                         _shotView.img = resultImg;
                         _shotView.previewCount = self.assetIds.count;
@@ -905,6 +912,22 @@
     }
 }
 
+#pragma mark - EJImageCropperDelegate
+- (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop {
+    if ([self.delegate respondsToSelector:@selector(ej_shotVC:didCropped:)]) {
+        [self.delegate ej_shotVC:self didCropped:image];
+    }
+}
+
+- (void)ej_imageCropperVCDidCancel {
+    _shotCount = 0;
+    [self.assetIds removeAllObjects];
+}
+
+- (BOOL)ej_imageCropperVCAutoPopAfterCrop {
+    return NO;
+}
+
 #pragma mark - private
 - (AVCaptureDevice *)getCameraDeviceWithPosition:(AVCaptureDevicePosition)position {
 
@@ -982,6 +1005,24 @@
     return image;
 }
 
+- (void)handleJumpToCropper {
+    PHAsset * result = [[PHAsset fetchAssetsWithLocalIdentifiers:self.assetIds options:nil] firstObject];
+    if (result.mediaType == PHAssetMediaTypeImage) {
+        // 跳转到图片裁剪页面
+        [[PHImageManager defaultManager] requestImageDataForAsset:result options:self.options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            UIImage * image = [UIImage imageWithData:imageData];
+            EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
+            vc.cropScale = _cropScale;
+            vc.customCropBorder = _customCropBorder;
+            vc.delegate = self;
+            [self.navigationController pushViewController:vc animated:YES];
+        }];
+    } else {
+        // 跳转到视频裁剪页面
+        NSLog(@"跳转到视频裁剪页面");
+    }
+}
+
 #pragma mark - getter or setter
 - (void)setAllowBoth:(BOOL)allowBoth {
     _allowBoth = allowBoth;
@@ -1023,6 +1064,15 @@
         _orientationLabel.hidden = YES;
     }
     return _orientationLabel;
+}
+
+- (PHImageRequestOptions *)options {
+    if (!_options) {
+        _options = [[PHImageRequestOptions alloc] init];
+        _options.resizeMode = PHImageRequestOptionsResizeModeFast;
+        _options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+    }
+    return _options;
 }
 
 @end
