@@ -12,7 +12,7 @@
 #import <JPImageresizerView/JPImageresizerView.h>
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import <LSToolsKit/LSToolsKit.h>
-#import <EJTools/EJTools.h>
+#import <EJTools/UIFont+EJAdd.h>
 
 @interface EJImageCropperVC ()
 
@@ -22,7 +22,6 @@
 
 @property (nonatomic, strong) UIView * bottomView;
 @property (nonatomic, strong) UIButton * cancelBtn;
-//@property (nonatomic, strong) UILabel * titleLabel;
 @property (nonatomic, strong) UIButton * doneBtn;
 @property (nonatomic, strong) UIButton * rotateBtn;
 
