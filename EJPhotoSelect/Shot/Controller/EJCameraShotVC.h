@@ -55,6 +55,8 @@ typedef enum : NSInteger {
 @property (nonatomic, assign) BOOL directCrop;
 /// 自定义裁剪边框
 @property (nonatomic, strong) UIImage * customCropBorder;
+@property (nonatomic, strong) UIImage * customLayerImage;
+@property (nonatomic, copy) NSString * cropWarningTitle;
 
 - (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(E_VideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
 

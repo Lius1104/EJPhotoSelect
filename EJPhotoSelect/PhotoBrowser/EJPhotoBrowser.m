@@ -1419,6 +1419,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                     vc.cropScale = cropScale;
                     vc.delegate = self;
                     vc.customCropBorder = _customCropBorder;
+                    vc.customLayerImage = _customLayerImage;
+                    vc.warningTitle = _cropWarningTitle;
                     [self.navigationController pushViewController:vc animated:YES];
                 });
             }];
@@ -1440,6 +1442,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         vc.cropScale = cropScale;
         vc.delegate = self;
         vc.customCropBorder = _customCropBorder;
+        vc.customLayerImage = _customLayerImage;
+        vc.warningTitle = _cropWarningTitle;
         [self.navigationController pushViewController:vc animated:YES];
         return;
     }
@@ -1565,6 +1569,10 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
             }
         }
     });
+}
+
+- (BOOL)ej_imageCropperVCAutoPopAfterCrop {
+    return YES;
 }
 
 #pragma mark - Action Progress

@@ -149,6 +149,28 @@
     }
 }
 
+- (void)setCustomLayerImage:(UIImage *)customLayerImage {
+    _customLayerImage = customLayerImage;
+    for (UIViewController * itemVC in self.viewControllers) {
+        if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
+            EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
+            picker.customLayerImage = _customLayerImage;
+            break;
+        }
+    }
+}
+
+- (void)setCropWarningTitle:(NSString *)cropWarningTitle {
+    _cropWarningTitle = cropWarningTitle;
+    for (UIViewController * itemVC in self.viewControllers) {
+        if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
+            EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
+            picker.cropWarningTitle = _cropWarningTitle;
+            break;
+        }
+    }
+}
+
 - (void)configSectionInserts:(UIEdgeInsets)inserts cellSpace:(NSUInteger)cellSpace numOfLineCells:(NSUInteger)num {
     for (UIViewController * itemVC in self.viewControllers) {
         if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {

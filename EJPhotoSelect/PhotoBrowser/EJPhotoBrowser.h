@@ -155,6 +155,8 @@
 @property (nonatomic, assign) BOOL forcedCrop;
 /// 自定义裁剪边框
 @property (nonatomic, strong) UIImage * customCropBorder;
+@property (nonatomic, strong) UIImage * customLayerImage;
+@property (nonatomic, copy) NSString * cropWarningTitle;
 
 // Init
 - (id)initWithPhotos:(NSArray *)photosArray;

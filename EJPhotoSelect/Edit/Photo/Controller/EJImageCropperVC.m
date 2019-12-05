@@ -21,8 +21,13 @@
 
 @property (nonatomic, strong) UIView * bottomView;
 @property (nonatomic, strong) UIButton * cancelBtn;
-@property (nonatomic, strong) UILabel * titleLabel;
+//@property (nonatomic, strong) UILabel * titleLabel;
 @property (nonatomic, strong) UIButton * doneBtn;
+@property (nonatomic, strong) UIButton * rotateBtn;
+
+@property (nonatomic, strong) UILabel * warningLabel;
+
+@property (nonatomic, strong) UIImageView * customImageView;
 
 @end
 
@@ -73,13 +78,6 @@
     [_cancelBtn addTarget:self action:@selector(handleClickCancelButton:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_cancelBtn];
     
-    _titleLabel = [[UILabel alloc] init];
-    _titleLabel.textColor = UIColorHex(4F4F4F);
-    _titleLabel.font = [UIFont systemFontOfSize:14];
-    _titleLabel.text = @"剪裁";
-    _titleLabel.textAlignment = NSTextAlignmentCenter;
-    [_bottomView addSubview:_titleLabel];
-    
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneBtn setImage:[UIImage imageNamed:@"ejtools_crop_done"] forState:UIControlStateNormal];
     _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -87,25 +85,31 @@
     [_doneBtn addTarget:self action:@selector(handleClickDoneButton:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_doneBtn];
     
+    _rotateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_rotateBtn setImage:[UIImage imageNamed:@"ejtools_crop_rotate"] forState:UIControlStateNormal];
+    [_rotateBtn addTarget:self action:@selector(handleClickRotateButton:) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomView addSubview:_rotateBtn];
+    
     [_cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left).offset(20);
+        make.left.equalTo(self.view.mas_left).offset(10);
         make.size.mas_equalTo(CGSizeMake(32, 32));
         make.centerY.equalTo(_bottomView);
     }];
     [_doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.view.mas_right).offset(-20);
+        make.right.equalTo(self.view.mas_right).offset(-10);
         make.size.equalTo(_cancelBtn);
         make.bottom.equalTo(_cancelBtn.mas_bottom);
     }];
     
-    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_cancelBtn.mas_right);
-        make.right.equalTo(_doneBtn.mas_left);
-        make.height.equalTo(_bottomView.mas_height);
-        make.top.equalTo(_bottomView.mas_top);
+    [_rotateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(30, 32));
+        make.center.equalTo(_bottomView);
     }];
     
-//    __weak typeof(self) wSelf = self;
+    if (_customCropBorder) {
+        _customCropBorder.accessibilityIdentifier = @"customCropBorder";
+    }
+    
     @weakify(self);
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(50, 0, (56 + 24), 0);
     JPImageresizerConfigure *configure = [JPImageresizerConfigure defaultConfigureWithResizeImage:_image make:^(JPImageresizerConfigure *configure) {
@@ -114,6 +118,7 @@
             configure.jp_borderImage(weak_self.customCropBorder);
             configure.jp_borderImageRectInset(CGPointMake(-2, -2));
         }
+        configure.jp_animationCurve(JPAnimationCurveLinear);
     }];
     JPImageresizerView *imageresizerView = [JPImageresizerView imageresizerViewWithConfigure:configure imageresizerIsCanRecovery:^(BOOL isCanRecovery) {
     } imageresizerIsPrepareToScale:^(BOOL isPrepareToScale) {
@@ -122,11 +127,52 @@
         // 当预备缩放设置按钮不可点，结束后可点击
         BOOL enabled = !isPrepareToScale;
         self.doneBtn.enabled = enabled;
+        self.rotateBtn.enabled = enabled;
     }];
     imageresizerView.resizeWHScale = _cropScale;
     imageresizerView.frameType = JPClassicFrameType;
     [self.view insertSubview:imageresizerView atIndex:0];
     self.imageresizerView = imageresizerView;
+    
+    if (_customCropBorder && _customLayerImage && _cropScale != 0) {
+        _customImageView = [[UIImageView alloc] initWithImage:self.customLayerImage];
+        _customImageView.contentMode = UIViewContentModeScaleAspectFill;
+        for (UIView * subview in _imageresizerView.frameView.subviews) {
+            if ([subview isKindOfClass:[UIImageView class]]) {
+                UIImageView * imageView = (UIImageView *)subview;
+                if ([imageView.image.accessibilityIdentifier isEqualToString:@"customCropBorder"]) {
+                    [imageView addSubview:_customImageView];
+                    [_customImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.center.equalTo(imageView);
+                        make.width.equalTo(imageView.mas_width).multipliedBy(0.66);
+                        make.height.equalTo(imageView.mas_height).multipliedBy(0.66);
+                    }];
+                    break;
+                }
+            }
+        }
+        
+        
+    }
+    
+    if ([_warningTitle length] > 0) {
+        _warningLabel = [[UILabel alloc] init];
+        _warningLabel.textColor = UIColorHex(FFFEFE);
+        _warningLabel.font = [UIFont ej_pingFangSCRegularOfSize:14];
+        _warningLabel.textAlignment = NSTextAlignmentCenter;
+        _warningLabel.text = _warningTitle;
+        [_imageresizerView addSubview:_warningLabel];
+        CGFloat height = (kScreenWidth - 20) / _cropScale;
+        CGFloat centerY = CGRectGetMidY(_imageresizerView.frameView.frame);
+        CGFloat top = centerY + height / 2 + 20;
+        [_warningLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_imageresizerView.mas_left).offset(10);
+            make.centerX.equalTo(_imageresizerView);
+            make.top.equalTo(_imageresizerView.mas_top).offset(top);
+            make.height.mas_equalTo(17);
+        }];
+    }
+    
     
     if (@available(iOS 11.0, *)) {
         
@@ -198,6 +244,22 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
     }];
+}
+
+// 旋转
+- (void)handleClickRotateButton:(UIButton *)sender {
+    _rotateBtn.userInteractionEnabled = NO;
+    _customImageView.hidden = YES;
+    [self.imageresizerView rotation];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _rotateBtn.userInteractionEnabled = YES;
+        BOOL isNormal = _imageresizerView.verticalityMirror == _imageresizerView.horizontalMirror;
+        
+        CGFloat angle = (_imageresizerView.isClockwiseRotation ? 1.0 : -1.0) * (isNormal ? 1.0 : -1.0) * M_PI_2;
+        CATransform3D fvTransform = CATransform3DRotate(_customImageView.layer.transform, -angle, 0, 0, 1);
+        _customImageView.layer.transform = fvTransform;
+        _customImageView.hidden = NO;
+    });
 }
 
 @end

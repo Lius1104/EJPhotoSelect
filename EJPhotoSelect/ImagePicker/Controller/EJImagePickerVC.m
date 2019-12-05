@@ -392,6 +392,9 @@
             EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
             vc.cropScale = _cropScale;
             vc.delegate = self;
+            vc.customCropBorder = _customCropBorder;
+            vc.customLayerImage = _customLayerImage;
+            vc.warningTitle = _cropWarningTitle;
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }];
@@ -419,6 +422,7 @@
     brower.showCropButton = _allowCrop;
     brower.forcedCrop = _forcedCrop;
     brower.customCropBorder = _customCropBorder;
+    brower.customLayerImage = _customLayerImage;
     if (_maxSelectedCount == 1) {
         brower.showSelectButton = NO;
     } else {
@@ -710,6 +714,7 @@
     [brower setCurrentPhotoIndex:currentIndex];
     brower.isPreview = YES;
     brower.customCropBorder = _customCropBorder;
+    brower.customLayerImage = _customLayerImage;
     [self.navigationController pushViewController:brower animated:YES];
 }
 
@@ -755,6 +760,8 @@
     vc.directCrop = _directEdit;
     vc.cropScale = _cropScale;
     vc.customCropBorder = _customCropBorder;
+    vc.customLayerImage = _customLayerImage;
+    vc.cropWarningTitle = _cropWarningTitle;
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self ej_presentViewController:nav animated:YES completion:nil];
 }
@@ -793,6 +800,8 @@
             vc.directCrop = _directEdit;
             vc.cropScale = _cropScale;
             vc.customCropBorder = _customCropBorder;
+            vc.customLayerImage = _customLayerImage;
+            vc.cropWarningTitle = _cropWarningTitle;
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self ej_presentViewController:nav animated:YES completion:nil];
         });

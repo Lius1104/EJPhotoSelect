@@ -45,6 +45,8 @@
 #import "UIView+EJAnimation.h"
 #import "UIView+EJCornerRadius.h"
 
+#import "UIImageView+EJWebCache.h"
+
 #import "NSDate+EJAdd.h"
 #import "NSDateFormatter+EJAdd.h"
 #import "NSString+EJNetwork.h"

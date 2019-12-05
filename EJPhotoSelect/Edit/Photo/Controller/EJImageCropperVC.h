@@ -29,6 +29,8 @@
 
 /// 自定义裁剪边框
 @property (nonatomic, strong) UIImage * customCropBorder;
+@property (nonatomic, strong) UIImage * customLayerImage;
+@property (nonatomic, copy) NSString * warningTitle;
 
 - (instancetype)initWithImage:(UIImage *)image;
 

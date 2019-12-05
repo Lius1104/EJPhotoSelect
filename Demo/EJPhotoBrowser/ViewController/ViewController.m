@@ -125,7 +125,9 @@
             vc.allowBoth = NO;
             vc.videoShotCount = 1;
             vc.directCrop = YES;
-            vc.customCropBorder = [UIImage imageNamed:@"touxiang"];
+            vc.customCropBorder = [UIImage imageNamed:@"mengceng"];
+            vc.customLayerImage = [UIImage imageNamed:@"youxiang"];
+            vc.cropWarningTitle = @"请将头像缩放到合适的位置";
             UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self ej_presentViewController:nav animated:YES completion:nil];
         }];
@@ -144,6 +146,9 @@
             vc.previewDelete = _config.previewDelete;
             vc.forcedCrop = _config.forcedCrop;
             vc.autoPopAfterCrop = NO;
+            vc.customCropBorder = [UIImage imageNamed:@"mengceng"];
+            vc.customLayerImage = [UIImage imageNamed:@"youxiang"];
+            vc.cropWarningTitle = @"请将头像缩放到合适的位置";
             // ui
             [vc configSectionInserts:_config.sectionInsets cellSpace:_config.cellSpace numOfLineCells:_config.numOfLineCells];
             

@@ -1014,6 +1014,8 @@
             EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
             vc.cropScale = _cropScale;
             vc.customCropBorder = _customCropBorder;
+            vc.customLayerImage = _customLayerImage;
+            vc.warningTitle = _cropWarningTitle;
             vc.delegate = self;
             [self.navigationController pushViewController:vc animated:YES];
         }];
