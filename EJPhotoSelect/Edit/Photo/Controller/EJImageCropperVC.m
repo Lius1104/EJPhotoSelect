@@ -12,7 +12,6 @@
 #import <JPImageresizerView/JPImageresizerView.h>
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import <LSToolsKit/LSToolsKit.h>
-#import <EJTools/UIFont+EJAdd.h>
 
 @interface EJImageCropperVC ()
 
@@ -158,7 +157,7 @@
     if ([_warningTitle length] > 0) {
         _warningLabel = [[UILabel alloc] init];
         _warningLabel.textColor = UIColorHex(FFFEFE);
-        _warningLabel.font = [UIFont ej_pingFangSCRegularOfSize:14];
+        _warningLabel.font = [UIFont systemFontOfSize:14];
         _warningLabel.textAlignment = NSTextAlignmentCenter;
         _warningLabel.text = _warningTitle;
         [_imageresizerView addSubview:_warningLabel];
