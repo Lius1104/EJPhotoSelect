@@ -12,6 +12,7 @@
 #import <JPImageresizerView/JPImageresizerView.h>
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import <LSToolsKit/LSToolsKit.h>
+#import <EJTools/EJTools.h>
 
 @interface EJImageCropperVC ()
 
