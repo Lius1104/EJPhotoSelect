@@ -8,6 +8,7 @@
 
 #import "EJShotItemsView.h"
 #import <YYKit/YYKit.h>
+#import <Masonry/Masonry.h>
 
 @implementation EJShotItemsView
 
