@@ -12,6 +12,7 @@
 		533FEAE722FD1645008373A1 /* EJPhotoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 533FEAE522FD1645008373A1 /* EJPhotoConfig.m */; };
 		534D0DC1238CF3BC0092F49A /* UIImage+EJClicpShotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 534D0DC0238CF3BC0092F49A /* UIImage+EJClicpShotImage.m */; };
 		5369123422FAB00F00D8B5F2 /* EJImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5369123322FAB00F00D8B5F2 /* EJImageManager.m */; };
+		539131E4239A4B7A009BB8A4 /* EJShotItemsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 539131E3239A4B7A009BB8A4 /* EJShotItemsView.m */; };
 		53CB9EF822F7D95900A85A77 /* EJSelectedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */; };
 		53CB9EF922F7D95900A85A77 /* EJSelectedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */; };
 		53CB9EFD22F7D97100A85A77 /* EJAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9EFB22F7D97100A85A77 /* EJAddCell.m */; };
@@ -88,6 +89,8 @@
 		5369123122FAB00F00D8B5F2 /* EJImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJImageManager.h; sourceTree = "<group>"; };
 		5369123222FAB00F00D8B5F2 /* ImagePickerEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerEnums.h; sourceTree = "<group>"; };
 		5369123322FAB00F00D8B5F2 /* EJImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJImageManager.m; sourceTree = "<group>"; };
+		539131E2239A4B7A009BB8A4 /* EJShotItemsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJShotItemsView.h; sourceTree = "<group>"; };
+		539131E3239A4B7A009BB8A4 /* EJShotItemsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJShotItemsView.m; sourceTree = "<group>"; };
 		53CB9EF522F7D95900A85A77 /* EJSelectedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJSelectedCell.h; sourceTree = "<group>"; };
 		53CB9EF622F7D95900A85A77 /* EJSelectedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJSelectedCell.m; sourceTree = "<group>"; };
 		53CB9EF722F7D95900A85A77 /* EJSelectedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EJSelectedCell.xib; sourceTree = "<group>"; };
@@ -491,6 +494,8 @@
 			children = (
 				53E0334C22FA767600AB3B04 /* EJCameraShotView.h */,
 				53E0334D22FA767600AB3B04 /* EJCameraShotView.m */,
+				539131E2239A4B7A009BB8A4 /* EJShotItemsView.h */,
+				539131E3239A4B7A009BB8A4 /* EJShotItemsView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -841,6 +846,7 @@
 				53E0335E22FA767600AB3B04 /* LSInterceptVideo.m in Sources */,
 				53E0336B22FA767600AB3B04 /* EJCameraShotVC.m in Sources */,
 				53E0336922FA767600AB3B04 /* EJTapDetectingView.m in Sources */,
+				539131E4239A4B7A009BB8A4 /* EJShotItemsView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

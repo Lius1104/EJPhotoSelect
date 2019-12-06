@@ -12,7 +12,7 @@
 #import <Masonry/Masonry.h>
 #import <LSToolsKit/LSToolsKit.h>
 #import <EJTools/EJTools.h>
-
+#import "EJShotItemsView.h"
 
 
 @interface EJCameraShotView ()<UIScrollViewDelegate> {
@@ -30,9 +30,11 @@
 //拍摄照片
 @property (nonatomic, strong) UIButton * cameraBtn;
 
-@property (nonatomic, strong) UIView * selectedDot;
-@property (nonatomic, strong) UIScrollView * selectScroll;
-@property (nonatomic, strong) NSArray<UIButton *> * selectItem;
+//@property (nonatomic, strong) UIView * selectedDot;
+//@property (nonatomic, strong) UIScrollView * selectScroll;
+//@property (nonatomic, strong) NSArray<UIButton *> * selectItem;
+
+@property (nonatomic, strong) EJShotItemsView * shotItemView;
 
 //切换到拍摄视频状态
 @property (nonatomic, strong) UIButton * doneBtn;
@@ -166,64 +168,19 @@
     }];
     
     if (_shotType == EJ_ShotType_Both) {
-        _selectScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
-        _selectScroll.clipsToBounds = NO;
-        _selectScroll.pagingEnabled = YES;
-        _selectScroll.showsHorizontalScrollIndicator = NO;
-        _selectScroll.delegate = self;
+        _shotItemView = [[EJShotItemsView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 24)];
+        _shotItemView.selectScroll.delegate = self;
         
-        UIButton * photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [photoButton setTitle:@"照片" forState:UIControlStateNormal];
-        [photoButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
-#if defined(kMajorColor)
-        [photoButton setTitleColor:kMajorColor forState:UIControlStateSelected];
-#else
-        [photoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-#endif
-        
-        photoButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        photoButton.frame = CGRectMake(0, 0, 45, 20);
-        photoButton.selected = YES;
-        [_selectScroll addSubview:photoButton];
-        
-        UIButton * videoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [videoButton setTitle:@"视频" forState:UIControlStateNormal];
-        [videoButton setTitleColor:UIColorHex(ffffff) forState:UIControlStateNormal];
-#if defined(kMajorColor)
-        [videoButton setTitleColor:kMajorColor forState:UIControlStateSelected];
-#else
-        [videoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-#endif
-        videoButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        videoButton.frame = CGRectMake(45, 0, 45, 20);
-        [_selectScroll addSubview:videoButton];
-        _selectScroll.contentSize = CGSizeMake(90, 0);
-        
-        _selectItem = @[photoButton, videoButton];
-        
-        [_toolView addSubview:_selectScroll];
-        
-        _selectedDot = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, 4)];
-#if defined(kMajorColor)
-        _selectedDot.backgroundColor = kMajorColor;
-#else
-        _selectedDot.backgroundColor = [UIColor whiteColor];
-#endif
-        _selectedDot.layer.cornerRadius = 2;
-        _selectedDot.layer.masksToBounds = YES;
-        [_toolView addSubview:_selectedDot];
-        
-        [_selectScroll mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(_toolView);
-            make.height.mas_equalTo(20);
-            make.width.mas_equalTo(45);
-            make.top.equalTo(_toolView);
+        [_shotItemView.selectItem enumerateObjectsUsingBlock:^(UIButton * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [obj addTarget:self action:@selector(handleClickSelectItemButton:) forControlEvents:UIControlEventTouchUpInside];
         }];
-        [_selectedDot mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(_toolView);
-            make.size.mas_equalTo(CGSizeMake(4, 4));
-            make.top.equalTo(_selectScroll.mas_bottom);
+        
+        [_toolView addSubview:_shotItemView];
+        [_shotItemView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.equalTo(_toolView);
+            make.height.mas_equalTo(24);
         }];
+        
     }
     
 
@@ -506,8 +463,7 @@
 
 - (void)startRecordVideo {
     // 隐藏 scroll，禁用 swipe 手势
-    _selectScroll.hidden = YES;
-    _selectedDot.hidden = YES;
+    _shotItemView.hidden = YES;
     [self.swipeGestures enumerateObjectsUsingBlock:^(UISwipeGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.enabled = NO;
     }];
@@ -530,8 +486,7 @@
 
 - (void)stopRecordVideo {
     // 显示 scroll ，开启手势
-    _selectScroll.hidden = NO;
-    _selectedDot.hidden = NO;
+    _shotItemView.hidden = NO;
     [self.swipeGestures enumerateObjectsUsingBlock:^(UISwipeGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.enabled = YES;
     }];
@@ -560,8 +515,7 @@
 
 - (void)setUpAllowBoth {
     if (_shotType == EJ_ShotType_Both) {
-        _selectScroll.hidden = !_allowBoth;
-        _selectedDot.hidden = !_allowBoth;
+        _shotItemView.hidden = !_allowBoth;
         [_swipeGestures enumerateObjectsUsingBlock:^(UISwipeGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             obj.enabled = _allowBoth;
         }];
@@ -688,16 +642,42 @@
     }
 }
 
+- (void)handleClickSelectItemButton:(UIButton *)sender {
+    NSUInteger index = sender.tag;
+    if (index != _currentType) {
+        for (UIButton * obj in _shotItemView.selectItem) {
+            obj.enabled = NO;
+        }
+        switch (_currentType) {
+            case E_CurrentType_Photo: {
+                _currentType = E_CurrentType_Video;
+                [self handleChangeCurrentShotType];
+            }
+                break;
+            case E_CurrentType_Video: {
+                _currentType = E_CurrentType_Photo;
+                [self handleChangeCurrentShotType];
+            }
+                break;
+            default:
+                break;
+        }
+        for (UIButton * obj in _shotItemView.selectItem) {
+            obj.enabled = YES;
+        }
+    }
+}
+
 - (void)handleChangeCurrentShotType {
     //动画隐藏／显示对应按钮
     _changeDeviceBtn.hidden = NO;
     if (_currentType == E_CurrentType_Video) {
-        _selectScroll.contentOffset = CGPointMake(45, 0);
+        _shotItemView.selectScroll.contentOffset = CGPointMake(45, 0);
     } else {
-        _selectScroll.contentOffset = CGPointMake(0, 0);
+        _shotItemView.selectScroll.contentOffset = CGPointMake(0, 0);
     }
-    [self.selectItem enumerateObjectsUsingBlock:^(UIButton * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (idx == _selectScroll.contentOffset.x / 45) {
+    [self.shotItemView.selectItem enumerateObjectsUsingBlock:^(UIButton * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == _shotItemView.selectScroll.contentOffset.x / 45) {
             obj.selected = YES;
         } else {
             obj.selected = NO;

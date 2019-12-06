@@ -16,6 +16,7 @@
 
 @protocol EJImagePickerVCDelegate <NSObject>
 
+@optional
 - (void)ej_imagePickerVC:(EJImagePickerNVC *)imagePicker didSelectedSource:(NSMutableArray *)source;
 
 - (void)ej_imagePickerVC:(EJImagePickerNVC *)imagePicker didCroppedImage:(UIImage *)image;
