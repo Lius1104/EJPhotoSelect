@@ -7,6 +7,7 @@
 //
 
 #import "EJShotItemsView.h"
+#import <YYKit/YYKit.h>
 
 @implementation EJShotItemsView
 
