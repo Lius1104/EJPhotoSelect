@@ -28,6 +28,9 @@
 
 @property (nonatomic, strong) UIImageView * customImageView;
 
+@property (nonatomic, assign) BOOL isAddObserver;
+@property (nonatomic, weak) UIImageView * borderImage;
+
 @end
 
 @implementation EJImageCropperVC
@@ -37,8 +40,23 @@
     if (self) {
         _cropScale = 0;
         _image = image;
+        _isAddObserver = NO;
     }
     return self;
+}
+
+- (void)dealloc {
+    if (_isAddObserver) {
+        for (UIView * subview in _imageresizerView.frameView.subviews) {
+            if ([subview isKindOfClass:[UIImageView class]]) {
+                UIImageView * imageView = (UIImageView *)subview;
+                if ([imageView.image.accessibilityIdentifier isEqualToString:@"customCropBorder"]) {
+                    [imageView removeObserver:self forKeyPath:@"frame"];
+                    break;
+                }
+            }
+        }
+    }
 }
 
 - (void)viewDidLoad {
@@ -136,10 +154,14 @@
     if (_customCropBorder && _customLayerImage && _cropScale != 0) {
         _customImageView = [[UIImageView alloc] initWithImage:self.customLayerImage];
         _customImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _customImageView.clipsToBounds = YES;
         for (UIView * subview in _imageresizerView.frameView.subviews) {
             if ([subview isKindOfClass:[UIImageView class]]) {
                 UIImageView * imageView = (UIImageView *)subview;
                 if ([imageView.image.accessibilityIdentifier isEqualToString:@"customCropBorder"]) {
+                    [imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+                    _isAddObserver = YES;
+                    _borderImage = imageView;
                     [imageView addSubview:_customImageView];
                     [_customImageView mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.center.equalTo(imageView);
@@ -195,6 +217,17 @@
     _cropScale = cropScale;
     if (self.imageresizerView) {
         self.imageresizerView.resizeWHScale = _cropScale;
+    }
+}
+
+#pragma mark - KVO
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"frame"]) {
+        NSLog(@"frame : %@", NSStringFromCGRect(_borderImage.frame));
+        if (_customImageView) {
+            _customImageView.width = _borderImage.width * 0.66;
+            _customImageView.height = _borderImage.height * 0.66;
+        }
     }
 }
 
