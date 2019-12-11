@@ -107,6 +107,7 @@
         
         _manager = [[PHCachingImageManager alloc] init];
         _options = [[PHImageRequestOptions alloc] init];
+        _options.networkAccessAllowed = YES;
         _options.resizeMode = PHImageRequestOptionsResizeModeFast;
         _options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     }
@@ -385,9 +386,19 @@
 
 - (void)jumpToCrop {
     _isLocalSelected = YES;
-    PHAsset * first = [self.selectedSource firstObject];
+    PHAsset * first = [self.selectedSource objectOrNilAtIndex:0];
+    if (first == nil) {
+        [EJProgressHUD showAlert:@"出错了，请重试" forView:self.view];
+        return;
+    }
     if (first.mediaType == PHAssetMediaTypeImage) {
         [self.manager requestImageDataForAsset:first options:self.options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            if (imageData == nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [EJProgressHUD showAlert:@"找不到照片了" forView:self.view];
+                });
+                return;
+            }
             UIImage * image = [UIImage imageWithData:imageData];
             EJImageCropperVC * vc = [[EJImageCropperVC alloc] initWithImage:image];
             vc.cropScale = _cropScale;
@@ -679,15 +690,20 @@
     if (_showShot) {
         currentIndex -= 1;
     }
-    if (_maxSelectedCount == 1 && _allowCrop) {
-        [self.selectedSource removeAllObjects];
-        [self.selectedSource addObject:[_fetchResult objectAtIndex:currentIndex]];
-        if (_directEdit) {
-            [self jumpToCrop];
-            return;
+    if (currentIndex < _fetchResult.count) {
+        if (_maxSelectedCount == 1 && _allowCrop) {
+            [self.selectedSource removeAllObjects];
+            [self.selectedSource addObject:[_fetchResult objectAtIndex:currentIndex]];
+            if (_directEdit) {
+                [self jumpToCrop];
+                return;
+            }
         }
+        [self jumpToBrowser:currentIndex];
+    } else {
+        [collectionView reloadData];
+        [EJProgressHUD showAlert:@"出错了，请重试" forView:self.view];
     }
-    [self jumpToBrowser:currentIndex];
 }
 
 #pragma mark - LSAssetCollectionToolBarDelegate
