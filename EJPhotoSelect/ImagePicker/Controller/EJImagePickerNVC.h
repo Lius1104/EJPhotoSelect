@@ -27,6 +27,8 @@
 @interface EJImagePickerNVC : UINavigationController
 
 @property (nonatomic, weak) id <EJImagePickerVCDelegate> pickerDelegate;
+/// 自定义 title
+@property (nonatomic, copy) NSString * customTitle;
 
 /**
  最大选中数量

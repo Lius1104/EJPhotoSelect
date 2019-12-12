@@ -171,6 +171,17 @@
     }
 }
 
+- (void)setCustomTitle:(NSString *)customTitle {
+    _customTitle = customTitle;
+    for (UIViewController * itemVC in self.viewControllers) {
+        if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
+            EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
+            picker.customTitle = _customTitle;
+            break;
+        }
+    }
+}
+
 - (void)configSectionInserts:(UIEdgeInsets)inserts cellSpace:(NSUInteger)cellSpace numOfLineCells:(NSUInteger)num {
     for (UIViewController * itemVC in self.viewControllers) {
         if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {

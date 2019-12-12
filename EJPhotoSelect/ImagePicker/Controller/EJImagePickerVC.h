@@ -25,6 +25,9 @@
 
 @interface EJImagePickerVC : UIViewController
 
+/// 自定义 title
+@property (nonatomic, copy) NSString * customTitle;
+
 @property (nonatomic, weak) id <EJImagePickerDelegate> delegate;
 
 /**

@@ -124,7 +124,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = UIColorHex(ffffff);
-    self.title = @"选择照片视频";
+    if ([_customTitle length] > 0) {
+        self.title = _customTitle;
+    } else {
+        self.title = @"选择照片视频";
+    }
     
     if ([EJPhotoConfig sharedPhotoConfig].barTintColor) {
        self.navigationController.navigationBar.barTintColor = [EJPhotoConfig sharedPhotoConfig].barTintColor;
@@ -282,8 +286,12 @@
     options.sortDescriptors = @[sort];
     _fetchResult = [PHAsset fetchAssetsInAssetCollection:_assetCollection options:options];
     if (_maxSelectedCount != 1) {
-        NSString * title = [_assetCollection.localizedTitle length] > 0 ? _assetCollection.localizedTitle : @"";
-        self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)_fetchResult.count];
+        if ([_customTitle length] > 0) {
+            self.title = _customTitle;
+        } else {
+            NSString * title = [_assetCollection.localizedTitle length] > 0 ? _assetCollection.localizedTitle : @"";
+            self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)_fetchResult.count];
+        }
     }
 }
 
@@ -466,8 +474,12 @@
     dispatch_sync(dispatch_get_main_queue(), ^{
         self.fetchResult = [changeDetail fetchResultAfterChanges];
         if (_maxSelectedCount != 1) {
-            NSString * title = [self.assetCollection.localizedTitle length] > 0 ? self.assetCollection.localizedTitle : @"";
-            self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)self.fetchResult.count];
+            if ([_customTitle length] > 0) {
+                self.title = _customTitle;
+            } else {
+                NSString * title = [self.assetCollection.localizedTitle length] > 0 ? self.assetCollection.localizedTitle : @"";
+                self.title = [NSString stringWithFormat:@"%@(%d)", title, (int)self.fetchResult.count];
+            }
         }
         if (changeDetail.hasIncrementalChanges) {
             UICollectionView * collection = self.collectionView;
@@ -476,26 +488,6 @@
                     [self.collectionView reloadData];
                 } else {
                     [self.collectionView reloadData];
-//                    [collection performBatchUpdates:^{
-//                        NSIndexSet * removedIndexes = changeDetail.removedIndexes;
-//                        if (removedIndexes.count > 0) {
-//                            NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:removedIndexes AtSection:0];
-//                            [collection deleteItemsAtIndexPaths:indexPaths];
-//                        }
-//                        NSIndexSet * insertIndexes = changeDetail.insertedIndexes;
-//                        if (insertIndexes.count > 0) {
-//                            NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:insertIndexes AtSection:0];
-//                            [collection insertItemsAtIndexPaths:indexPaths];
-//                        }
-//                        NSIndexSet * changedIndexes = changeDetail.changedIndexes;
-//                        if (changedIndexes.count > 0) {
-//                            NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:changedIndexes AtSection:0];
-//                            [collection reloadItemsAtIndexPaths:indexPaths];
-//                        }
-//                        [changeDetail enumerateMovesWithBlock:^(NSUInteger fromIndex, NSUInteger toIndex) {
-//                            [collection moveItemAtIndexPath:[NSIndexPath indexPathForItem:fromIndex inSection:0] toIndexPath:[NSIndexPath indexPathForItem:toIndex inSection:0]];
-//                        }];
-//                    } completion:nil];
                 }
             } else {
                 //

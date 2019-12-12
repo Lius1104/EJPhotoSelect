@@ -138,6 +138,7 @@
                 [self.dataSource removeAllObjects];
             }
             EJImagePickerNVC * vc = [[EJImagePickerNVC alloc] initWithSourceType:sourceType MaxCount:_config.maxSelectCount SelectedSource:self.dataSource increaseOrder:_config.increaseOrder showShot:_config.allowShot allowCrop:_config.allowCrop];
+            vc.customTitle = @"hhhhh";
             if (_config.allowCrop) {
                 vc.directEdit = _config.directEdit;
                 vc.cropScale = _config.cropScale;
