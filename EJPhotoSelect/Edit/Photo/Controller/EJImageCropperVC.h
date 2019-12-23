@@ -14,6 +14,8 @@
 - (void)ej_imageCropperVCDidCancel;
 
 - (void)ej_imageCropperVCDidCrop:(UIImage *)image isCrop:(BOOL)isCrop;
+
+@optional
 /// 主要用于 某些需要同步的操作上
 - (BOOL)ej_imageCropperVCAutoPopAfterCrop;
 
