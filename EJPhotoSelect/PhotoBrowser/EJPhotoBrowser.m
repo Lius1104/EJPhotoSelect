@@ -232,6 +232,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [_backItem setImage:[UIImage imageNamed:@"ejtools_photobrowser_back"] forState:UIControlStateNormal];
     [_backItem addTarget:self action:@selector(handleClickBackItem) forControlEvents:UIControlEventTouchUpInside];
     _backItem.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    _backItem.imageEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0);
     [_navigationBar addSubview:_backItem];
     
     _titleLabel = [[UILabel alloc] init];
@@ -248,7 +249,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [_navigationBar addSubview:_selectButton];
     _selectButton.hidden = !_showSelectButton;
     
-    _backItem.frame = CGRectMake(8, kToolsStatusHeight, 30, kToolsNavStatusHeight - kToolsStatusHeight);
+    _backItem.frame = CGRectMake(0, kToolsStatusHeight, 38, kToolsNavStatusHeight - kToolsStatusHeight);
     _selectButton.frame = CGRectMake(self.view.width - 30 - 13, kToolsStatusHeight, 30, 30);
     _selectButton.centerY = _backItem.centerY;
     
@@ -1538,15 +1539,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
             NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
             if (maxCount == 1) {
-                if ([self.delegate respondsToSelector:@selector(photoBrowser:isPhotoSelectedAtIndex:)]) {
-                    BOOL isSelected = [self.delegate photoBrowser:self isPhotoSelectedAtIndex:_currentPageIndex];
-                    if (!isSelected) {
-                        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
-                            [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
-                        }
-                    }
-                } else {
-                    NSAssert(0, @"please configure photoBrowser:isPhotoSelectedAtIndex:");
+                if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
+                    [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
                 }
             } else {
                 // 获取当前的预选状态
@@ -1554,10 +1548,14 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                 if (isSelected == NO && [self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
                     [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
                 }
+                if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
+                    [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
+                }
             }
-        }
-        if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
-            [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
+        } else {
+            if ([self.delegate respondsToSelector:@selector(photoBrowser:didCropPhotoAtIndex:assetId:)]) {
+                [self.delegate photoBrowser:self didCropPhotoAtIndex:_currentPageIndex assetId:asset.localIdentifier];
+            }
         }
         if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
             NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];

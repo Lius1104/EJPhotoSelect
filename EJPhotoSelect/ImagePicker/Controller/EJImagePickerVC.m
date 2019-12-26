@@ -685,8 +685,8 @@
     if (currentIndex < _fetchResult.count) {
         if (_maxSelectedCount == 1 && _allowCrop) {
             [self.selectedSource removeAllObjects];
-            [self.selectedSource addObject:[_fetchResult objectAtIndex:currentIndex]];
             if (_directEdit) {
+                [self.selectedSource addObject:[_fetchResult objectAtIndex:currentIndex]];
                 [self jumpToCrop];
                 return;
             }

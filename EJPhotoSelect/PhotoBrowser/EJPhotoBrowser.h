@@ -28,10 +28,8 @@
 @optional
 
 - (id <EJPhoto>)photoBrowser:(EJPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index;
-//- (EJCaptionView *)photoBrowser:(EJPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index;
 - (NSString *)photoBrowser:(EJPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(EJPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index;
-//- (void)photoBrowser:(EJPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index;
 
 /**
  当前资源是否选中
