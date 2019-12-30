@@ -408,7 +408,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 #pragma mark - Appearance
 
 - (void)viewWillAppear:(BOOL)animated {
-    
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
 	// Super
 	[super viewWillAppear:animated];
     
@@ -1353,6 +1353,9 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                         return;
                     } else {
                         // 不需要裁剪
+                        if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:selectedChanged:)]) {
+                            [self.delegate photoBrowser:self photoAtIndex:_currentPageIndex selectedChanged:YES];
+                        }
                     }
                 } else {
                     if (needCrop) {
@@ -1378,6 +1381,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                         [alertC addAction:doneAction];
                         [self presentViewController:alertC animated:YES completion:nil];
                         return;
+                    } else {
+                        // 不需要裁剪
                     }
                 }
             } else {

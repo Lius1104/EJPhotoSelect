@@ -973,6 +973,10 @@
         return;
     }
     
+    if (_maxSelectedCount == 1) {
+        [self.selectedSource removeAllObjects];
+    }
+    
     PHAsset * currentAsset;
     for (PHAsset * item in self.selectedSource) {
         if ([item.localIdentifier isEqualToString:indexAsset.localIdentifier]) {
