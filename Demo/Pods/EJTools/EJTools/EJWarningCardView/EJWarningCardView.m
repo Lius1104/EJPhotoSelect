@@ -319,6 +319,7 @@
     } else {
         _mainView.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
     }
+    self.frame = view.bounds;
     [view addSubview:self];
     [view addSubview:self.mainView];
     [UIView animateWithDuration:kAnimationDuration animations:^{

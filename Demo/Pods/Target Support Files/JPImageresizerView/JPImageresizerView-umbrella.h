@@ -11,6 +11,7 @@
 #endif
 
 #import "CALayer+JPImageresizer.h"
+#import "JPImageresizerBlurView.h"
 #import "JPImageresizerConfigure.h"
 #import "JPImageresizerFrameView.h"
 #import "JPImageresizerTypedef.h"

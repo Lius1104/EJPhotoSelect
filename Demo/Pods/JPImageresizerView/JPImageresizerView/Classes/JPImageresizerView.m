@@ -1,6 +1,6 @@
 //
 //  JPImageresizerView.m
-//  DesignSpaceRestructure
+//  JPImageresizerView
 //
 //  Created by 周健平 on 2017/12/19.
 //  Copyright © 2017年 周健平. All rights reserved.
@@ -32,33 +32,34 @@
     [self.frameView updateFrameType:frameType];
 }
 
+- (void)setBlurEffect:(UIBlurEffect *)blurEffect {
+    [self.frameView setupStrokeColor:self.strokeColor blurEffect:blurEffect bgColor:self.bgColor maskAlpha:self.maskAlpha animated:YES];
+}
+
 - (void)setBgColor:(UIColor *)bgColor {
-    if (bgColor == [UIColor clearColor]) bgColor = [UIColor blackColor];
-    self.backgroundColor = bgColor;
-    [self.frameView setFillColor:bgColor];
+    [self.frameView setupStrokeColor:self.strokeColor blurEffect:self.blurEffect bgColor:bgColor maskAlpha:self.maskAlpha animated:YES];
 }
 
 - (void)setMaskAlpha:(CGFloat)maskAlpha {
-    self.frameView.maskAlpha = maskAlpha;
+    [self.frameView setupStrokeColor:self.strokeColor blurEffect:self.blurEffect bgColor:self.bgColor maskAlpha:maskAlpha animated:YES];
 }
 
 - (void)setStrokeColor:(UIColor *)strokeColor {
-    self.frameView.strokeColor = strokeColor;
+    [self.frameView setupStrokeColor:strokeColor blurEffect:self.blurEffect bgColor:self.bgColor maskAlpha:self.maskAlpha animated:YES];
 }
 
 - (void)setResizeImage:(UIImage *)resizeImage {
-    self.imageView.image = resizeImage;
-    [self updateSubviewLayouts];
+    [self setResizeImage:resizeImage animated:YES transition:UIViewAnimationTransitionCurlUp];
 }
 
 - (void)setVerBaseMargin:(CGFloat)verBaseMargin {
     _verBaseMargin = verBaseMargin;
-    [self updateSubviewLayouts];
+    [self updateSubviewLayouts:self.imageView.image duration:0];
 }
 
 - (void)setHorBaseMargin:(CGFloat)horBaseMargin {
     _horBaseMargin = horBaseMargin;
-    [self updateSubviewLayouts];
+    [self updateSubviewLayouts:self.imageView.image duration:0];
 }
 
 - (void)setResizeWHScale:(CGFloat)resizeWHScale {
@@ -139,18 +140,26 @@
     self.frameView.borderImageRectInset = borderImageRectInset;
 }
 
-#pragma mark - getter
-
-- (JPImageresizerMaskType)maskType {
-    return _frameView.maskType;
+- (void)setIsShowMidDots:(BOOL)isShowMidDots {
+    self.frameView.isShowMidDots = isShowMidDots;
 }
+
+#pragma mark - getter
 
 - (JPImageresizerFrameType)frameType {
     return _frameView.frameType;
 }
 
+- (UIBlurEffect *)blurEffect {
+    return _frameView.blurEffect;
+}
+
 - (UIColor *)bgColor {
-    return self.backgroundColor;
+    return _frameView.bgColor;
+}
+
+- (CGFloat)maskAlpha {
+    return _frameView.maskAlpha;
 }
 
 - (UIColor *)strokeColor {
@@ -178,10 +187,6 @@
     return 0.0;
 }
 
-- (CGFloat)maskAlpha {
-    return _frameView.maskAlpha;
-}
-
 - (BOOL)isLockResizeFrame {
     return !_frameView.panGR.enabled;
 }
@@ -191,11 +196,15 @@
 }
 
 - (UIImage *)borderImage {
-    return self.frameView.borderImage;
+    return _frameView.borderImage;
 }
 
 - (CGPoint)borderImageRectInset {
-    return self.frameView.borderImageRectInset;
+    return _frameView.borderImageRectInset;
+}
+
+- (BOOL)isShowMidDots {
+    return _frameView.isShowMidDots;
 }
 
 #pragma mark - init
@@ -205,12 +214,11 @@
                  imageresizerIsPrepareToScale:(JPImageresizerIsPrepareToScaleBlock)imageresizerIsPrepareToScale {
     JPImageresizerView *imageresizerView = [[self alloc] initWithResizeImage:configure.resizeImage
                                        frame:configure.viewFrame
-                                    maskType:configure.maskType
                                    frameType:configure.frameType
-                              animationCurve:configure.animationCurve
-                                 strokeColor:configure.strokeColor
+                              animationCurve:configure.animationCurve blurEffect:configure.blurEffect
                                      bgColor:configure.bgColor
                                    maskAlpha:configure.maskAlpha
+                                 strokeColor:configure.strokeColor
                                verBaseMargin:configure.verBaseMargin
                                horBaseMargin:configure.horBaseMargin
                                resizeWHScale:configure.resizeWHScale
@@ -218,6 +226,8 @@
                                  borderImage:configure.borderImage
                         borderImageRectInset:configure.borderImageRectInset
                             maximumZoomScale:configure.maximumZoomScale
+                               isRoundResize:configure.isRoundResize
+                               isShowMidDots:configure.isShowMidDots
                    imageresizerIsCanRecovery:imageresizerIsCanRecovery
                 imageresizerIsPrepareToScale:imageresizerIsPrepareToScale];
     imageresizerView.edgeLineIsEnabled = configure.edgeLineIsEnabled;
@@ -226,12 +236,12 @@
 
 - (instancetype)initWithResizeImage:(UIImage *)resizeImage
                               frame:(CGRect)frame
-                           maskType:(JPImageresizerMaskType)maskType
                           frameType:(JPImageresizerFrameType)frameType
                      animationCurve:(JPAnimationCurve)animationCurve
-                        strokeColor:(UIColor *)strokeColor
+                         blurEffect:(UIBlurEffect *)blurEffect
                             bgColor:(UIColor *)bgColor
                           maskAlpha:(CGFloat)maskAlpha
+                        strokeColor:(UIColor *)strokeColor
                       verBaseMargin:(CGFloat)verBaseMargin
                       horBaseMargin:(CGFloat)horBaseMargin
                       resizeWHScale:(CGFloat)resizeWHScale
@@ -239,11 +249,14 @@
                         borderImage:(UIImage *)borderImage
                borderImageRectInset:(CGPoint)borderImageRectInset
                    maximumZoomScale:(CGFloat)maximumZoomScale
+                      isRoundResize:(BOOL)isRoundResize
+                      isShowMidDots:(BOOL)isShowMidDots
           imageresizerIsCanRecovery:(JPImageresizerIsCanRecoveryBlock)imageresizerIsCanRecovery
        imageresizerIsPrepareToScale:(JPImageresizerIsPrepareToScaleBlock)imageresizerIsPrepareToScale {
     if (self = [super initWithFrame:frame]) {
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingNone;
+        self.layer.backgroundColor = bgColor.CGColor;
         
         _verBaseMargin = verBaseMargin;
         _horBaseMargin = horBaseMargin;
@@ -260,8 +273,6 @@
         
         self.animationCurve = animationCurve;
         
-        self.bgColor = maskType == JPLightBlurMaskType ? UIColor.whiteColor : (maskType == JPDarkBlurMaskType ? UIColor.blackColor : bgColor);
-        
         [self setupScrollViewWithMaximumZoomScale:maximumZoomScale];
         
         [self setupImageViewWithImage:resizeImage];
@@ -269,12 +280,12 @@
         JPImageresizerFrameView *frameView =
         [[JPImageresizerFrameView alloc] initWithFrame:self.scrollView.frame
                                            contentSize:_contentSize
-                                              maskType:maskType
                                              frameType:frameType
                                         animationCurve:animationCurve
-                                           strokeColor:strokeColor
-                                             fillColor:self.bgColor
+                                            blurEffect:blurEffect
+                                               bgColor:bgColor
                                              maskAlpha:maskAlpha
+                                           strokeColor:strokeColor
                                          verBaseMargin:_verBaseMargin
                                          horBaseMargin:_horBaseMargin
                                          resizeWHScale:resizeWHScale
@@ -282,6 +293,8 @@
                                              imageView:self.imageView
                                            borderImage:borderImage
                                   borderImageRectInset:borderImageRectInset
+                                         isRoundResize:isRoundResize
+                                         isShowMidDots:isShowMidDots
                              imageresizerIsCanRecovery:imageresizerIsCanRecovery
                           imageresizerIsPrepareToScale:imageresizerIsPrepareToScale];
         
@@ -330,31 +343,68 @@
 }
 
 - (void)setupImageViewWithImage:(UIImage *)image {
-    CGFloat width = (self.frame.size.width - _contentInsets.left - _contentInsets.right);
-    CGFloat height = (self.frame.size.height - _contentInsets.top - _contentInsets.bottom);
-    CGFloat maxW = width - 2 * _horBaseMargin;
-    CGFloat maxH = height - 2 * _verBaseMargin;
-    CGFloat whScale = image.size.width / image.size.height;
-    CGFloat w = maxW;
-    CGFloat h = w / whScale;
-    if (h > maxH) {
-        h = maxH;
-        w = h * whScale;
-    }
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    imageView.frame = CGRectMake(0, 0, w, h);
     imageView.userInteractionEnabled = YES;
     [self.scrollView addSubview:imageView];
     _imageView = imageView;
+    [self updateImageViewFrameWithImage:image];
+}
+
+- (void)updateImageViewFrameWithImage:(UIImage *)image {
+    CGFloat maxWidth = self.frame.size.width - _contentInsets.left - _contentInsets.right - 2 * _horBaseMargin;
+    CGFloat maxHeight = self.frame.size.height - _contentInsets.top - _contentInsets.bottom - 2 * _verBaseMargin;
+    CGFloat imgViewW = maxWidth;
+    CGFloat imgViewH = imgViewW * (image.size.height / image.size.width);
+    if (imgViewH > maxHeight) {
+        imgViewH = maxHeight;
+        imgViewW = imgViewH * (image.size.width / image.size.height);
+    }
+    self.imageView.frame = CGRectMake(0, 0, imgViewW, imgViewH);
+    self.scrollView.contentSize = self.imageView.bounds.size;
     
-    CGFloat verticalInset = (self.scrollView.bounds.size.height - h) * 0.5;
-    CGFloat horizontalInset = (self.scrollView.bounds.size.width - w) * 0.5;
-    self.scrollView.contentSize = imageView.bounds.size;
-    self.scrollView.contentInset = UIEdgeInsetsMake(verticalInset, horizontalInset, verticalInset, horizontalInset);
-    self.scrollView.contentOffset = CGPointMake(-horizontalInset, -verticalInset);
+    CGFloat horInset = (self.scrollView.bounds.size.width - self.scrollView.contentSize.width) * 0.5;
+    CGFloat verInset = (self.scrollView.bounds.size.height - self.scrollView.contentSize.height) * 0.5;
+    self.scrollView.contentInset = UIEdgeInsetsMake(verInset, horInset, verInset, horInset);
+    self.scrollView.contentOffset = CGPointMake(-horInset, -verInset);
 }
 
 #pragma mark - puild method
+
+- (void)setResizeImage:(UIImage *)resizeImage animated:(BOOL)isAnimated transition:(UIViewAnimationTransition)transition {
+    if (isAnimated) {
+        if (transition == UIViewAnimationTransitionNone) {
+            NSTimeInterval duration = 0.3;
+            [UIView transitionWithView:self.imageView duration:duration options:(_animationOption | UIViewAnimationOptionTransitionCrossDissolve) animations:^{
+                self.imageView.image = resizeImage;
+            } completion:nil];
+            [UIView animateWithDuration:duration delay:0 options:_animationOption animations:^{
+                [self updateSubviewLayouts:resizeImage duration:duration];
+            } completion:nil];
+        } else {
+            NSTimeInterval duration = 0.45;
+            [UIView animateWithDuration:duration delay:0 options:_animationOption animations:^{
+                [UIView setAnimationTransition:transition forView:self.imageView cache:YES];
+                self.imageView.image = resizeImage;
+                [self updateSubviewLayouts:resizeImage duration:duration];
+            } completion:nil];
+        }
+    } else {
+        self.imageView.image = resizeImage;
+        [self updateSubviewLayouts:resizeImage duration:0];
+    }
+}
+
+- (void)setupStrokeColor:(UIColor *)strokeColor
+              blurEffect:(UIBlurEffect *)blurEffect
+                 bgColor:(UIColor *)bgColor
+               maskAlpha:(CGFloat)maskAlpha
+                animated:(BOOL)isAnimated {
+    [self.frameView setupStrokeColor:strokeColor
+                          blurEffect:blurEffect
+                             bgColor:bgColor
+                           maskAlpha:maskAlpha
+                            animated:isAnimated];
+}
 
 - (void)setResizeWHScale:(CGFloat)resizeWHScale isToBeArbitrarily:(BOOL)isToBeArbitrarily animated:(BOOL)isAnimated {
     if (self.frameView.isPrepareToScale) {
@@ -362,6 +412,14 @@
         return;
     }
     [self.frameView setResizeWHScale:resizeWHScale isToBeArbitrarily:isToBeArbitrarily animated:isAnimated];
+}
+
+- (void)roundResize:(BOOL)isAnimated {
+    [self.frameView roundResize:isAnimated];
+}
+
+- (BOOL)isRoundResizing {
+    return self.frameView.isRoundResizing;
 }
 
 - (void)setVerticalityMirror:(BOOL)verticalityMirror animated:(BOOL)isAnimated {
@@ -390,10 +448,10 @@
 }
 
 - (void)updateResizeImage:(UIImage *)resizeImage verBaseMargin:(CGFloat)verBaseMargin horBaseMargin:(CGFloat)horBaseMargin {
-    self.imageView.image = resizeImage;
     _verBaseMargin = verBaseMargin;
     _horBaseMargin = horBaseMargin;
-    [self updateSubviewLayouts];
+    self.imageView.image = resizeImage;
+    [self updateSubviewLayouts:resizeImage duration:0];
 }
 
 - (void)rotation {
@@ -419,21 +477,33 @@
     } completion:nil];
 }
 
+- (void)recoveryToRoundResize {
+    [self __recoveryByTargetResizeWHScale:1 isToBeArbitrarily:NO isToRoundResize:YES];
+}
+
 - (void)recoveryByCurrentResizeWHScale {
-    [self recoveryByTargetResizeWHScale:self.resizeWHScale isToBeArbitrarily:NO];
+    [self __recoveryByTargetResizeWHScale:self.resizeWHScale isToBeArbitrarily:NO isToRoundResize:NO];
 }
 
 - (void)recoveryByInitialResizeWHScale:(BOOL)isToBeArbitrarily {
-    [self recoveryByTargetResizeWHScale:self.initialResizeWHScale isToBeArbitrarily:isToBeArbitrarily];
+    [self __recoveryByTargetResizeWHScale:self.initialResizeWHScale isToBeArbitrarily:isToBeArbitrarily isToRoundResize:NO];
 }
 
 - (void)recoveryByTargetResizeWHScale:(CGFloat)targetResizeWHScale isToBeArbitrarily:(BOOL)isToBeArbitrarily {
+    [self __recoveryByTargetResizeWHScale:targetResizeWHScale isToBeArbitrarily:isToBeArbitrarily isToRoundResize:NO];
+}
+
+- (void)__recoveryByTargetResizeWHScale:(CGFloat)targetResizeWHScale isToBeArbitrarily:(BOOL)isToBeArbitrarily isToRoundResize:(BOOL)isToRoundResize {
     if (!self.frameView.isCanRecovery) {
         JPLog(@"已经是初始状态，不需要重置");
         return;
     }
     
-    [self.frameView willRecoveryByResizeWHScale:targetResizeWHScale isToBeArbitrarily:isToBeArbitrarily];
+    if (isToRoundResize) {
+        [self.frameView willRecoveryToRoundResize];
+    } else {
+        [self.frameView willRecoveryByResizeWHScale:targetResizeWHScale isToBeArbitrarily:isToBeArbitrarily];
+    }
     
     self.directionIndex = 0;
     
@@ -446,8 +516,8 @@
     frame.origin.x = x;
     frame.origin.y = y;
     
-    // 做3d旋转时会遮盖住上层的控件，设置为-400即可
-    self.layer.zPosition = -400;
+    // 做3d旋转时会遮盖住上层的控件，设置为-500即可
+    self.layer.zPosition = -500;
     NSTimeInterval duration = 0.45;
     [UIView animateWithDuration:duration delay:0 options:_animationOption animations:^{
         
@@ -467,21 +537,21 @@
 }
 
 - (void)originImageresizerWithComplete:(void (^)(UIImage *))complete {
-    [self imageresizerWithComplete:complete scale:1.0];
+    [self imageresizerWithComplete:complete compressScale:1.0];
 }
 
-- (void)imageresizerWithComplete:(void (^)(UIImage *))complete scale:(CGFloat)scale {
+- (void)imageresizerWithComplete:(void (^)(UIImage *))complete compressScale:(CGFloat)compressScale {
     if (self.frameView.isPrepareToScale) {
         JPLog(@"裁剪区域预备缩放至适合位置，裁剪功能暂不可用，此时应该将裁剪按钮设为不可点或隐藏");
         !complete ? : complete(nil);
         return;
     }
-    if (scale <= 0) {
+    if (compressScale <= 0) {
         JPLog(@"压缩比例不能小于或等于0");
         !complete ? : complete(nil);
         return;
     }
-    [self.frameView imageresizerWithComplete:complete scale:scale];
+    [self.frameView imageresizerWithComplete:complete compressScale:compressScale];
 }
 
 #pragma mark - private method
@@ -524,8 +594,8 @@
     };
     
     if (isAnimated) {
-        // 做3d旋转时会遮盖住上层的控件，设置为-400即可
-        self.layer.zPosition = -400;
+        // 做3d旋转时会遮盖住上层的控件，设置为-500即可
+        self.layer.zPosition = -500;
         transform.m34 = 1.0 / 1500.0;
         if (isHorizontalMirror) {
             transform.m34 *= -1.0;
@@ -548,32 +618,13 @@
     }
 }
 
-- (void)updateSubviewLayouts {
+- (void)updateSubviewLayouts:(UIImage *)image duration:(NSTimeInterval)duration {
     self.directionIndex = 0;
-    
     self.scrollView.layer.transform = CATransform3DIdentity;
     self.scrollView.minimumZoomScale = 1.0;
     self.scrollView.zoomScale = self.scrollView.minimumZoomScale;
-    
-    CGFloat maxW = self.frame.size.width - 2 * _horBaseMargin;
-    CGFloat maxH = self.frame.size.height - 2 * _verBaseMargin;
-    CGFloat whScale = self.imageView.image.size.width / self.imageView.image.size.height;
-    CGFloat w = maxW;
-    CGFloat h = w / whScale;
-    if (h > maxH) {
-        h = maxH;
-        w = h * whScale;
-    }
-    self.imageView.frame = CGRectMake(0, 0, w, h);
-    
-    CGFloat verticalInset = (self.scrollView.bounds.size.height - h) * 0.5;
-    CGFloat horizontalInset = (self.scrollView.bounds.size.width - w) * 0.5;
-    
-    self.scrollView.contentSize = self.imageView.bounds.size;
-    self.scrollView.contentInset = UIEdgeInsetsMake(verticalInset, horizontalInset, verticalInset, horizontalInset);
-    self.scrollView.contentOffset = CGPointMake(-horizontalInset, -verticalInset);
-    
-    [self.frameView updateImageresizerFrameWithVerBaseMargin:_verBaseMargin horBaseMargin:_horBaseMargin];
+    [self updateImageViewFrameWithImage:image];
+    [self.frameView updateImageresizerFrameWithVerBaseMargin:_verBaseMargin horBaseMargin:_horBaseMargin duration:duration];
 }
 
 #pragma mark - <UIScrollViewDelegate>

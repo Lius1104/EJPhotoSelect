@@ -1,6 +1,6 @@
 //
 //  JPImageresizerFrameView.h
-//  DesignSpaceRestructure
+//  JPImageresizerView
 //
 //  Created by 周健平 on 2017/12/11.
 //  Copyright © 2017年 周健平. All rights reserved.
@@ -13,12 +13,12 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
                   contentSize:(CGSize)contentSize
-                     maskType:(JPImageresizerMaskType)maskType
                     frameType:(JPImageresizerFrameType)frameType
                animationCurve:(JPAnimationCurve)animationCurve
-                  strokeColor:(UIColor *)strokeColor
-                    fillColor:(UIColor *)fillColor
+                   blurEffect:(UIBlurEffect *)blurEffect
+                      bgColor:(UIColor *)bgColor
                     maskAlpha:(CGFloat)maskAlpha
+                  strokeColor:(UIColor *)strokeColor
                 verBaseMargin:(CGFloat)verBaseMargin
                 horBaseMargin:(CGFloat)horBaseMargin
                 resizeWHScale:(CGFloat)resizeWHScale
@@ -26,27 +26,36 @@
                     imageView:(UIImageView *)imageView
                   borderImage:(UIImage *)borderImage
          borderImageRectInset:(CGPoint)borderImageRectInset
+                isRoundResize:(BOOL)isRoundResize
+                isShowMidDots:(BOOL)isShowMidDots
     imageresizerIsCanRecovery:(JPImageresizerIsCanRecoveryBlock)imageresizerIsCanRecovery
  imageresizerIsPrepareToScale:(JPImageresizerIsPrepareToScaleBlock)imageresizerIsPrepareToScale;
 
-@property (nonatomic, assign, readonly) JPImageresizerMaskType maskType;
+@property (nonatomic, weak, readonly) UIPanGestureRecognizer *panGR;
 
 @property (nonatomic, assign, readonly) JPImageresizerFrameType frameType;
 
-@property (nonatomic, weak, readonly) UIPanGestureRecognizer *panGR;
+@property (nonatomic, assign, readonly) NSTimeInterval defaultDuration;
 
 @property (nonatomic, assign) JPAnimationCurve animationCurve;
 
 @property (nonatomic, strong) UIColor *strokeColor;
-
-@property (nonatomic, strong) UIColor *fillColor;
-
-@property (nonatomic, assign) CGFloat maskAlpha;
+@property (nonatomic) UIBlurEffect *blurEffect;
+@property (nonatomic) UIColor *bgColor;
+@property (nonatomic) CGFloat maskAlpha;
+- (void)setupStrokeColor:(UIColor *)strokeColor
+              blurEffect:(UIBlurEffect *)blurEffect
+                 bgColor:(UIColor *)bgColor
+               maskAlpha:(CGFloat)maskAlpha
+                animated:(BOOL)isAnimated;
 
 @property (nonatomic, assign, readonly) CGRect imageresizerFrame;
 
 @property (nonatomic, assign) CGFloat resizeWHScale;
 - (void)setResizeWHScale:(CGFloat)resizeWHScale isToBeArbitrarily:(BOOL)isToBeArbitrarily animated:(BOOL)isAnimated;
+
+- (void)roundResize:(BOOL)isAnimated;
+- (BOOL)isRoundResizing;
 
 @property (nonatomic, assign) BOOL isPreview;
 - (void)setIsPreview:(BOOL)isPreview animated:(BOOL)isAnimated;
@@ -68,18 +77,21 @@
 @property (nonatomic, strong) UIImage *borderImage;
 @property (nonatomic, assign) CGPoint borderImageRectInset;
 
+@property (nonatomic, assign) BOOL isShowMidDots;
+
 @property (nonatomic, copy) BOOL (^isVerticalityMirror)(void);
 @property (nonatomic, copy) BOOL (^isHorizontalMirror)(void);
 
 - (void)updateFrameType:(JPImageresizerFrameType)frameType;
 
-- (void)updateImageresizerFrameWithVerBaseMargin:(CGFloat)verBaseMargin horBaseMargin:(CGFloat)horBaseMargin;
+- (void)updateImageresizerFrameWithVerBaseMargin:(CGFloat)verBaseMargin horBaseMargin:(CGFloat)horBaseMargin duration:(NSTimeInterval)duration;;
 
 - (void)startImageresizer;
 - (void)endedImageresizer;
 
 - (void)rotationWithDirection:(JPImageresizerRotationDirection)direction rotationDuration:(NSTimeInterval)rotationDuration;
 
+- (void)willRecoveryToRoundResize;
 - (void)willRecoveryByResizeWHScale:(CGFloat)resizeWHScale isToBeArbitrarily:(BOOL)isToBeArbitrarily;
 - (void)recoveryWithDuration:(NSTimeInterval)duration;
 - (void)recoveryDone;
@@ -89,6 +101,11 @@
 - (void)horizontalMirrorWithDiffY:(CGFloat)diffY;
 - (void)mirrorDone;
 
-- (void)imageresizerWithComplete:(void(^)(UIImage *resizeImage))complete scale:(CGFloat)scale;
+- (void)imageresizerWithComplete:(void(^)(UIImage *resizeImage))complete compressScale:(CGFloat)compressScale;
 
+@end
+
+@interface JPImageresizerProxy : NSProxy
++ (instancetype)proxyWithTarget:(id)target;
+@property (nonatomic, weak) id target;
 @end

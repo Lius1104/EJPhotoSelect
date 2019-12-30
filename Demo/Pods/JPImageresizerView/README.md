@@ -6,7 +6,16 @@
 
 英文文档（English document）：https://www.jianshu.com/p/5600da5c9bf6
 
-## 简介（当前版本：1.2.0）
+## 简介（当前版本：1.3.4）
+### 文档暂时只更新了版本功能，具体可先查看Demo（新版Demo目前构建中，文档届时也一同翻新）
+
+#### 1.2.1~1.3.4 更新内容
+    1.新增圆切样式；
+    2.中间的点/块可隐藏；
+    3.可动态切换图片、设置线框颜色和背景颜色，可设置是否带有动画效果；
+    4.毛玻璃效果可设置系统现有的所有效果；
+    5.适配深色/浅色模式的切换（前提是颜色使用的是系统的动态颜色）；
+    6.优化逻辑。
 
 仿微信裁剪图片的一个裁剪小工具。
 
@@ -17,8 +26,9 @@
         4.支持上左下右的旋转；
         5.水平和垂直的镜像翻转；
         6.两种边框样式；
-        7.自定义遮罩颜色，或两种高斯模糊的遮罩；
-        8.自定义边框图片。
+        7.支持圆框裁剪
+        8.自定义遮罩和线框的颜色、高斯模糊样式；
+        9.自定义边框图片。
 
     注意：
         1.由于autoLayout不利于手势控制，所以目前使用的是frame布局，暂不支持autoLayout；
@@ -133,7 +143,7 @@ self.imageresizerView.frameType = JPClassicFrameType;
 ![image](https://github.com/Rogue24/JPImageresizerView/raw/master/Cover/JPCustomBorderImage2.jpg)
 ```objc
 // 使用自定义边框图片（例：平铺模式）
-UIImage *tileBorderImage = [[UIImage imageNamed:@"jp_dotted_line"] resizableImageWithCapInsets:UIEdgeInsetsMake(14, 14, 14, 14) resizingMode:UIImageResizingModeTile];
+UIImage *tileBorderImage = [[UIImage imageNamed:@"dotted_line"] resizableImageWithCapInsets:UIEdgeInsetsMake(14, 14, 14, 14) resizingMode:UIImageResizingModeTile];
 
 // 设置边框图片与边线的偏移量（即CGRectInset，用于调整边框图片与边线的差距）
 self.imageresizerView.borderImageRectInset = CGPointMake(-1.75, -1.75);
@@ -228,7 +238,7 @@ self.imageresizerView.isPreview = YES;
 // 裁剪过程是在子线程中执行，回调则切回主线程执行
 // 如果是高清图片，调用前可添加HUD提示...
 // scale：压缩比例（0.0 ~ 1.0），大于等于1.0按原图尺寸裁剪，小于等于0.0则返回nil
-// 例：scale = 0.5，1000 x 1000 --> 500 x 500
+// 例：scale = 0.5，1000 x 500 --> 500 x 250
 
 // 1.自定义压缩比例进行裁剪
 [self.imageresizerView imageresizerWithComplete:^(UIImage *resizeImage) {
