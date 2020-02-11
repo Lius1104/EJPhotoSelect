@@ -18,6 +18,7 @@ pod 'Masonry'
 pod 'LSToolsKit'
 
 pod 'EJTools'
+pod 'EJWarningCardView'
 
   target 'EJPhotoBrowserTests' do
     inherit! :search_paths

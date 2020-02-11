@@ -1,0 +1,6 @@
+framework module EJWarningCardView {
+  umbrella header "EJWarningCardView-umbrella.h"
+
+  export *
+  module * { export * }
+}

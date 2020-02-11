@@ -24,6 +24,7 @@
     if (self) {
         self.removeFromSuperViewOnHide = YES;
         self.contentColor = UIColorHex(ffffff);
+        self.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
         self.bezelView.backgroundColor = [UIColor blackColor];
     }
     return self;

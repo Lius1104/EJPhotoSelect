@@ -300,7 +300,11 @@
         if (needAppend) {
             NSString * appString = @"";
             if (targetWidth != 0) {
-                CGFloat width = targetWidth * [UIScreen mainScreen].scale;
+//                CGFloat width = targetWidth * [UIScreen mainScreen].scale;
+//                CGFloat scale = [UIScreen mainScreen].scale;
+//                scale = scale > 2 ? 2 : scale;
+                CGFloat scale = 1;
+                CGFloat width = targetWidth * scale;
                 if (width <= 120) {
                     appString = @"?size=s120";
                 } else if (width <= 200) {

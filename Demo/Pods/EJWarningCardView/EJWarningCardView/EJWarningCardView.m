@@ -294,7 +294,18 @@
 }
 
 - (void)show {
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UIWindow * window;
+    if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(window)]) {
+//        NSLog(@"have");
+        window = [[[UIApplication sharedApplication] delegate] window];
+    } else {
+//        NSLog(@"did not ");
+        if (@available(iOS 11.0, *)) {
+            window = [[UIApplication sharedApplication].windows firstObject];
+        } else {
+            window = [[UIApplication sharedApplication].windows lastObject];
+        }
+    }
     self.mainView.alpha = 1;
     if (_showFrom == WarningCardShowFromTopCenter || _showFrom == WarningCardShowFromBottomCenter) {
         _mainView.transform = CGAffineTransformMakeScale(1.0, 0.00001);

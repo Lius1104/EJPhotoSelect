@@ -18,7 +18,7 @@
 #import <LSToolsKit/LSToolsKit.h>
 
 #import <EJTools.h>
-#import <EJTools/EJWarningCardView.h>
+#import <EJWarningCardView/EJWarningCardView.h>
 #import <EJTools/EJProgressHUD.h>
 
 
