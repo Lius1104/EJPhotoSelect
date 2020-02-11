@@ -13,7 +13,6 @@
 #import <EJWarningCardView/EJWarningCardView.h>
 #import <Masonry/Masonry.h>
 #import <YYKit/YYKit.h>
-//#import <UINavigationController+FDFullscreenPopGesture.h>
 
 typedef NS_ENUM(NSInteger, EJPlayerState) {
     EJPlayerStateBuffering,  //缓冲中

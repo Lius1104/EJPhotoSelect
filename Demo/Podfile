@@ -8,17 +8,17 @@ target 'EJPhotoBrowser' do
   use_frameworks!
 
   # Pods for EJPhotoBrowser
-pod 'SDWebImage'
-pod 'DACircularProgress'
-pod 'MBProgressHUD'
-pod 'YYKit'
-pod 'JPImageresizerView'
-pod 'FDFullscreenPopGesture'
-pod 'Masonry'
-pod 'LSToolsKit'
+  pod 'SDWebImage'
+  pod 'DACircularProgress'
+  pod 'MBProgressHUD'
+  pod 'YYKit'
+  pod 'JPImageresizerView'
+  pod 'FDFullscreenPopGesture'
+  pod 'Masonry'
+  pod 'LSToolsKit'
 
-pod 'EJTools'
-pod 'EJWarningCardView'
+  pod 'EJTools'
+  pod 'EJWarningCardView'
 
   target 'EJPhotoBrowserTests' do
     inherit! :search_paths
