@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "EJPhotoSelect"
-  spec.version      = "1.1.2"
+  spec.version      = "1.1.3"
   spec.summary      = "本地照片选择器"
 
   # This description is used to generate tags and improve search results.
@@ -105,7 +105,7 @@ Pod::Spec.new do |spec|
   #
 
   # spec.resource  = "icon.png"
-  spec.resources = "EJPhotoSelect/Resources/*.xib"
+  # spec.resources = "EJPhotoSelect/Resources/*.xib"
 
   # spec.preserve_paths = "FilesToSave", "MoreFilesToSave"
 

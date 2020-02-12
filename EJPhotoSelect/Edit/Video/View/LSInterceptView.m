@@ -264,7 +264,8 @@
         layout.minimumInteritemSpacing = 0;
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         _collection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 375, _itemCellSize.height) collectionViewLayout:layout];
-        [_collection registerNib:[UINib nibWithNibName:@"LSVideoFrameCell" bundle:nil] forCellWithReuseIdentifier:@"LSVideoFrameCell"];
+//        [_collection registerNib:[UINib nibWithNibName:@"LSVideoFrameCell" bundle:nil] forCellWithReuseIdentifier:@"LSVideoFrameCell"];
+        [_collection registerClass:[LSVideoFrameCell class] forCellWithReuseIdentifier:@"LSVideoFrameCell"];
         _collection.delegate = self;
         _collection.dataSource = self;
         _collection.showsHorizontalScrollIndicator = NO;

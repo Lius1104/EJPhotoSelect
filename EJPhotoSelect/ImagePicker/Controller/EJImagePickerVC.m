@@ -1017,7 +1017,8 @@
         _collectionView.backgroundColor = [UIColor whiteColor];
         [_collectionView registerClass:[LSAssetItemCell class] forCellWithReuseIdentifier:@"ls_assetItem_Cell"];
         if (_showShot) {
-            [_collectionView registerNib:[UINib nibWithNibName:@"EJImagePickerShotCell" bundle:nil] forCellWithReuseIdentifier:@"EJImagePickerShotCell"];
+//            [_collectionView registerNib:[UINib nibWithNibName:@"EJImagePickerShotCell" bundle:nil] forCellWithReuseIdentifier:@"EJImagePickerShotCell"];
+            [_collectionView registerClass:[EJImagePickerShotCell class] forCellWithReuseIdentifier:@"EJImagePickerShotCell"];
         }
         _collectionView.delegate = self;
         _collectionView.dataSource = self;

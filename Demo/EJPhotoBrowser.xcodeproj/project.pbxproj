@@ -19,8 +19,6 @@
 		53CB9EFE22F7D97100A85A77 /* EJAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CB9EFC22F7D97100A85A77 /* EJAddCell.xib */; };
 		53CB9F0322F7DF0E00A85A77 /* EJConfigVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9F0222F7DF0E00A85A77 /* EJConfigVC.m */; };
 		53CB9F0722F804E400A85A77 /* EJConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CB9F0622F804E400A85A77 /* EJConfigModel.m */; };
-		53D2413922FC3CED00809E74 /* EJImagePickerShotCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D2413722FC3CED00809E74 /* EJImagePickerShotCell.xib */; };
-		53D2413A22FC3CED00809E74 /* LSVideoFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D2413822FC3CED00809E74 /* LSVideoFrameCell.xib */; };
 		53E0334E22FA767600AB3B04 /* EJVideoPlayerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E032FA22FA767600AB3B04 /* EJVideoPlayerVC.m */; };
 		53E0334F22FA767600AB3B04 /* EJPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */; };
 		53E0335022FA767600AB3B04 /* EJAlbumPickerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0330422FA767600AB3B04 /* EJAlbumPickerVC.m */; };
@@ -101,8 +99,6 @@
 		53CB9F0222F7DF0E00A85A77 /* EJConfigVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJConfigVC.m; sourceTree = "<group>"; };
 		53CB9F0522F804E400A85A77 /* EJConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EJConfigModel.h; sourceTree = "<group>"; };
 		53CB9F0622F804E400A85A77 /* EJConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EJConfigModel.m; sourceTree = "<group>"; };
-		53D2413722FC3CED00809E74 /* EJImagePickerShotCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EJImagePickerShotCell.xib; sourceTree = "<group>"; };
-		53D2413822FC3CED00809E74 /* LSVideoFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LSVideoFrameCell.xib; sourceTree = "<group>"; };
 		53E032FA22FA767600AB3B04 /* EJVideoPlayerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJVideoPlayerVC.m; sourceTree = "<group>"; };
 		53E032FB22FA767600AB3B04 /* EJVideoPlayerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EJVideoPlayerVC.h; sourceTree = "<group>"; };
 		53E032FD22FA767600AB3B04 /* EJPlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EJPlayerControlView.m; sourceTree = "<group>"; };
@@ -262,8 +258,6 @@
 		53D2413622FC3C3600809E74 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				53D2413722FC3CED00809E74 /* EJImagePickerShotCell.xib */,
-				53D2413822FC3CED00809E74 /* LSVideoFrameCell.xib */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -693,12 +687,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53D2413A22FC3CED00809E74 /* LSVideoFrameCell.xib in Resources */,
 				53E2788422B87B0800B65C7E /* LaunchScreen.storyboard in Resources */,
 				53CB9EFE22F7D97100A85A77 /* EJAddCell.xib in Resources */,
 				53E2788122B87B0800B65C7E /* Assets.xcassets in Resources */,
 				53CB9EF922F7D95900A85A77 /* EJSelectedCell.xib in Resources */,
-				53D2413922FC3CED00809E74 /* EJImagePickerShotCell.xib in Resources */,
 				53E2787F22B87B0700B65C7E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
