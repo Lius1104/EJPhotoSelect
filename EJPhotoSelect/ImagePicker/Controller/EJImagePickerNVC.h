@@ -55,7 +55,7 @@
 /// 是否限制视频时长，default is YES.
 @property (nonatomic, assign) BOOL limitVideoDuration;
 
-/// 仅在 limitVideoDuration = YES时，有效
+/// 仅在 limitVideoDuration = YES时，有效. 默认180秒
 @property (nonatomic, assign) NSUInteger maxVideoDuration;
 
 /**
