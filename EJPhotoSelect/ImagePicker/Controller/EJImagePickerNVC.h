@@ -97,7 +97,7 @@
  初始化图片选择器
 
  @param sourceType 选择范围：图片，视频，图片和视频
- @param maxCount 最大选择数量
+ @param maxCount 最大选择数量，等于0时，不限制选中数量
  @param selectedSource 已经选择的资源
  @param increaseOrder 图片/视频创建时间增序
  @param showShot 是否显示拍摄按钮
