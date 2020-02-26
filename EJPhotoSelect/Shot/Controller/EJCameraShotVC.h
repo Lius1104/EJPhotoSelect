@@ -58,8 +58,19 @@ typedef enum : NSInteger {
 @property (nonatomic, strong) UIImage * customLayerImage;
 @property (nonatomic, copy) NSString * cropWarningTitle;
 
+/// 初始化拍摄
+/// @param shotTime 最大拍摄时长
+/// @param delegate <#delegate description#>
+/// @param suggestOrientation 视频建议拍摄方向
+/// @param maxCount 最大拍摄数量
 - (instancetype)initWithShotTime:(NSTimeInterval)shotTime delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(E_VideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
 
+/// 初始化拍摄
+/// @param shotTime 拍摄最大时长
+/// @param shotType 拍摄类型
+/// @param delegate <#delegate description#>
+/// @param suggestOrientation 视频建议拍摄方向
+/// @param maxCount 最大拍摄数量
 - (instancetype)initWithShotTime:(NSTimeInterval)shotTime shotType:(EJ_ShotType)shotType delegate:(id<EJCameraShotVCDelegate>)delegate suggestOrientation:(E_VideoOrientation)suggestOrientation /*allowPreview:(BOOL)allowPreview*/ maxCount:(NSUInteger)maxCount;
 
 @end
