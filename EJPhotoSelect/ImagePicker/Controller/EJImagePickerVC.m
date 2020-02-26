@@ -772,7 +772,11 @@
     if (_sourceType == E_SourceType_All) {
         shotType = EJ_ShotType_Both;
     }
-    EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:kVideoShotDuration shotType:shotType delegate:self suggestOrientation:E_VideoOrientationAll /*allowPreview:YES*/ maxCount:1];
+    NSTimeInterval duration = _maxVideoDuration;
+    if (_limitVideoDuration == NO) {
+        duration = 0;
+    }
+    EJCameraShotVC * vc = [[EJCameraShotVC alloc] initWithShotTime:duration shotType:shotType delegate:self suggestOrientation:E_VideoOrientationAll /*allowPreview:YES*/ maxCount:1];
     vc.forcedCrop = _forcedCrop;
     vc.directCrop = _directEdit;
     vc.cropScale = _cropScale;

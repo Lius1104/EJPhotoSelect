@@ -86,10 +86,12 @@
         _longTimeLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
         _longTimeLabel.textColor = UIColorHex(ffffff);
         NSString * text = nil;
-        if (_shotTime > 60) {
-            text = [NSString stringWithFormat:@"最长录制时间%.2f分钟", (_shotTime / 60.f)];
-        } else {
-            text = [NSString stringWithFormat:@"最长录制时间%02d秒", (int)_shotTime];
+        if (_shotTime > 0) {
+            if (_shotTime > 60) {
+                text = [NSString stringWithFormat:@"最长录制时间%.2f分钟", (_shotTime / 60.f)];
+            } else {
+                text = [NSString stringWithFormat:@"最长录制时间%02d秒", (int)_shotTime];
+            }
         }
         _longTimeLabel.text = text;
         _longTimeLabel.textAlignment = NSTextAlignmentCenter;
@@ -109,7 +111,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _isShowPreview = NO;
-        _shotTime = -1;
+        _shotTime = 0;
         [self setupSubviews:frame];
 
     }
