@@ -71,6 +71,8 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     _isPreview = NO;
 //    _previewDelete = NO;
     _forcedCrop = YES;
+    // 默认YES，限制视频时长
+    _limitVideoDuration = YES;
     
     NSNumber *isVCBasedStatusBarAppearanceNum = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIViewControllerBasedStatusBarAppearance"];
     if (isVCBasedStatusBarAppearanceNum) {
@@ -1112,7 +1114,11 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [videoPlayer dismissViewControllerAnimated:NO completion:^{
         EJPhoto * photo = (EJPhoto *)[self photoAtIndex:_currentPageIndex];
         if (photo.asset) {
-            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:photo.asset defaultDuration:_maxVideoDuration];
+            NSTimeInterval duration = _maxVideoDuration;
+            if (_limitVideoDuration == NO) {
+                duration = photo.asset.duration;
+            }
+            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:photo.asset defaultDuration:duration];
             vc.delegate = self;
             [self ej_presentViewController:vc animated:YES completion:nil];
         }
@@ -1335,7 +1341,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                 EJPhoto * photo = (EJPhoto *)[self photoAtIndex:_currentPageIndex];
                 if (photo.asset) {//本地资源
                     if (photo.isVideo) {
-                        needCrop = photo.asset.duration > _maxVideoDuration;
+                        needCrop = _limitVideoDuration && photo.asset.duration > _maxVideoDuration;
                     } else {
                         CGFloat cropScale = 0;
                         if ([self.delegate respondsToSelector:@selector(photoBrowser:crapScaleAtIndex:)]) {
@@ -1404,7 +1410,11 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
         PHAsset * asset = photo.asset;
         if (asset.mediaType == PHAssetMediaTypeVideo) {
             // 视频裁剪
-            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:_maxVideoDuration];
+            NSTimeInterval duration = _maxVideoDuration;
+            if (_limitVideoDuration == NO) {
+                duration = asset.duration;
+            }
+            LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:duration];
             vc.delegate = self;
             [self ej_presentViewController:vc animated:YES completion:nil];
             return;
@@ -1469,8 +1479,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     } else {
         EJPhoto * photo = (EJPhoto *)[self photoAtIndex:_currentPageIndex];
         if (photo.isVideo && photo.asset) {// 本地视频
-            if (photo.asset.duration > _maxVideoDuration) {
-//                [EJProgressHUD showAlert:[NSString stringWithFormat:@"只能选择%d秒以内的视频", (int)_maxVideoDuration] forView:self.view];
+            if (_limitVideoDuration && photo.asset.duration > _maxVideoDuration) {
                 NSString * secondString;
                 if (_maxVideoDuration < 60) {
                     secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];

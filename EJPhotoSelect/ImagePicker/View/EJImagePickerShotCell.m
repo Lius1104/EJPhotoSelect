@@ -38,7 +38,7 @@
 }
 
 - (void)handleClickShotButton:(UIButton *)sender {
-    if ([self.delegate respondsToSelector:@selector(ej_imagePickerShotCellDidClick:)]) {
+    if ([self.delegate respondsToSelector:@selector(ej_imagePickerShotCellDidClick:)]) { 
         [self.delegate ej_imagePickerShotCellDidClick:self];
     }
 }

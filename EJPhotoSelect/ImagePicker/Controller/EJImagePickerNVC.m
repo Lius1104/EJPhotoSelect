@@ -31,6 +31,8 @@
         self.selectedSource = selectedSource == nil ? [NSMutableArray arrayWithCapacity:1] : selectedSource;
         self.showShot = showShot;
         self.allowCrop = allowCrop;
+        
+        _limitVideoDuration = YES;
 
         if ([EJPhotoConfig sharedPhotoConfig].barTintColor) {
             self.navigationBar.barTintColor = [EJPhotoConfig sharedPhotoConfig].barTintColor;
@@ -67,6 +69,17 @@
         if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
             EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
             picker.cropScale = _cropScale;
+            break;
+        }
+    }
+}
+
+- (void)setLimitVideoDuration:(BOOL)limitVideoDuration {
+    _limitVideoDuration = limitVideoDuration;
+    for (UIViewController * itemVC in self.viewControllers) {
+        if ([itemVC isKindOfClass:[EJImagePickerVC class]]) {
+            EJImagePickerVC * picker = (EJImagePickerVC *)itemVC;
+            picker.limitVideoDuration = _limitVideoDuration;
             break;
         }
     }

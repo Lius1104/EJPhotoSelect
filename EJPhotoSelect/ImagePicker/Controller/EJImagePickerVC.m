@@ -83,6 +83,7 @@
         self.allowCrop = allowCrop;
         self.maxSelectedCount = maxCount;
         self.directEdit = YES;
+        self.limitVideoDuration = YES;
         self.maxVideoDuration = 180;
         self.previewDelete = YES;
         self.forcedCrop = YES;
@@ -418,7 +419,11 @@
             [self.navigationController pushViewController:vc animated:YES];
         }];
     } else {
-        LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:first defaultDuration:_maxVideoDuration];
+        NSTimeInterval duration = _maxVideoDuration;
+        if (_limitVideoDuration == NO) {
+            duration = first.duration;
+        }
+        LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:first defaultDuration:duration];
         vc.delegate = self;
         [self ej_presentViewController:vc animated:YES completion:nil];
     }
@@ -437,6 +442,7 @@
         [self.browserSource addObject:[EJPhoto photoWithAsset:asset targetSize:imageTargetSize]];
     }
     EJPhotoBrowser * brower = [[EJPhotoBrowser alloc] initWithDelegate:self];
+    brower.limitVideoDuration = _limitVideoDuration;
     brower.maxVideoDuration = _maxVideoDuration;
     brower.showCropButton = _allowCrop;
     brower.forcedCrop = _forcedCrop;
@@ -573,7 +579,8 @@
             [cell setUpSelectSourceBlock:^(NSString *clickLocalIdentifier) {
                 @strongify(cell);
                 if ([self.selectedSource count] == 0) {
-                    if (asset.mediaType == PHAssetMediaTypeVideo && asset.duration > _maxVideoDuration) {
+                    // 如果选中视频需要裁剪，并且大于最大时长需要提示裁剪弹窗
+                    if (asset.mediaType == PHAssetMediaTypeVideo && _limitVideoDuration && asset.duration > _maxVideoDuration) {
                         NSString * secondString;
                         if (_maxVideoDuration < 60) {
                             secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
@@ -603,7 +610,7 @@
                     [self.selectedSource addObject:asset];
                     [self.toolBar configSourceCount:self.selectedSource.count];
                 } else {
-                    __block BOOL containSource = NO;
+                    __block BOOL containSource = NO;// 是否包含在已选中资源中
                     [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         if ([obj.localIdentifier isEqualToString:clickLocalIdentifier]) {
                             cell.sourceSelected = NO;
@@ -615,10 +622,11 @@
                         // 从 数组中移除
                         [self.selectedSource removeObject:asset];
                         [self.toolBar configSourceCount:self.selectedSource.count];
-                    } else {
+                    }
+                    else {
                         // 判断 最大 数量
                         if (self.maxSelectedCount == 0 || [self.selectedSource count] < self.maxSelectedCount) {
-                            if (asset.mediaType == PHAssetMediaTypeVideo && asset.duration > _maxVideoDuration) {
+                            if (asset.mediaType == PHAssetMediaTypeVideo && _limitVideoDuration && asset.duration > _maxVideoDuration) {
                                 NSString * secondString;
                                 if (_maxVideoDuration < 60) {
                                     secondString = [NSString stringWithFormat:@"%d秒", (int)_maxVideoDuration];
@@ -677,7 +685,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    // 跳转到 图片浏览
+    // 跳转到 图片浏览, 拍照按钮不走该方法
     NSUInteger currentIndex = indexPath.row;
     if (_showShot) {
         currentIndex -= 1;
@@ -716,6 +724,7 @@
     }
     EJPhotoBrowser * brower = [[EJPhotoBrowser alloc] initWithDelegate:self];
     brower.maxVideoDuration = _maxVideoDuration;
+    brower.limitVideoDuration = _limitVideoDuration;
     brower.showSelectButton = YES;
     brower.showCropButton = _allowCrop;
     brower.forcedCrop = _forcedCrop;

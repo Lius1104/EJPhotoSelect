@@ -40,14 +40,22 @@
  */
 @property (nonatomic, assign) E_SourceType sourceType;
 
+/// 已经选择的资源
 @property (nonatomic, strong) NSMutableArray <PHAsset *>* selectedSource;
 
+/// 是否允许显示拍摄按钮
 @property (nonatomic, assign) BOOL showShot;
 
+/// 是否允许裁剪
 @property (nonatomic, assign) BOOL allowCrop;
 
+/// 图片裁剪比例
 @property (nonatomic, assign) CGFloat cropScale;
 
+/// 是否限制视频时长，default is YES.
+@property (nonatomic, assign) BOOL limitVideoDuration;
+
+/// 仅在 limitVideoDuration = YES时，有效
 @property (nonatomic, assign) NSUInteger maxVideoDuration;
 
 /**
@@ -86,15 +94,15 @@
 - (void)configSectionInserts:(UIEdgeInsets)inserts cellSpace:(NSUInteger)cellSpace numOfLineCells:(NSUInteger)num;
 
 /**
- <#Description#>
+ 初始化图片选择器
 
- @param sourceType <#sourceType description#>
- @param maxCount <#maxCount description#>
- @param selectedSource <#selectedSource description#>
- @param increaseOrder <#increaseOrder description#>
- @param showShot <#showShot description#>
- @param allowCrop <#allowCrop description#>
- @return <#return value description#>
+ @param sourceType 选择范围：图片，视频，图片和视频
+ @param maxCount 最大选择数量
+ @param selectedSource 已经选择的资源
+ @param increaseOrder 图片/视频创建时间增序
+ @param showShot 是否显示拍摄按钮
+ @param allowCrop 是否允许裁剪
+ @return EJImagePickerNVC
  */
 - (instancetype)initWithSourceType:(E_SourceType)sourceType MaxCount:(NSUInteger)maxCount SelectedSource:(NSMutableArray <PHAsset *>*)selectedSource increaseOrder:(BOOL)increaseOrder showShot:(BOOL)showShot allowCrop:(BOOL)allowCrop;
 

@@ -35,8 +35,11 @@
  */
 @property (nonatomic, assign) CGFloat cropScale;
 
+/// 是否限制视频时长，default is YES.
+@property (nonatomic, assign) BOOL limitVideoDuration;
+
 /**
- 视频的最大时长，默认为180s
+ 视频的最大时长，默认为180s, 仅在 limitVideoDuration = YES时有效
  */
 @property (nonatomic, assign) NSTimeInterval maxVideoDuration;
 

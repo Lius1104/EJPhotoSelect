@@ -143,6 +143,7 @@
                 vc.directEdit = _config.directEdit;
                 vc.cropScale = _config.cropScale;
                 vc.maxVideoDuration = _config.videoDefaultDuration;
+//                vc.limitVideoDuration = NO;
             }
             vc.previewDelete = _config.previewDelete;
             vc.forcedCrop = _config.forcedCrop;

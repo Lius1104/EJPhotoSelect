@@ -136,8 +136,11 @@
 @property (nonatomic, strong) NSString *customImageSelectedIconName;
 @property (nonatomic, strong) NSString *customImageSelectedSmallIconName;
 
+/// 是否限制视频时长，default is YES.
+@property (nonatomic, assign) BOOL limitVideoDuration;
+
 /**
-视频的最长时间
+视频的最长时间, 仅在 limitVideoDuration = YES时，有效
  */
 @property (nonatomic, assign) NSTimeInterval maxVideoDuration;
 
