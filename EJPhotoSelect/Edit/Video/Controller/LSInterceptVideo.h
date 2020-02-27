@@ -5,9 +5,14 @@
 //  Created by LiuShuang on 2019/6/14.
 //  Copyright © 2019 Shuang Lau. All rights reserved.
 //
+//  视频裁剪
+
+
 
 #import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
+
+
 
 @protocol LSInterceptVideoDelegate <NSObject>
 
