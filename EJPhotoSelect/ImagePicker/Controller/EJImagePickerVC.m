@@ -124,7 +124,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = UIColorHex(ffffff);
+    if (@available(iOS 13.0, *)) {
+        self.view.backgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+            if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                return UIColorHex(1C1C1E);
+            } else {
+                return UIColorHex(ffffff);
+            }
+        }];
+    } else {
+        // Fallback on earlier versions
+        self.view.backgroundColor = UIColorHex(ffffff);
+    }
+    
     if ([_customTitle length] > 0) {
         self.title = _customTitle;
     } else {
@@ -196,11 +208,11 @@
             case PHAuthorizationStatusAuthorized: {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIButton * albumBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                    albumBtn.frame = CGRectMake(0, 0, 50, 34);
+                    albumBtn.frame = CGRectMake(0, 0, 35, 44);
                     [albumBtn setTitle:@"相册" forState:UIControlStateNormal];
-                    albumBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-                    if ([EJPhotoConfig sharedPhotoConfig].tintColor) {
-                        [albumBtn setTitleColor:[EJPhotoConfig sharedPhotoConfig].tintColor forState:UIControlStateNormal];
+                    albumBtn.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:15];
+                    if ([EJPhotoConfig sharedPhotoConfig].barOperationColor) {
+                        [albumBtn setTitleColor:[EJPhotoConfig sharedPhotoConfig].barOperationColor forState:UIControlStateNormal];
                     } else {
                         [albumBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                     }
@@ -1027,10 +1039,9 @@
         layout.minimumLineSpacing = _itemSpace;
         layout.minimumInteritemSpacing = _itemSpace;
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) collectionViewLayout:layout];
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = self.view.backgroundColor;
         [_collectionView registerClass:[LSAssetItemCell class] forCellWithReuseIdentifier:@"ls_assetItem_Cell"];
         if (_showShot) {
-//            [_collectionView registerNib:[UINib nibWithNibName:@"EJImagePickerShotCell" bundle:nil] forCellWithReuseIdentifier:@"EJImagePickerShotCell"];
             [_collectionView registerClass:[EJImagePickerShotCell class] forCellWithReuseIdentifier:@"EJImagePickerShotCell"];
         }
         _collectionView.delegate = self;

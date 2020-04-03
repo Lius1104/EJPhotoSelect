@@ -55,7 +55,19 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"相册";
-    self.view.backgroundColor = [UIColor whiteColor];
+    
+    if (@available(iOS 13.0, *)) {
+        self.view.backgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+            if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                return UIColorHex(1C1C1E);
+            } else {
+                return UIColorHex(ffffff);
+            }
+        }];
+    } else {
+        // Fallback on earlier versions
+        self.view.backgroundColor = UIColorHex(ffffff);
+    }
     
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(self.view);
@@ -215,7 +227,7 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 77;
+    return 64;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -229,8 +241,8 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     EJ_AlbumModel * album = self.albumSource[indexPath.row];
     [cell setUpCoverImage:album.coverImg];
     NSString * title = [album.assetCollection.localizedTitle length] > 0 ? album.assetCollection.localizedTitle : @"";
-    NSMutableAttributedString * titleString = [[NSMutableAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: UIColorHex(333333)}];
-    NSAttributedString * countString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" · %d", (int)album.sourceCount] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: UIColorHex(333333)}];
+    NSMutableAttributedString * titleString = [[NSMutableAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName: [UIFont ej_pingFangSCBoldOfSize:14], NSForegroundColorAttributeName: UIColorHex(333333)}];
+    NSAttributedString * countString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  (%d)", (int)album.sourceCount] attributes:@{NSFontAttributeName: [UIFont ej_pingFangSCRegularOfSize:14], NSForegroundColorAttributeName: UIColorHex(666666)}];
     [titleString appendAttributedString:countString];
     cell.titleLabel.attributedText = titleString;
     
@@ -248,6 +260,7 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] init];
+        _tableView.backgroundColor = self.view.backgroundColor;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [[UIView alloc] init];

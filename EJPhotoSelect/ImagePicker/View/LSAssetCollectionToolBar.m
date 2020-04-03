@@ -34,7 +34,18 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
+        if (@available(iOS 13.0, *)) {
+            self.backgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+                if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                    return UIColorHex(1C1C1E);
+                } else {
+                    return UIColorHex(ffffff);
+                }
+            }];
+        } else {
+            // Fallback on earlier versions
+            self.backgroundColor = UIColorHex(ffffff);
+        }
         _isShowCount = YES;
         _isShowOriginal = YES;
         _showPercentage = NO;
@@ -48,7 +59,21 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     self = [super initWithFrame:CGRectMake(0, 0, width, 50)];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
+//        self.backgroundColor = [UIColor whiteColor];
+        
+        if (@available(iOS 13.0, *)) {
+            self.backgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+                if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                    return UIColorHex(1C1C1E);
+                } else {
+                    return UIColorHex(ffffff);
+                }
+            }];
+        } else {
+            // Fallback on earlier versions
+            self.backgroundColor = UIColorHex(ffffff);
+        }
+        
         _isShowOriginal = isShowOriginal;
         _isShowCount = isShowCount;
         _maxCount = maxCount;
@@ -70,21 +95,35 @@
 - (void)setupSubviews {
     _previewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     
+    UIColor * color;
+    if (@available(iOS 13.0, *)) {
+        color = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+            if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                return UIColorHex(ffffff);
+            } else {
+                return UIColorHex(333333);
+            }
+        }];
+    } else {
+        // Fallback on earlier versions
+        color = UIColorHex(333333);
+    }
+    
     if ([EJPhotoConfig sharedPhotoConfig].majorTitleColor) {
         [_previewButton setTitleColor:[EJPhotoConfig sharedPhotoConfig].majorTitleColor forState:UIControlStateNormal];
     } else {
-        [_previewButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_previewButton setTitleColor:color forState:UIControlStateNormal];
     }
     
-    _previewButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    _previewButton.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:15];
     _previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_previewButton addTarget:self action:@selector(handleClickPreviewButton:) forControlEvents:UIControlEventTouchUpInside];
     _previewButton.enabled = NO;
     [self addSubview:_previewButton];
     
     _originalButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_originalButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    _originalButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [_originalButton setTitleColor:color forState:UIControlStateNormal];
+    _originalButton.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:15];
     [_originalButton setTitle:@"原图" forState:UIControlStateNormal];
     [_originalButton setImage:[UIImage imageNamed:@"source_normal"] forState:UIControlStateNormal];
     [_originalButton setImage:[UIImage imageNamed:@"source_selected"] forState:UIControlStateSelected];
@@ -102,9 +141,7 @@
     
     [self addSubview:_doneButton];
     
-//    _previewButton.backgroundColor = [UIColor redColor];
-//    _originalButton.backgroundColor = [UIColor blueColor];
-//    _doneButton.backgroundColor = [UIColor greenColor];
+
     [_previewButton setTitle:@"预览" forState:UIControlStateNormal];
     [_doneButton setTitle:@"确定" forState:UIControlStateNormal];
     [_doneButton setTitle:@"确定" forState:UIControlStateDisabled];
@@ -154,10 +191,10 @@
             NSString * numString;
             if (_showPercentage == NO || _maxCount == 0) {
                 numString = [NSString stringWithFormat:@"(%d)", (int)count];
+                NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor whiteColor]}];
+                [attStr appendAttributedString:numStr];
             } else {
                 numString = [NSString stringWithFormat:@"(%d/%d)", (int)count, (int)_maxCount];
-            }
-            if ([numString length] > 0) {
                 NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12], NSForegroundColorAttributeName : [UIColor whiteColor]}];
                 [attStr appendAttributedString:numStr];
             }

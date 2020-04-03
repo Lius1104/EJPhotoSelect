@@ -21,6 +21,7 @@
     [[LSSaveToAlbum mainSave] configCustomAlbumName:@"本地资源处理"];
     [EJPhotoConfig sharedPhotoConfig].tintColor = [UIColor redColor];
     [EJPhotoConfig sharedPhotoConfig].barTintColor = [UIColor greenColor];
+    [EJPhotoConfig sharedPhotoConfig].barOperationColor = UIColorHex(38C1BA);
     
     return YES;
 }

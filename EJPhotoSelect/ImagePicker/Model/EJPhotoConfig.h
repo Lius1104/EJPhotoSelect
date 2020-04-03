@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIColor * barTintColor;
 
+@property (nonatomic, strong) UIColor * barOperationColor;
+
 @property (nonatomic, strong) UIColor * majorTitleColor;
 
 @property (nonatomic, strong) UIColor * alertCancelColor;
