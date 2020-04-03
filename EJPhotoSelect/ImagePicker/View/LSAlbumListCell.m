@@ -9,6 +9,7 @@
 #import "LSAlbumListCell.h"
 #import <Masonry/Masonry.h>
 #import <YYKit/YYKit.h>
+#import "UIFont+EJAdd.h"
 
 @interface LSAlbumListCell ()
 

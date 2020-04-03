@@ -13,6 +13,7 @@
 #import "ImagePickerEnums.h"
 #import "EJImageManager.h"
 #import "LSAlbumListCell.h"
+#import "UIFont+EJAdd.h"
 
 typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 
