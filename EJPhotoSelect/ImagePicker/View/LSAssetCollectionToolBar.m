@@ -116,7 +116,7 @@
         [_previewButton setTitleColor:color forState:UIControlStateNormal];
     }
     
-    _previewButton.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:15];
+    _previewButton.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:14];
     _previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_previewButton addTarget:self action:@selector(handleClickPreviewButton:) forControlEvents:UIControlEventTouchUpInside];
     _previewButton.enabled = NO;
@@ -124,7 +124,7 @@
     
     _originalButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_originalButton setTitleColor:color forState:UIControlStateNormal];
-    _originalButton.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:15];
+    _originalButton.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:14];
     [_originalButton setTitle:@"原图" forState:UIControlStateNormal];
     [_originalButton setImage:[UIImage imageNamed:@"source_normal"] forState:UIControlStateNormal];
     [_originalButton setImage:[UIImage imageNamed:@"source_selected"] forState:UIControlStateSelected];
@@ -135,7 +135,7 @@
     
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _doneButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    _doneButton.titleLabel.font = [UIFont ej_pingFangSCRegularOfSize:14];
     [_doneButton setBackgroundImage:[UIImage imageNamed:@"ejtools_btn_normal"] forState:UIControlStateNormal];
     [_doneButton setBackgroundImage:[UIImage imageNamed:@"ejtools_btn_disabled"] forState:UIControlStateDisabled];
     [_doneButton addTarget:self action:@selector(handleClickDoneButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -179,7 +179,7 @@
 
 - (void)configSourceCount:(NSUInteger)count {
     if (_isShowCount) {
-        NSMutableAttributedString * attStr = [[NSMutableAttributedString alloc] initWithString:@"确定" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        NSMutableAttributedString * attStr = [[NSMutableAttributedString alloc] initWithString:@"确定" attributes:@{NSFontAttributeName : [UIFont ej_pingFangSCRegularOfSize:14], NSForegroundColorAttributeName : [UIColor whiteColor]}];
         if (count == 0) {
             [_previewButton setTitle:@"预览" forState:UIControlStateNormal];
             [_doneButton setAttributedTitle:attStr forState:UIControlStateDisabled];
@@ -192,11 +192,11 @@
             NSString * numString;
             if (_showPercentage == NO || _maxCount == 0) {
                 numString = [NSString stringWithFormat:@"(%d)", (int)count];
-                NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor whiteColor]}];
+                NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont ej_pingFangSCRegularOfSize:14], NSForegroundColorAttributeName : [UIColor whiteColor]}];
                 [attStr appendAttributedString:numStr];
             } else {
                 numString = [NSString stringWithFormat:@"(%d/%d)", (int)count, (int)_maxCount];
-                NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12], NSForegroundColorAttributeName : [UIColor whiteColor]}];
+                NSAttributedString * numStr = [[NSAttributedString alloc] initWithString:numString attributes:@{NSFontAttributeName : [UIFont ej_pingFangSCRegularOfSize:14], NSForegroundColorAttributeName : [UIColor whiteColor]}];
                 [attStr appendAttributedString:numStr];
             }
             [_doneButton setAttributedTitle:attStr forState:UIControlStateNormal];
