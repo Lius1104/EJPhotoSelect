@@ -10,6 +10,7 @@
 #import <Masonry/Masonry.h>
 #import <YYKit/YYKit.h>
 #import "EJPhotoConfig.h"
+#import "UIFont+EJAdd.h"
 
 @interface LSAssetCollectionToolBar ()
 
