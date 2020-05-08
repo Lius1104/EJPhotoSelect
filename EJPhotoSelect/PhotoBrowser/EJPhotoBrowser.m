@@ -158,6 +158,11 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     self.view.backgroundColor = [UIColor blackColor];
     self.view.clipsToBounds = YES;
     
+    UIBarButtonItem * backItem = [[UIBarButtonItem alloc] init];
+    backItem.title = @"";
+    self.navigationItem.backBarButtonItem = backItem;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
 	
     [self setupSubviews];
     
@@ -177,6 +182,11 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     // Setup paging scrolling view
     CGRect pagingScrollViewFrame = [self frameForPagingScrollView];
     _pagingScrollView = [[UIScrollView alloc] initWithFrame:pagingScrollViewFrame];
+    if (@available(iOS 11.0, *)) {
+        _pagingScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     _pagingScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _pagingScrollView.pagingEnabled = YES;
     _pagingScrollView.delegate = self;
@@ -187,17 +197,18 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
     [self.view addSubview:_pagingScrollView];
     
     [_pagingScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
-            make.left.equalTo(self.view.mas_safeAreaLayoutGuideLeft);
-            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
-            make.right.equalTo(self.view.mas_safeAreaLayoutGuideRight);
-        } else {
-            make.top.equalTo(self.view.mas_top);
-            make.left.equalTo(self.view.mas_left);
-            make.bottom.equalTo(self.view.mas_bottom);
-            make.right.equalTo(self.view.mas_right);
-        }
+//        if (@available(iOS 11.0, *)) {
+//            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+//            make.left.equalTo(self.view.mas_safeAreaLayoutGuideLeft);
+//            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+//            make.right.equalTo(self.view.mas_safeAreaLayoutGuideRight);
+//        } else {
+//            make.top.equalTo(self.view.mas_top);
+//            make.left.equalTo(self.view.mas_left);
+//            make.bottom.equalTo(self.view.mas_bottom);
+//            make.right.equalTo(self.view.mas_right);
+//        }
+        make.edges.equalTo(self.view);
     }];
     
     _navigationBar = [[UIView alloc] init];
@@ -223,7 +234,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 - (void)configNavigationBar {
 //    UIView *bottomLine = [[UIView alloc] init];
-//    bottomLine.backgroundColor = kLineColor;
+//    bottomLine.backgroundColor = kkE3To44Color;
 //    [_navigationBar addSubview:bottomLine];
 //    [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.right.bottom.equalTo(_navigationBar);
@@ -260,7 +271,7 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
 
 - (void)configBottomBar {
 //    UIView * topLine = [[UIView alloc] init];
-//    topLine.backgroundColor = kLineColor;
+//    topLine.backgroundColor = kkE3To44Color;
 //    [_bottomBar addSubview:topLine];
 //    [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.top.right.equalTo(_bottomBar);
@@ -1577,13 +1588,18 @@ static void * EJVideoPlayerObservation = &EJVideoPlayerObservation;
                 if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinish:)]) {
                     [self.delegate photoBrowserDidFinish:self];
                 }
-                [self.navigationController popViewControllerAnimated:YES];
             }
         }
     });
 }
 
 - (BOOL)ej_imageCropperVCAutoPopAfterCrop {
+    if ([self.delegate respondsToSelector:@selector(photoBrowserMaxSelectePhotoCount:)]) {
+        NSUInteger maxCount = [self.delegate photoBrowserMaxSelectePhotoCount:self];
+        if (maxCount == 1) {
+            return NO;
+        }
+    }
     return YES;
 }
 

@@ -293,13 +293,12 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:EJPHOTO_PROGRESS_NOTIFICATION object:dict];
     };
     
-    _assetRequestID = [imageManager requestImageForAsset:asset targetSize:targetSize contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage *result, NSDictionary *info) {
+    _assetRequestID = [imageManager requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.underlyingImage = result;
+            self.underlyingImage = [UIImage imageWithData:imageData];
             [self imageLoadingComplete];
         });
     }];
-
 }
 
 // Release if we can get it again from path or url

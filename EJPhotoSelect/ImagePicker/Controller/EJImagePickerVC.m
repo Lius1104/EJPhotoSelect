@@ -965,17 +965,12 @@
 - (void)photoBrowserDidFinish:(EJPhotoBrowser *)photoBrowser {
     [self.collectionView reloadData];
     [_toolBar configSourceCount:self.selectedSource.count];
-//    if (_maxSelectedCount == 1) {
-        [self ls_assetCollectionToolBarDidClickDoneButton];
-//    }
+    [self ls_assetCollectionToolBarDidClickDoneButton];
 }
 
 - (void)photoBrowserDidCancel:(EJPhotoBrowser *)photoBrowser {
     [self.collectionView reloadData];
     [_toolBar configSourceCount:self.selectedSource.count];
-//    if (_maxSelectedCount == 1) {
-//    [self ls_assetCollectionToolBarDidClickDoneButton];
-//    }
 }
 
 - (NSUInteger)photoBrowserSelectedPhotoCount:(EJPhotoBrowser *)photoBrowser {
@@ -1018,11 +1013,7 @@
     if (currentAsset) {
         NSUInteger currentIndex = [self.selectedSource indexOfObject:currentAsset];
         [self.selectedSource replaceObjectAtIndex:currentIndex withObject:asset];
-//        if (photoBrowser.isPreview) {
-            [self.browserSource replaceObjectAtIndex:index withObject:currPhoto];
-//        } else {
-//            [self.browserSource insertObject:currPhoto atIndex:0];
-//        }
+        [self.browserSource replaceObjectAtIndex:index withObject:currPhoto];
     } else {
         [self.selectedSource addObject:asset];
         [self.browserSource insertObject:currPhoto atIndex:0];

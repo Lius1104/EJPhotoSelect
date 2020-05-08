@@ -66,6 +66,10 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = UIColorHex(ffffff);
     
+    UIBarButtonItem * backItem = [[UIBarButtonItem alloc] init];
+    backItem.title = @"";
+    self.navigationItem.backBarButtonItem = backItem;
+    
     _bottomView = [[UIView alloc] init];
     _bottomView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:_bottomView];

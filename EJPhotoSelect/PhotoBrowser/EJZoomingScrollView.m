@@ -30,6 +30,10 @@
 - (id)initWithPhotoBrowser:(EJPhotoBrowser *)browser {
     if ((self = [super init])) {
         
+        if (@available(iOS 11.0, *)) {
+            self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
+        
         // Setup
         _index = NSUIntegerMax;
         _photoBrowser = browser;
@@ -270,7 +274,12 @@
         if (ABS(boundsAR - imageAR) < 0.17) {
             zoomScale = MAX(xScale, yScale);
             // Ensure we don't zoom in or out too far, just in case
-            zoomScale = MIN(MAX(self.minimumZoomScale, zoomScale), self.maximumZoomScale);
+//            zoomScale = MIN(MAX(self.minimumZoomScale, zoomScale), self.maximumZoomScale);
+            if (_photo.isVideo) {
+                zoomScale = MIN(MAX(self.minimumZoomScale, zoomScale), self.maximumZoomScale);
+            } else {
+                zoomScale = self.minimumZoomScale;
+            }
         }
     }
     return zoomScale;
@@ -294,9 +303,21 @@
     CGSize imageSize = _photoImageView.image.size;
     
     // Calculate Min
-    CGFloat xScale = boundsSize.width / imageSize.width;    // the scale needed to perfectly fit the image width-wise
-    CGFloat yScale = boundsSize.height / imageSize.height;  // the scale needed to perfectly fit the image height-wise
-    CGFloat minScale = MIN(xScale, yScale);                 // use minimum of these to allow the image to become fully visible
+    // 判断是否是长图
+    BOOL isLong = imageSize.width / imageSize.height >= 2.5 || imageSize.height / imageSize.width >= 2.5;
+        CGFloat minScale = 0;
+        CGFloat xScale = boundsSize.width / imageSize.width;    // the scale needed to perfectly fit the image width-wise
+        CGFloat yScale = boundsSize.height / imageSize.height;  // the scale needed to perfectly fit the image height-wise
+        if (isLong) {
+            if (imageSize.width >= imageSize.height) {// 横着的长图
+                minScale = MIN(xScale, yScale);;
+            }
+            else {// 竖着的长图
+                minScale = MAX(xScale, yScale);
+            }
+        } else {
+            minScale = MIN(xScale, yScale);                 // use minimum of these to allow the image to become fully visible
+        }
     
     // Calculate Max
     CGFloat maxScale = 3;
@@ -327,7 +348,8 @@
     }
     
     // Disable scrolling initially until the first pinch to fix issues with swiping on an initally zoomed in photo
-    self.scrollEnabled = NO;
+    // 初始化的时候可以滚动
+//    self.scrollEnabled = NO;
     
     // If it's a video then disable zooming
     if ([self displayingVideo]) {
